@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require_relative "../config/environment"
+
+new_blog_assignments = GenerateAssignments.new
+new_blog_assignments.make_index!

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Blog Schedule</title>
+  </head>
+  <body>
+    <h3>Blog Schedule</h3>
+      <% @groups = Author.new.scrape_authors * 6 %>
+      <% BlogDate.new.find_weekdays.each do |date| %>
+        <b><%= date %></b><br>
+        <!-- on next line, could use shift method instead of pop to assign authors differently -->
+        <% @foursome = @groups.pop(4)%> 
+          <% @foursome.each do |author| %>
+            <%= author %><br>
+          <% end %>
+          <br>
+      <% end %>    
+  </body>
+</html>
