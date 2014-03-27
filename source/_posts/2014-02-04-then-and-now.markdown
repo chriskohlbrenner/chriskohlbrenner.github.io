@@ -3,7 +3,7 @@ layout: post
 title: "Then and Now"
 date: 2014-02-04 18:40:22 -0500
 comments: true
-categories: 
+categories: non-code
 ---
 It is August 2007, and I'm sitting in my freshman dorm at Wheaton College. A few days after arriving on campus to <a href="http://www.wunderground.com/history/airport/KDPA/2007/8/23/DailyHistory.html">record-setting rains</a> and a few days before classes began, there was one unified, collective priority: internet. In those days we hadn't yet realized how bad the internet would be: how low the bandwidth, how weak the wifi, and just how persistent(ly annoying) the Bradford Agent.  They were simple times--the first iPhone had just been released, for example, and few of us had even heard of Twitter--and we were simply excited to check our email and Facebook.  Yet so few of us could.
 
