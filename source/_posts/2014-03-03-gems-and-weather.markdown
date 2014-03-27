@@ -3,7 +3,7 @@ layout: post
 title: "gems and weather forecasts"
 date: 2014-03-03 08:47:00 -0500
 comments: true
-categories: [Ruby, Gems]
+categories: Ruby Gems
 ---
 <h2>What's a gem anyway?</h2>
 

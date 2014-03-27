@@ -3,7 +3,7 @@ layout: post
 title: "i'm a rails contributor!"
 date: 2014-03-19 17:03:24 -0400
 comments: true
-categories: 
+categories: Ruby Rails Github
 ---
 
 I can now count myself among the 2,000 or so contributors to Ruby on Rails. Pretty elite company--but I got in on a technicality.

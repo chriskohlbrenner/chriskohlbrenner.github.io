@@ -3,7 +3,7 @@ layout: post
 title: "sinatra what?"
 date: 2014-03-04 09:53:21 -0500
 comments: true
-categories: 
+categories: Sinatra Ruby
 ---
 Maybe it's just because it was a Monday. Or maybe it's because our recent material pushed me even farther outside of my comfort zone than I already was. Maybe I was unrealistically comparing myself to brilliant classmates who happen to have more experience with web apps. Or maybe it's any number of the myths referenced in <a href="http://stephaniehoh.github.io/blog/2013/11/06/the-myth-of-i-cant-code/">this alum's blog post</a>.
 

@@ -3,7 +3,7 @@ layout: post
 title: "Terminally Bashing the Kernel"
 date: 2014-02-12 11:34:52 -0500
 comments: true
-categories: hardware low-level kernel
+categories: Hardware Low-Level Kernel
 ---
 <blockquote>"Live in the command line."</blockquote>One of earliest instructions in week one was to "live in the command line." Avi described that computers should be more than the media consumption devices they are to most users. That everything we need to do on a computer can be done exclusively from the shell. That, as programmers, we need to make the command line our home.
 
