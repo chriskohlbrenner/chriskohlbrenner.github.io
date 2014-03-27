@@ -13,6 +13,8 @@ According to <a href="http://guides.rubyonrails.org/getting_started.html#what-is
 
 "Easier", "assumptions", "less code", "more fun". How does Rails accomplish this? It mostly comes down to valuing convention over congifuration, equipping the programmer with a conventional setup rather than requiring him to configure it every time. One way Rails enables this is through generators.
 
+<!--more-->
+
 <h2><code>rails generate</code></h2>
 {% img /images/rails_generator.png %}
 

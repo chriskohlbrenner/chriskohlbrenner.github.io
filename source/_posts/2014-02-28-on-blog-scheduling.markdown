@@ -13,6 +13,8 @@ Each student at Flatiron School is expected to write a blog post about every two
 
 But how was this schedule generated? Of course it could have been done manually, copying and pasting four names at a time into each date (manually cutting out) weekends. But programmers are better than that. Avi certainly didn't manually construct this schedule. He must have automated the process by writing a program. This post chronicles my effort to do the same.
 
+<!--more-->
+
 <h2>Some context</h2>
 
 At the end of today, we'll have completed four of twelve weeks at Flatiron School, a full one-third. Those four weeks have covered the following:

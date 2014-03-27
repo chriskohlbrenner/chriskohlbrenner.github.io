@@ -10,6 +10,8 @@ I can now count myself among the 2,000 or so contributors to Ruby on Rails. Pret
 
 {% img left /images/rails_contribution.png %}
 
+<!--more-->
+
 When I say I got in on a technicality, I mean that quite literally. The technicality was a typo in a Rails guide. A missing "s", to be exact.
 
 Visit section 12.2 of the <a href="http://guides.rubyonrails.org/active_record_querying.html#joining-tables">ActiveRecord Querying guide</a> and you'll see a line that says "Active Record lets you use the names of the associations defined onthe model as a shortcut for specifying JOIN <strong>clause</strong> when using the joins method." Emphasis is mine, because that word "clause" is the typo. I added an "s", which should be reflected shortly.

@@ -15,6 +15,8 @@ Simply put, a gem is a packaged Ruby application or library. That's all. It's ju
 <h5>And RubyGems?</h5>
 Gems actually exist apart from RubyGems (i.e., you can have your own internal gems), but RubyGems is the package that became part Ruby's standard library (in version 1.9 of Ruby). With RubyGems, developers can search, install, build, and publicly share gems straight from the command line. When you type <code>gem list</code> (or any other <code>gem</code> command into the command line, you're depending on RubyGems. Typing <code>gem -h</code>, you'll see that "RubyGems is a <i>sophisticated</i> package manager for Ruby," so I suppose we can add pretentious to the list of RubyGems' attributes.
 
+<!--more-->
+
 <h2>My own exploration</h2>
 In the interest of learning by doing, I made a gem. The process is straightforward; I followed the <a href="http://guides.rubygems.org/make-your-own-gem/">RubyGems guide</a>, which lays out each step quite clearly. It comes down to the following:
 <ul>

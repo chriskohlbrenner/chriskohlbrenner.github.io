@@ -12,6 +12,8 @@ I'm working on a trip planner app using NJ Transit data to find the next departu
 <h4>It works!</h4>
 At least as a proof of concept (<a href="https://github.com/chriskohlbrenner/njtransit">full code here</a>). I know, it's Jersey--not that great. Also messy SQL/Active Record queries... Those things aside, the fact that it's working means an annoying hurdle is behind me (or I at least better understand how to get around it). That hurdle is <strong>comparing time</strong>.
 
+<!--more-->
+
 <!-- Making sense of Arel and ActiveRecord queries is an issue unto itself (and perhaps the subject of a future post), but  -->
 <h3>About Time Comparisons</h3>
 To determine the <i>next</i> departure time, I need to determine a time from the database with the current time. Not as easy as it seems.

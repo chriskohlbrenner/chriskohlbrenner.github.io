@@ -9,6 +9,8 @@ categories: Hardware Low-Level Kernel
 
 But what <i>is</i> the command line? I've used Terminal long enough to be comfortable using it, but what is it? Is Terminal the same as the command line and the shell and bash? What am I really doing when I use these tools? What are the kernel and command line and Bash, and how should I even use all those words?
 
+<!--more-->
+
 Rest assured, I can't and won't answer all of those questions in their completion. I'm keeping a narrow scope, as Avi instructed, looking to understand a few specifics rather than write a book on computing.
 
 <h2>A few definitions</h2>
