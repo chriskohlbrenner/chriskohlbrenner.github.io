@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "on blog scheduling"
+title: "On Blog Scheduling"
 date: 2014-02-28 08:01:48 -0500
 comments: true
 categories: Ruby Flatiron

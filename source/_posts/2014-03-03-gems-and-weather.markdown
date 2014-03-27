@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "gems and weather forecasts"
+title: "Gems and Weather Forecasts"
 date: 2014-03-03 08:47:00 -0500
 comments: true
 categories: Ruby Gems

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "sinatra what?"
+title: "Sinatra What?"
 date: 2014-03-04 09:53:21 -0500
 comments: true
 categories: Sinatra Ruby

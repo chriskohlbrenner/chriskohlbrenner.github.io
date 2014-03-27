@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "i'm a rails contributor!"
+title: "I'm a Rails Contributor!"
 date: 2014-03-19 17:03:24 -0400
 comments: true
 categories: Ruby Rails Github

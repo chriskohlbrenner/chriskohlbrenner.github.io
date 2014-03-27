@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Generating Rails in broad strokes"
+title: "Generating Rails in Broad Strokes"
 date: 2014-03-13 07:51:07 -0400
 comments: true
 categories: Ruby Rails

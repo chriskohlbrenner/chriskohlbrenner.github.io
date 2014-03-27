@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "wasting, spending, and saving time on active support"
+title: "Wasting, Spending, and Saving Time on Active Support"
 date: 2014-03-27 13:08:38 -0400
 comments: true
 categories: Ruby Rails ActiveSupport Time
