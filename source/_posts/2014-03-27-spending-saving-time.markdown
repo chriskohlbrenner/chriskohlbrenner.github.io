@@ -7,7 +7,7 @@ categories: Ruby Rails ActiveSupport Time
 ---
 I'm working on a trip planner app using NJ Transit data to find the next departure time for a trip, given its origin and destination. For example, what's the next train leaving Hoboken for Secaucus?
 
-{% img right images/hoboken_secaucus.png %}
+{% img /images/hoboken_secaucus.png %}
 
 <h4>It works!</h4>
 At least as a proof of concept (<a href="https://github.com/chriskohlbrenner/njtransit">full code here</a>). I know, it's Jersey--not that great. Also messy SQL/Active Record queries... Those things aside, the fact that it's working means an annoying hurdle is behind me (or I at least better understand how to get around it). That hurdle is <strong>comparing time</strong>.
