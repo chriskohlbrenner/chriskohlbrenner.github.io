@@ -3,7 +3,7 @@ layout: post
 title: "on blog scheduling"
 date: 2014-02-28 08:01:48 -0500
 comments: true
-categories: ruby, Flatiron School
+categories: ruby 'Flatiron School'
 ---
 <h4>Or, evidence that I've learned something in four weeks at Flatiron School.</h4>
 
