@@ -5,6 +5,10 @@ date: 2014-03-27 13:08:38 -0400
 comments: true
 categories: Ruby Rails ActiveSupport Time
 ---
+
+<strong>Summary:</strong> Dealing with time can be difficult. <a href="http://api.rubyonrails.org/classes/Time.html">ActiveSupport</a> helps. Store daily time values (e.g., daily schedules, irrespective of date) in a database as offsets from midnight (in seconds).
+<p>---------------------------------------------------</p>
+
 I'm working on a trip planner app using NJ Transit data to find the next departure time for a trip, given its origin and destination. For example, what's the next train leaving Hoboken for Secaucus?
 
 {% img /images/hoboken_secaucus.png %}
@@ -20,7 +24,9 @@ To determine the <i>next</i> departure time, I need to determine a time from the
 
 <!-- the There's a lot going on behind the scenes--Rails and ActiveRecord and database associations and all--but some of the main code is below. -->
 
-The code below is what enabled the screenshot above. So that's good, it works. But it's not pretty. <code>Time.now</code> is straightforward enough. And <code>.where("departure_time" > ?, \<time\>)</code> makes sense--it's an <a href="http://guides.rubyonrails.org/active_record_querying.html">Active Record query</a> that fires a SQL statement comparing the departure times from the database with the current time. But what about the <code>.change(year: 2000, month: 01, day: 01)</code>, especially with the appended <code>- 18000</code>?
+The code below is a big part of what enabled the screenshot above. That's good, it works. But it's not pretty.
+
+<code>Time.now</code> is straightforward enough. And <code>.where("departure_time" > ?, \<time\>)</code> makes sense--it's an <a href="http://guides.rubyonrails.org/active_record_querying.html">Active Record query</a> that fires a SQL statement comparing the departure times from the database with the current time. But what about the <code>.change(year: 2000, month: 01, day: 01)</code>, especially with the appended <code>- 18000</code>?
 
 {% include_code time.rb %}
 
