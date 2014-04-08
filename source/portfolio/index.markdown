@@ -11,7 +11,7 @@ footer: true
     <ul>
       <li>Populated database of languages and words from frequency lists based on data from OpenSubtitles.org</li>
       <li>Gathered translations from Google Translate using Net::HTTP and JSON parsing in Ruby</li>
-      <li>Displayed translations dynamically with jQueryImplemented Javascript game to test user’s knowledge of a given language</li>
+      <li>Displayed translations dynamically with jQuery</li>
       <li>Implemented Javascript game to test user’s knowledge of a given language</li>
       <li>Implemented Wrap Bootstrap theme for front-end display</li>
     </ul>
