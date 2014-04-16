@@ -5,7 +5,7 @@ date: 2014-04-16 9:00:00 -0400
 comments: true
 categories: Rails JavaScript Gems Gon Typeahead Front-End
 ---
-<i><strong>Note:</strong> If you haven't already read Part 1, you can see it <a href="/blog/2014/04/15/typeahead/">here</a>. In this post, I'll cover the <code>.typeahead</code> JavaScript method.</i>
+<i><strong>Note:</strong> If you haven't already read Part 1, which covers the Gon gem in detail, you can see it <a href="/blog/2014/04/15/typeahead/">here</a>. In this post, I'll cover the <code>.typeahead</code> JavaScript method.</i>
 
 <h2>The How-To (cont.)</h2>
 
@@ -52,3 +52,9 @@ categories: Rails JavaScript Gems Gon Typeahead Front-End
   </li>
 </ul>
 And that concludes my adventures with typeahead. It took some time, but, as I described before, it's those seemingly minor finishing touches that can end up taking the most time. This exercise was certainly proof of that. But it was worth it to get a working--and good-looking--typeahead form input.
+<h3>Resources</h3>
+<ul>
+  <li><a href="http://stackoverflow.com/questions/10873312/how-to-customize-bootstrap-typeahead-layout-function-for-more-than-just-text">Relevant StackOverflow question</a></li>
+  <li><a href="http://fusiongrokker.com/post/heavily-customizing-a-bootstrap-typeahead">Great blog post chronicling similar struggles with typeahead</a></li>
+  <li><a href="http://twitter.github.io/typeahead.js/">Twitter Typeahead.js source code</a></li>
+</ul>

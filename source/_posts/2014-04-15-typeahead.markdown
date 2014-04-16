@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Typeahead: a How-To Guide (Part 1 of 2)"
+title: "Typeahead and Gon: a How-To Guide (Part 1 of 2)"
 date: 2014-04-15 17:15:42 -0400
 comments: true
 categories: Rails JavaScript Gems Gon Typeahead Front-End
@@ -46,3 +46,9 @@ I will post Part 2 of this blog tomorrow, which will cover using this JavaScript
 
 <i><strong>Edit:</strong>Here's <a href="/blog/2014/04/16/typeahead-2/">part 2!</a></i>
 {% img /images/typeahead.png %}
+
+<h3>Resources</h3>
+<ul>
+  <li><a href="http://railscasts.com/episodes/324-passing-data-to-javascript">Ryan Bates (RailsCast) on Gon</a></li>
+  <li><a href="https://github.com/gazay/gon">Gon source code</a></li>
+</ul>
