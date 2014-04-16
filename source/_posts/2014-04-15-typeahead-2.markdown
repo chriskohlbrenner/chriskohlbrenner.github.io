@@ -1,0 +1,54 @@
+---
+layout: post
+title: "Typeahead: a How-To Guide (Part 2 of 2)"
+date: 2014-04-16 9:00:00 -0400
+comments: true
+categories: Rails JavaScript Gems Gon Typeahead Front-End
+---
+<i><strong>Note:</strong> If you haven't already read Part 1, you can see it <a href="/blog/2014/04/15/typeahead/">here</a>. In this post, I'll cover the <code>.typeahead</code> JavaScript method.</i>
+
+<h2>The How-To (cont.)</h2>
+
+<ul>
+  Typeahead.js depends on having a source of data available. In fact, <a href="http://twitter.github.io/typeahead.js/examples/#the-basics">Twitter's "basic" typeahead example</a> includes <code>var states</code>, with all 50 states input as strings, directly in the JavaScript file. That's effectively what I did in the previous post with Gon: I made Rails variables available in JavaScript. I'll use those same variables here.
+  <!--more-->
+  <br><br>
+  <h3>2. Typeahead.js</h3>
+  <li>
+      Add the gem: <code>gem <a href="https://github.com/yourabi/twitter-typeahead-rails/">'twitter-typeahead-rails'</a></code>.
+  </li><br>
+  <li>
+      Add <code>//= require twitter/typeahead</code> to the application.js manifest.
+  </li><br>
+  <li>
+      Determine the css selector for the input on which you want to implement typeahead. In my case, I added a class of "typeahead" to my targeted text field as follows:
+        {% include_code form.html.erb %}
+  </li><br>
+  <li>
+      In whichever JavaScript file you've made the dataset available, add <code>$('.typeahead').typeahead()</code>. Replace ".typeahead" with whatever CSS selector you're using (see previous step). You now have the entire structure into which you can try the various <a href="http://twitter.github.io/typeahead.js/examples/">typeahead.js examples</a>.
+  </li><br>
+  <li>
+      I started with <a href="http://twitter.github.io/typeahead.js/examples/#the-basics">the basics</a>, copying line 1-23 above my typeahead method, and everything withing the curly braces from line 37-44 into my typeahead method. Make sure to change the example's default variable ("states" in the basic example, "best-pictures" in the custom templates example) to whatever variable you assigned using Gon. Depending on how you're Rails app is structured--particularly what your asset pipeline looks like--this may be all you need.
+  </li><br>
+  <li>
+      <p>I had conflicting stylesheets and JavaScript files, plus I wanted more flexibility creating templates for the typeahead, so I implemented the <a href="http://twitter.github.io/typeahead.js/examples/#custom-templates">custom templates example</a>. Full code for what I describe is below.
+      </p>
+      <p>
+      To begin, I added the templates (lines 28-40). The "empty" template worked easily--the code copied from Twitter's example worked on its own. I had more difficulty with the "suggestion" template, primarily because I didn't immediately realize that it's a function, as opposed to the string that the "empty" template was. At this point, I was able to style the template as I liked, even including an image.
+      </p>
+      <p>
+      Next I had to configure the typeahead to use the pictures connected to each user. Gon and typeahead seem to support a pattern of passing entire objects and calling two or more different attributes (best pictures' names and years in the custom template example), but I was unable to configure my JavaScript this way. Instead, knowing that my "gravatars" array directly mirrored my "usernames", I used JavaScript's <code>indexOf()</code> method, as seen in line 37. This enabled me to the the index of a given username and find the gravatar url at that index of the gravatars array. Not ideal, but it worked.
+      </p>
+        {% include_code typeahead.js %}
+  </li><br>
+  <li>
+    My final issue came with the highlighting. The <code>highlight:true</code> line within the typeahead method indicates that it should work right out of the box, but it did not for me (again, due to conflicting other assets). For this reason, I needed to debug in my JavaScript console, eventually finding that an item selected using typeahead was situated in a div with class of "tt-cursor". A lot of the default styling was fine with me but, since the highlighting itself did not work, I added the following to my css, thus giving the selected item a background color.
+      ``` css styling.css
+        div .tt-cursor {
+          background-color: #16A085;
+        }
+      ```
+    (that selector, ".tt-cursor", was very important!)
+  </li>
+</ul>
+And that concludes my adventures with typeahead. It took some time, but, as I described before, it's those seemingly minor finishing touches that can end up taking the most time. This exercise was certainly proof of that. But it was worth it to get a working--and good-looking--typeahead form input.
