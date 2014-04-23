@@ -67,3 +67,6 @@ Better Specs tries to fill this gap by collecting most of the "best practices" t
 {% endblockquote %}
 
 My learning has gotten me to an initial implementation of an RSpec test suite--I now look to Better Specs for some better (or even best) practices. That said, getting this far was an accomplishment in itself. Now to continue that pursuit of happiness.
+
+<h4>Bonus: straight from the creator of Ruby on Rails</h4>
+DHH just happened to post <a href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">this essay</a> the day after I wrote this blog. A helpful reminder to focus on what's helpful--what makes programming easier--and not on dogmas of TDD or test-first.
