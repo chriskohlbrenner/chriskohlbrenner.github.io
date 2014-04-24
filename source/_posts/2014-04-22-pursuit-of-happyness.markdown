@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Pursuit of (Programming) Happiness"
+title: "Pursuit of (Programming) Happiness: Testing"
 date: 2014-04-22 15:29:33 -0400
 comments: true
 categories: RSpec Tests Testing Rails Simplecov
