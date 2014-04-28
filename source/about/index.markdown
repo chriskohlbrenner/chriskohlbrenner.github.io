@@ -8,6 +8,10 @@ footer: true
 ---
 {% img right http://chriskohlbrenner.github.io/images/profile.png 300 300 %}
 
-Chris is learning to code at the <a href="http://flatironschool.com">Flatiron School</a>. He has made his home in Chicago, Illinois; Amman, Jordan; Cairo, Egypt; urban and suburban New York; and El Paso, TX. In college he spent a year, cumulatively, in Palestine, Jordan, and Egypt.
+Chris is a web developer. He has the <a href="http://flatironschool.com">Flatiron School</a> (Ruby-004) to thank for much of his programming knowledge.
 
-He is defined by more than his attendance of Flatiron School and previous residences, but--for now--that's all he's included here.
+Chris likes to move around. He has lived in Chicago, Illinois; Amman, Jordan; Cairo, Egypt; urban and suburban New York; and El Paso, TX. In college he spent a year, cumulatively, in Palestine, Jordan, and Egypt.
+
+Chris' interests include (in addition to programming) economic development, religion and spirituality, international travel (see above), and foreign languages (Arabic, German, French, and Spanish, so far...).
+
+He is on Twitter (<a href="https://twitter.com/ckohlbrenner">@CKohlbrenner</a>). You can follow him.
