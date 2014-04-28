@@ -9,11 +9,13 @@ categories: POODR Ruby Rails Books
 
 {% img center /images/poodr-figure-4-1.png %}
 What you see above are two very different communication patterns. Metz describes them as follows:
-{% blockquote POODR http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330 { Page 60 } %}
+{% blockquote "Practical Object-Oriented Design in Ruby" http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330 { Page 60 } %}
 In the first application, the messages have no apparent pattern. [...] In the second application, the messages have a clearly defined pattern. [...] The design issue in the first application is not necessarily a failure of dependency injection or single responsibility. Those techniques, while necessary, are not enough to prevent the construction of an application whose design causes you pain. The roots of this new problem lie not in what each class does but with what it reveals."
 {% endblockquote %}
 
-Welcome to public and private interfaces. As Metz explains, we can separate out the methods that we expose (that is, the public interface) from those that we keep private (known as the--wait for it--private interface). A couple other definitions of public and private interfaces:
+<!--more-->
+
+Welcome to public and private interfaces. As Metz explains, we can separate out the methods that we expose and reveal (that is, the public interface) from those that we keep private (known as the--wait for it--private interface). A couple other definitions of public and private interfaces:
 <table>
   <tr>
     <th><strong>Public Interfaces</strong></th>
@@ -51,7 +53,7 @@ How does this play out in code? Like this:
 Without getting into the details of each method, what this structure demonstrates is a public interface that exposes just the <code>send_bitcoin</code> and <code>request_bitcoin</code> methods. This is all the menu that the User needs. Of course, behind the scenes there are lots of private methods being called, to say nothing of the controller actions delegating those methods, but the user only needs these two.
 
 It comes down to creating explicit interfaces. As Metz argues,
-{% blockquote POODR http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330 { Page 76 } %}
+{% blockquote "Practical Object-Oriented Design in Ruby" http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330 { Page 76 } %}
 Your goal is to write code that works today, that can easily be reused, and that can be adapted for unexpected use in the future. Other people will invoke your methods; it is your obligation to communicate which ones are dependable.
 
 Every time you create a class, declare its interfaces. Methods in the public
