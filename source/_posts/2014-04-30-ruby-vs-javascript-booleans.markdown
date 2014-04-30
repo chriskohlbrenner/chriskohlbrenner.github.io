@@ -50,6 +50,7 @@ Yes and no. In terms of how Ruby and JavaScript evaluate certain values, yes. Wh
 
 That said, what we're doing is evaluating non-Boolean values as Boolean. For that reason, values like 8, "abc", undefined, and nil are "truthy" or "falsey". They're not technically true or false, because only true and false are Booleans.
 
+<a href="https://gist.github.com/jfarmer/2647362">Note</a>: "In some languages, like C and Python, 0 counts as false. In fact, in Python, empty arrays, strings, and hashes all count as false. In JavaScript, empty strings count as false, but empty arrays count as true." Again, in Ruby, only nil and false evaluate as false. Even 0 evaluates as true.
 
 <h3>Proof that this is accurate</h3>
 The best way to become familiar with Boolean values is to try them out in the console. In JavaScript, the <code>Boolean([value])</code> object evaluates the Boolean value (i.e., converts non-Boolean to Boolean). In Ruby, the double bang (<code>!!</code>) converts non-Boolean values to Boolean. See some examples below: first JavaScript, then Ruby.
