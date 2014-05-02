@@ -1,0 +1,55 @@
+---
+layout: post
+title: "Polymorphism and Duck Typing (POODR: Chapter 5)"
+date: 2014-05-02 09:42:24 -0400
+comments: true
+categories: Books POODR Rails Ruby Polymorphism Duck_Type
+---
+<strong>Having recently graduated from the Flatiron School, I am working my way through programming-related reading, beginning with Sandi Metz's "Practical Object-Oriented Design in Ruby". Click <a href="/blog/categories/POODR/">here for more posts about POODR</a>.</strong>
+
+My hope for this blog post is not to intimidate (as Sandi Metz suggests below), but to communicate the concepts of polymorphism and duck typing in Ruby, as Metz describes them in Chapter 5 of POODR.
+
+{% blockquote Sandi Metz http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330  "Practical Object-Oriented Design in Ruby (95)"  %}
+The term 'polymorphism' is commonly used in object-oriented programming
+but its use in everyday speech is rare enough to warrant a definition. <strong>Polymorphism</strong> expresses a very specific concept and can be used,
+depending on your inclinations, either to <strong>communicate or to intimidate</strong>.
+Either way, it’s important to have a clear understanding of its meaning. First, a general definition: 'Morph' is the Greek word for form, 'morphism' is the state of having a form, and <strong>'polymorphism' is the state of having many forms</strong>. Biologists use this word. Darwin’s famous finches are polymorphic; a single species has many forms. [...] <strong>Polymorphism in OOP refers to the ability of many different objects to respond to the same message</strong>. Senders of the message need not care about the class of the receiver; receivers supply their own specific version of the behavior.
+{% endblockquote %}
+(Bolded emphases mine)
+
+A pretty simple definition for a somewhat complicated word. Polymorphism, the state of having many forms. Specifically, for our purposes in object-oriented programming, the ability of many different objects to respond to the same message. Let's flesh this out.
+
+<h3>An example: Metz's Bike Co. (i.e., what problems does duck typing solve?)</h3>
+
+Imagine a bicycle touring company looking to automate its process of booking trips. Each trip needs to be prepared by a mechanic (ensuring the bicycles are in working order), a trip coordinator (handling logistics, like food, for the trip), and a driver (ensuring the vehicle is ready to transport the trip participants). The code below (straight from POODR) is an example of how <u>not</u> to do this. But why?
+
+{% include_code poodr_5_bad_example.rb %}
+
+I'll let Metz explain what's wrong with this:
+
+{% blockquote Sandi Metz http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330  "Practical Object-Oriented Design in Ruby (90)"  %}
+Count the number of new dependencies in the prepare method. It relies on specific classes, no others will do. It relies on the explicit names of those classes. It knows the names of the messages that each class understands, along with the arguments that those messages require. All of this knowledge increases risk; many distant changes will now have side effects on this code.
+
+To make matters worse, this style of code propagates itself. When another new trip preparer appears, you, or the next person down the programming line, will add a new when branch to the case statement. Your application will accrue more and more methods like this, where the method knows many class names and sends a specific message based on class. The logical endpoint of this programming style is a stiff and inflexible application, where it eventually becomes easier to rewrite everything than to change anything.
+{% endblockquote %}
+
+A lot of negative consequences: class dependencies, risk of side effects for distant changes, propogation of this type of code, and ultimately a rigid application that requires a rewrite. This is where duck typing comes in. It can prevent all of those things.
+
+<h3>Solving these problems with duck typing (i.e., what is duck typing anyway?</h3>
+Duck typing is about defining objects by <strong>what they do</strong> instead of <strong>who they are</strong>. Think about Trip's <code>prepare</code> method--what does it do? Metz describes, "the method serves a single purpose, its arguments arrive wishing to collaborate to accomplish a single goal. Every argument is here for the same reason and that reason is unrelated to the argument’s underlying class" (90). It's not about the class of each argument, be it <code>Mechanic</code>, <code>TripCoordinator</code>, or <code>Driver</code>. If it walks like a duck and quacks like a duck, treat it like a duck (or, in this case, like a <code>Preparer</code>). Consider the example below:
+
+{% include_code poodr_5_duck_type_example.rb %}
+
+What's changed? <code>Trip</code>'s <code>prepare</code> method and each other class' unique preparation methods (they've all become <code>prepare_trip</code>). We've effectively implemented a <code>Preparer</code> class, but it has no concrete existence; it exists only as a duck type. Now all objects that implement <code>prepare_trip</code> are <code>Preparers</code>.
+
+Is this better? How? First of all, there's a certain symmetry and conciseness to it. We can all agree (or should, anyway) that's better. Second, though our first example was more concrete (and, thus, perhaps simpler to understand), we now have more extensible code. It's slightly more abstract, but changes to the code require us only to turn another object into a <code>Preparer</code>, rather than changing our original <code>prepare</code> method to include yet another class.
+
+Understanding these tradeoffs can be difficult, and it boils down to a tension between concretion and abstraction. Metz explains that "Concrete code is easy to understand but costly to extend. Abstract code may initially seem more obscure but, once understood, is far easier to change. Use of a duck type moves your code along the scale from more
+concrete to more abstract, making the code easier to extend but casting a veil over the
+underlying class of the duck" (94).
+
+<h3>Recognizing Ducks</h3>
+This is all great, but how can we recognize ducks (and thus duck-type our objects) if it is, in fact, a difficult situation to recognize? Three common patterns can be replaced with ducks: (1) case statements that switch on class (this is what we saw in the original bad example), (2) <code>kind_of?</code> and <code>is_a?</code>, and (3) <code>responds_to?</code>. Each of these patterns deals with the object's behavior. If you find yourself using these patterns to check on an object's behavior, remember: if it behaves like a duck, treat it as such.
+
+<h3>Wrapping up</h3>
+Why did I introduce this post with a definition of polymorphism? Because duck typing is a reality of OOP <strong>only because</strong> OOP is polymorphic. Though duck typing is only one way to achieve polymorphism in Ruby (inheritance and behavior sharing with modules are others), it is a great example of it. Duck types leverage the ability of many Ruby objects to respond to the same message, which is the very definition of polymorphism.
