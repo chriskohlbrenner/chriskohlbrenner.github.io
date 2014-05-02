@@ -10,6 +10,8 @@ categories: Ruby AMQP RabbitMQ Message_Queueing
 <h1>Background</h1>
 If you're already familiar with message queueing, or if you're someone who doesn't like reading the instructions, jump to the <a href="/blog/2014/04/30/amqp-rabbitmq-ruby#code">code section below.</a>
 
+<!--more-->
+
 <h3>Definition of terms</h3>
 I recently came across some brand new terms. So, to begin, some definitions via Wikipedia (they may still be confusing; I try to clear them up below):<ul>
 <li><a href="http://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol"><strong>Advanced Message Queuing Protocol (AMQP)</strong></a>: an open standard application layer protocol for <u>message-oriented middleware</u>. The defining features of AMQP are message orientation, queuing, routing (including point-to-point and publish-and-subscribe), reliability and security.</li>

@@ -17,6 +17,8 @@ Either way, it’s important to have a clear understanding of its meaning. First
 {% endblockquote %}
 (Bolded emphases mine)
 
+<!--more-->
+
 A pretty simple definition for a somewhat complicated word. Polymorphism, the state of having many forms. Specifically, for our purposes in object-oriented programming, the ability of many different objects to respond to the same message. Let's flesh this out.
 
 <h3>An example: Metz's Bike Co. (i.e., what problems does duck typing solve?)</h3>
