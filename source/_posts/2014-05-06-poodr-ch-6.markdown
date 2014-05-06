@@ -1,0 +1,46 @@
+---
+layout: post
+title: "A few notes on classical inheritance in Ruby (POODR: Chapter 6)"
+date: 2014-05-06 09:55:11 -0400
+comments: true
+categories: Books POODR Rails Ruby Inheritance
+---
+<strong>Having recently graduated from the Flatiron School, I am working my way through programming-related reading, beginning with Sandi Metz's "Practical Object-Oriented Design in Ruby". Click <a href="/blog/categories/POODR/">here for more posts about POODR</a>.</strong>
+
+{% blockquote Sandi Metz http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330  "Practical Object-Oriented Design in Ruby (105)"  %}
+The idea of inheritance may seem complicated but as with all complexity, there’s a simplifying abstraction. Inheritance is, at its core, a mechanism for automatic message delegation. It defines a forwarding path for not-understood messages. It creates relationships such that, if one object cannot respond to a received message, it delegates that message to another. You don’t have to write code to explicitly delegate the message, instead you define an inheritance relationship between two objects and the forwarding happens automatically.
+{% endblockquote %}
+
+<!--more-->
+
+That's it, that's all there is to inheritance. Not really. There's a lot to inheritance, and it's one of the things that makes Ruby the language that it is, in all its object-oriented glory.
+
+In this post, I'll speed through a couple key lessons about <strong>classical</strong> inheritance. Some of it was old news, some of it brand new.
+
+<h3>Classical?</h3>
+Referring specifically to "classical" inheritance is simply to refer to "class"-based inheritance. This distinguishes it from other inheritance techniques (like modules in Ruby, prototypical inheritance in JavaScript, or any number of others). Classical inheritance deals with subclasses and superclasses (from which subclasses inherit).
+
+<h3>Single vs. Multiple Inheritance</h3>
+Multiple inheritance can get complicated (how do we know from which ancestor a descendant will inherit?). Metz explains that "Many object-oriented languages [including Ruby] sidestep these complications by providing single inheritance, whereby a subclass is allowed only one parent superclass. Ruby does this; it has single inheritance. A superclass may have many subclasses, but each subclass is permitted only one superclass" (112).
+
+<h3>Inherent Inheritance (inheritance and <code>nil?</code>)</h3>
+Whether you've implemented a class hierarchy or not, if you've used Ruby then you've used inheritance. An example: <code>nil?</code>. Ruby contains two implementations of that method, one in <code>NilClass</code> and the other in <code>Object</code>. When <code>nil?</code> is called on an instance of <code>NilClass</code>, it returns <code>true</code>. On everything else, because everything elses is a subclass of <code>Object</code>, the <code>nil?</code> message travels up the superclass hierarchy to <code>Object</code>, which will then return <code>false</code>. See the image below for a depiction of this.
+
+{% img center /images/nil-inheritance.png %}
+
+<h3>Creating a Hierarchy has Costs (to duplicate or inherit?)</h3>
+Any decision to implement inheritance should take into consideration the costs. Metz presents an example of a <code>MountainBike</code> and a <code>RoadBike</code> class, both of which could inherit from the <code>Bicycle</code> superclass. But she asks, "Even though you now have a requirement for two kinds of bikes, this still may not be the right moment to commit to inheritance" and continues "A decision to proceed with the hierarchy accepts the risk that you may not yet have enough information to identify the correct abstraction. Your choice about whether to wait or to proceed hinges on how soon you expect a third bike to appear versus how much you expect the duplication to cost" (118-119).
+
+<h3>"Push-everything-down-and-then-pull-some-things-up strategy"</h3>
+That's a technical term, I think. It's a direct quote, anyway. Metz describes that, in implementing inheritance, it is important to push certain things down to the subclass, then pull them back up to the superclass to be inherited (and vice versa), even though it means moving code around multiple times. Her reasoning? Every programmer needs to ask themself: "What will happen when I’m wrong?". Metz argues that "Every decision you make includes two costs: one to implement it and another to change it when you discover that you were wrong. Taking both costs into account when choosing among alternatives motivates you to make conservative choices that minimize the cost of change" (123).
+
+<h3><code>Super</code> keywords</h3>
+"Sending <code>super</code> in any method passes that message up the superclass chain" (115). This is essential for inheritance. Adding <code>super</code> to a method in a subclass will inherit the code of that same method of the subclass' parent. If you're confused, <a href="http://stackoverflow.com/questions/4632224/super-keyword-in-ruby">Stack Overflow's got you covered</a>.
+
+<!--more-->
+
+<h3>Metz's code</h3>
+I've copied Metz's final example of inheritance using <code>RoadBike</code>, <code>MountainBike</code>, and <code>Bicycle</code> classes. As you can see, many of the methods (<code>initialize</code>, <code>spares</code>, different <code>default</code>s, etc.) are shared by the superclass, but some are unique to the subclasses.
+{% include_code bicycle_inheritance.rb %}
+
+This is a finished example, but Metz likes to go through what she calls "antipatterns"--common patterns that appear beneficial but are actually detrimental--to demonstrate a concept, so make sure to read <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">the full text</a>.
