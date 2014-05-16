@@ -1,0 +1,16 @@
+<h1>Images</h1>
+
+<% cache "images", expires_in: 5.minutes do %>
+  <table id="images">
+    <tr>
+      <th>Image Name</th>
+      <th>Image</th>
+    </tr>
+  <% @images.each do |image| %>
+    <tr>
+      <td><%= link_to(image.name, image) %></td>
+      <td><img src="<%= image.url %>"></td>
+    </tr>
+  <% end %>
+  </table>
+<% end %>
