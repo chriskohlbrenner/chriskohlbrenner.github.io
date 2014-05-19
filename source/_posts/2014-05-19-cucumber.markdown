@@ -1,0 +1,61 @@
+---
+layout: post
+title: "cucumber: the basics"
+date: 2014-05-19 12:47:20 -0400
+comments: true
+categories: Cucumber Rails Testing Tests Easy_Intro
+---
+<a href="http://railscasts.com/episodes/155-beginning-with-cucumber"></a>
+
+<a href="http://railscasts.com/episodes/159-more-on-cucumber"></a>
+
+Cucumber is useful, right? It provides <a href="http://cukes.info/">"behavior driven development with elegance and joy"</a>.
+
+But <a href="http://www.jackkinsella.ie/2011/09/26/why-bother-with-cucumber-testing.html">some</a> call Cucumber "no more than a clumsy wrapper over basic integration tests", insisting that "Cucumber’s syntax is costly" and recommending that programmers "swap Cucumber for pure integration tests using Capybara". <a href="http://pivotallabs.com/cucumber-when-to-use-it-when-to-lose-it/">Others</a> agree, but argue that the benefit of Cucumber is for the product manager, not the programmer.
+
+Ryan Bates, for one, likes Cucumber (or did as of 2009, when he published this RailsCast...):
+{% blockquote RailsCasts http://railscasts.com/episodes/155-beginning-with-cucumber #155 Beginning with Cucumber %}
+It might seem like quite a lot of work to define the tests in English and implement each step one at a time, but Cucumber testing has several advantages. With it you’re testing your whole stack, so you’re writing tests that cover everything from the user interface down to the database. While they’re not a replacement for unit tests, they provide an excellent way of writing high-level tests to test the overall behaviour of your application.
+{% endblockquote %}
+
+I side with the nuanced view: Cucumber tests seem like a lot of extra work for an integration test that can be implemented using Capybara. That said, there's enough of a pro-Cucumber audience espousing the advantages--BDD, outside-in development[^1], user stories, readability--that it's worth being familiar.
+
+<!--more-->
+
+<h3>How does it work?</h3>
+Cucumber[^2] boils down to:
+<ol>
+  <li>
+    Cucumber definition(s) (a <code>.feature</code> file): this file defines both:<ul>
+      <li>the feature itself (syntax of “In order”, “As a” and “I Want”)
+      <li>one or more scenarios ("Given", "When", and "Then").</li>
+    </ul>
+    <strong>Note</strong>: the Cucumber definition is enough to run <code>cucumber</code> from the command line, though it will return a message describing skipped and undefined steps.
+  </li>
+  {% codeblock %}
+  Feature: Manage Articles
+    In order to make a blog
+    As an author
+    I want to create and manage articles
+    
+    Scenario: Articles List
+      Given I have articles titled Caching, Cucumber, Redis
+      When I go to the list of articles
+      Then I should see "Caching"
+      And I should see "Cucumber"
+      And I should see "Redis"
+  {% endcodeblock %}
+
+  <li>Step definition(s): these connect to the aforementioned cucumber steps, using Ruby code inside the blocks following each of the "Given", "When", and "Then" regexes.</li>
+{% include_code cucumber/step_definitions/view_articles_steps.rb %}
+</ol>
+
+It's really that simple. And it does require extra effort--even the copying of the Cucumber definition into the step definition regex feels wrong--but the process is easy enough.
+
+What it comes down to is a different syntax for a behavior-driven process or integration test. Cucumber is one more way to implement it (in addition to Capybara, etc.). Where Cucumber really has its value is in its different syntax, which is more human-readable, meaning a non-technical person can write the Cucumber definitions (which are then implemented as step definitions).
+
+So there may be limited value for a promgrammer on his or her own, but Cucumber can be valuable for a company or team as a whole.
+
+
+[^1]: Avdi Grimm walks through outside-in testing nicely (albeit with more programming complexity/sophistication than Cucumber) in <a href="http://www.rubytapas.com/episodes/120-Outside-In">this video</a>, in which he references the Cucumber "given/when/then" syntax.
+[^2]: For a full outline of configuring a Cucumber environment, Daniel Chang outlines the setup <a href="https://github.com/danielchangNYC/YATL/blob/master/testing_setup.md">here</a>.

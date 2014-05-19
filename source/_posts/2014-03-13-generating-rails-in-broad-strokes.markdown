@@ -3,7 +3,7 @@ layout: post
 title: "Generating Rails in Broad Strokes"
 date: 2014-03-13 07:51:07 -0400
 comments: true
-categories: Ruby Rails
+categories: Ruby Rails Easy_Intro
 ---
 
 In the last couple days we've moved from Sinatra to Rails as our Ruby framework. There are actually <a href="https://en.wikipedia.org/wiki/Comparison_of_web_application_frameworks#Ruby">several Ruby frameworks</a>, but we've focused on Sinatra (as our small introductory framework) and now Rails.
