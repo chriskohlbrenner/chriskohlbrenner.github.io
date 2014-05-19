@@ -7,7 +7,15 @@ sharing: true
 footer: true
 ---
 <ul>
-  <li><a href="language-80-20.herokuapp.com">Language 80/20</a> - Rails app that applies the 80-20 rule to language learning
+  <li><a href="http://www.tendermessenger.com/">Tender</a> - Venmo for Bitcoin (simple Bitcoin payment app)
+    <ul>
+      <li>Enable users to send or receive any amount of Bitcoin</li>
+      <li>Implement inbox/outbox system for messages to accompany payments and requests.</li>
+      <li>Built with Ruby on Rails, Omniauth, Javascript, AJAX, Postgres, Heroku, Rspec, Capybara and the Coinbase API.</li>
+    </ul>
+  </li>
+
+  <li><a href="http://language-80-20.herokuapp.com">Language 80/20</a> - Rails app that applies the 80-20 rule to language learning
     <ul>
       <li>Populated database of languages and words from frequency lists based on data from OpenSubtitles.org</li>
       <li>Gathered translations from Google Translate using Net::HTTP and JSON parsing in Ruby</li>
