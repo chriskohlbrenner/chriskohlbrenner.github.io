@@ -3,7 +3,7 @@ layout: post
 title: "Ira Glass on Storytelling [and Programming]"
 date: 2014-05-11 11:54:09 -0600
 comments: true
-categories: non-code inspiration
+categories: Non-Code Inspiration
 ---
 <a href="http://vimeo.com/85040589">"For everyone in doubt, especially for myself..."</a>.
 
