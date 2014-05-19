@@ -24,7 +24,6 @@ footer: true
       <li>Implemented Wrap Bootstrap theme for front-end display</li>
     </ul>
   </li>
-  <br>
   <li><a href="107.170.26.201">Weather app</a> - Sinatra app to display current temperature
     <ul>
       <li>Scraped data from Weather.com using Nokogiri</li>
