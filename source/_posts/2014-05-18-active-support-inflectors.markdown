@@ -3,13 +3,15 @@ layout: post
 title: "Bending Strings with ActiveSupport::Inflector"
 date: 2014-05-18 13:32:15 -0600
 comments: true
-categories: active_support inflector strings ruby rails
+categories: active_support inflector strings ruby rails intro
 ---
 Ever run into issues with strings? Problems like converting CamelCase to snake_case, pluralizing words, or making integers into ordinals? Inflectors give us an easy solution.
 
 <a href="http://dictionary.reference.com/browse/inflection">{% img center /images/inflection_definition.png %}</a>
 
-An 'inflector' is anything that applies 'inflection', from Latin for 'bending', meaning that it can bend strings. Conveniently, Rails provides a number of inflectors in the ActiveSupport::Inflector module. The entire ActiveSupport component to Rails is handy; <a href="http://guides.rubyonrails.org/active_support_core_extensions.html">this RailsGuide</a> is worth a read. That said, this post is a quick primer on the inflectors.
+An 'inflector' is anything that applies 'inflection', from Latin for 'bending', meaning that it can bend strings. Conveniently, Rails provides a number of inflectors in the ActiveSupport::Inflector module. The entire ActiveSupport component to Rails is handy; <a href="http://guides.rubyonrails.org/active_support_core_extensions.html">this RailsGuide</a> is worth a read. That said, this post is a quick primer on the inflector methods in Rails.
+
+<!--more-->
 
 <h3>Set-up</h3>
 Because ActiveSupport is a Ruby on Rails component, the ActiveSupport::Inflector will be available by default in Rails applications.[^1]
