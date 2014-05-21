@@ -5,7 +5,7 @@ date: 2014-04-29 09:46:48 -0400
 comments: true
 categories: Reblog Portfolio
 ---
-<strong>Note:</strong> This post is a reblog. It originally appeared on <a href="http://squarecraft.co/blog/introducing-tender">Alex Patriquin's blog</a>.
+<strong>Note:</strong> This post is a reblog. It originally appeared on <a href="http://squarecraft.co/introducing-tender">Alex Patriquin's blog</a>.
 
 <!--more-->
 
