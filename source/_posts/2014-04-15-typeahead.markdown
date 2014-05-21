@@ -3,7 +3,7 @@ layout: post
 title: "Typeahead and Gon: a How-To Guide (Part 1 of 2)"
 date: 2014-04-15 17:15:42 -0400
 comments: true
-categories: Rails JavaScript Gems Gon Typeahead Front-End
+categories: Rails JavaScript Gems Gon Typeahead Front-End CT
 ---
 I'm currently working on <a href="http://www.tendermessenger.com/">a project</a> with users and messages (<a href="https://github.com/AlexPatriquin/BitcoinMessenger">full Github repo here</a>). The main functionality is complete--the first 80%, if you will--but there's plenty more to do--Avi has emphasized that the finishing touches, the final 20%, can drag on for much longer than anticipated. One aspect of that final 20% was a key front end feature: typeahead.
 

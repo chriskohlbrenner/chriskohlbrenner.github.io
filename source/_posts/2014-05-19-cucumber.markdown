@@ -3,7 +3,7 @@ layout: post
 title: "cucumber: the basics"
 date: 2014-05-19 12:47:20 -0400
 comments: true
-categories: Cucumber Rails Testing Tests Easy_Intro
+categories: Cucumber Rails Testing Tests Easy_Intro CT
 ---
 <a href="http://railscasts.com/episodes/155-beginning-with-cucumber"></a>
 
