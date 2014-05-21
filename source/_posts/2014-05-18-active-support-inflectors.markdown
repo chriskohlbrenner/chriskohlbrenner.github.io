@@ -3,7 +3,7 @@ layout: post
 title: "Bending Strings with ActiveSupport::Inflector"
 date: 2014-05-18 13:32:15 -0600
 comments: true
-categories: ActiveSupport Inflector Strings Ruby Rails Easy_Intro
+categories: ActiveSupport Inflector Strings Ruby Rails
 ---
 Ever run into issues with strings? Problems like converting CamelCase to snake_case, pluralizing words, or making integers into ordinals? Inflectors give us an easy solution.
 
