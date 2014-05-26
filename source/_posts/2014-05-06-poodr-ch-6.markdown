@@ -7,6 +7,11 @@ categories: Books POODR Rails Ruby Inheritance
 ---
 <strong>Having recently graduated from the Flatiron School, I am working my way through programming-related reading, beginning with Sandi Metz's "Practical Object-Oriented Design in Ruby". Click <a href="/blog/categories/POODR/">here for more posts about POODR</a>.</strong>
 
+------
+
+<br>
+What's inheritance?
+
 {% blockquote Sandi Metz http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330  "Practical Object-Oriented Design in Ruby (105)"  %}
 The idea of inheritance may seem complicated but as with all complexity, there’s a simplifying abstraction. Inheritance is, at its core, a mechanism for automatic message delegation. It defines a forwarding path for not-understood messages. It creates relationships such that, if one object cannot respond to a received message, it delegates that message to another. You don’t have to write code to explicitly delegate the message, instead you define an inheritance relationship between two objects and the forwarding happens automatically.
 {% endblockquote %}

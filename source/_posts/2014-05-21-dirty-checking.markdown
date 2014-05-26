@@ -16,7 +16,7 @@ Little did I know that dirty checking is possible (and valuable) in Ruby as well
 <!--more-->
 
 <h3>Background</h3>
-(To skip the background context and jump straight to the technical explanation, click <a href="http://localhost:4000/blog/2014/05/21/dirty-checking#code">here</a>).<br>
+(To skip the background context and jump straight to the technical explanation, click <a href="/blog/2014/05/21/dirty-checking#code">here</a>).<br>
 In a recent pairing session, I was asked to implement a feature for a Q&A polling application. Imagine the application depicted below:
 
 {% img center /images/dirty_checking/q_and_a_img.png %}
