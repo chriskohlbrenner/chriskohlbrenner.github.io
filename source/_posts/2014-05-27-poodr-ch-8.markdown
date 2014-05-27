@@ -1,0 +1,25 @@
+---
+layout: post
+title: "'Cheerful, Detached, and Merciless': Composition and Code Arrangement in Ruby (POODR: Chapter 8)"
+date: 2014-05-27 09:57:39 -0400
+comments: true
+categories: Books POODR Rails Ruby Modules Inheritance
+---
+<strong>I am working my way through programming-related reading, currently with Sandi Metz's "Practical Object-Oriented Design in Ruby". Click <a href="/blog/categories/POODR/">here for more posts about POODR</a>.</strong>
+
+-------
+<br>
+Sandi Metz describes object-oriented composition--the combining of simple, independent objects into larger, more complex wholes, in which the larger object is connected to its parts via a 'has-a' relationship--and code arrangement in Ruby more generally:
+
+
+{% blockquote Sandi Metz http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330  Practical Object-Oriented Design in Ruby (190)  %}
+Composition allows you to combine small parts to create more complex objects such that the <strong>whole becomes more than the sum of its parts</strong>. Composed objects tend to consist of simple, discrete entities that can easily be rearranged into new combinations. These simple objects are easy to understand, reuse, and test, but because they combine into a more complicated whole, the operation of the bigger application may not be as easy to understand as that of the individual parts.
+
+Composition, <a href="/blog/2014/05/06/poodr-ch-6/">classical inheritance</a>, and <a href="/blog/2014/05/26/poodr-ch-7/">behavior sharing via modules</a> are competing techniques for arranging code. Each has different costs and benefits; these differences predispose them to be better at solving slightly different problems.
+
+These techniques are tools, nothing more, and <strong>you’ll become a better designer if you practice each of them</strong>. Learning to use them properly is a matter of experience and judgment, and one of the best ways to gain experience is to learn from your own mistakes. <strong>The key to improving your design skills is to attempt these techniques, accept your errors cheerfully, remain detached from past design decisions, and refactor mercilessly</strong>.
+
+As you gain experience, you’ll get better at choosing the correct technique the first time, your costs will go down, and your applications will improve.
+{% endblockquote %}
+
+Cheerful, detached, and merciless. New descriptors of a <a href="http://threevirtues.com/">virtuous programmer</a>?
