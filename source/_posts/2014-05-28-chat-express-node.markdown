@@ -7,6 +7,8 @@ categories: [JavaScript, Angular, Node.js, Node, SockJS, WebSockets, Front End F
 ---
 Having confidence in one web development framework, Ruby on Rails, I've recently set out to better understand some other established frameworks, particularly JavaScript frameworks. It was difficult to know where to focus my efforts[^1], and I eventually decided to learn by doing. I ended up with <a href="http://node-express-chat.herokuapp.com/">ExpressChat</a>, a simple real-time chat application built using Node.js, Express, AngularJS, and SockJS.
 
+{% img center /images/node-chat-express/chat-express-screenshot.png %}
+
 <!--more-->
 
 <h3>The Technologies</h3>
