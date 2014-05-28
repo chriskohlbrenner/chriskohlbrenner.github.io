@@ -1,0 +1,13 @@
+---
+layout: post
+title: "On Vim, Vimium, and Workflow"
+date: 2014-05-27 12:27:09 -0400
+comments: true
+categories: text_editor workflow
+published: false
+---
+Write about Vim
+vimtutor
+Vimium
+http://yannesposito.com/Scratch/en/blog/Learn-Vim-Progressively/
+https://vimium.github.io/
