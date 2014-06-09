@@ -3,7 +3,7 @@ layout: post
 title: "Debugging with Git: Log -S, Bisect, and Blame"
 date: 2014-06-04 11:24:44 -0400
 comments: true
-categories: 
+categories: [Git, Debugging]
 ---
 At a recent <a href="http://meetup.com/nycruby/events/182591142/">meetup</a>, Danielle Sucher discussed debugging in Ruby. Be jealous--those who came were given rubber duckies, since no talk on debugging would be complete without mentioning <a href="http://en.wikipedia.org/wiki/Rubber_duck_debugging">rubber duck debugging</a>.
 

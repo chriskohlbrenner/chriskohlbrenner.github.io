@@ -3,7 +3,7 @@ layout: post
 title: "Dirty Checking of Callbacks in Rails"
 date: 2014-05-21 14:30:19 -0400
 comments: true
-categories: ActiveModel Dirty_Checking Ruby Rails Callbacks CT
+categories: ActiveModel Dirty_Checking Ruby Rails Callbacks
 ---
 <strong>Summary</strong>: Dirty checking is a way of tracking changes by checking a variable's value against what that variable's value was. The Ruby on Rails <code>ActiveModel::Dirty</code> module enables dirty checking. This is useful for running ActiveRecord callbacks only when an attribute of an active model has changed.
 

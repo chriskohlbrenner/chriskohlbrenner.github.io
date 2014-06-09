@@ -3,7 +3,7 @@ layout: post
 title: "An introduction to redis"
 date: 2014-05-06 21:54:09 -0400
 comments: true
-categories: Ruby Redis Data NoSQL CT
+categories: Ruby Redis Data NoSQL
 ---
 Redis, which got its name as a <strong>re</strong>mote <strong>di</strong>ctionary <strong>s</strong>erver, is a key-value data store that can be useful for temporary caching or as a NoSQL ('not only SQL') data store.
 

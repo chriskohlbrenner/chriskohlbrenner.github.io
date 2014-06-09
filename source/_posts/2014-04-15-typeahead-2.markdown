@@ -3,7 +3,7 @@ layout: post
 title: "Typeahead: a How-To Guide (Part 2 of 2)"
 date: 2014-04-16 9:00:00 -0400
 comments: true
-categories: Rails JavaScript Gems Gon Typeahead Front-End CT
+categories: Rails JavaScript Gems Gon Typeahead Front-End
 ---
 <i><strong>Note:</strong> If you haven't already read Part 1, which covers the Gon gem in detail, you can see it <a href="/blog/2014/04/15/typeahead/">here</a>. In this post, I'll cover the <code>.typeahead</code> JavaScript method.</i>
 

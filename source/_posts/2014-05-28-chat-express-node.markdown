@@ -3,7 +3,7 @@ layout: post
 title: "JavaScript frameworks: On Node.js, Express, AngularJS, and SockJS"
 date: 2014-05-28 12:55:45 -0400
 comments: true
-categories: [JavaScript, Angular, Node.js, Node, SockJS, WebSockets, Front End Frameworks, CT]
+categories: [JavaScript, Angular, Node.js, Node, SockJS, WebSockets, Front End Frameworks]
 ---
 Having confidence in one web development framework, Ruby on Rails, I've recently set out to better understand some other established frameworks, particularly JavaScript frameworks. It was difficult to know where to focus my efforts[^1], and I eventually decided to learn by doing. I ended up with <a href="http://node-express-chat.herokuapp.com/">ExpressChat</a>, a simple real-time chat application built using Node.js, Express, AngularJS, and SockJS.
 

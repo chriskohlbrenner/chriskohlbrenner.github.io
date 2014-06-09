@@ -3,7 +3,7 @@ layout: post
 title: "caching in rails"
 date: 2014-05-12 11:11:54 -0600
 comments: true
-categories: Caching Cache Rails Memcached CT
+categories: Caching Cache Rails Memcached
 ---
 <strong>Summary</strong>: caching temporarily stores data so future requests don't take as much time. There are multiple caching techniques that can be easily implemented in Rails applications.
 
