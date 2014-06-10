@@ -1,0 +1,49 @@
+---
+layout: post
+title: "Notes on Cost-Effective Testing (POODR: Chapter 9)"
+date: 2014-06-10 10:17:18 -0400
+comments: true
+categories: [POODR, Ruby, Rails, Books, Testing, Tests]
+---
+<strong>I am working my way through programming-related reading, currently with Sandi Metz's "Practical Object-Oriented Design in Ruby". Click <a href="/blog/categories/POODR/">here for more posts about POODR</a>.</strong>
+
+-------
+<br>
+I've written about testing <a href="/blog/categories/testing/">previously</a>, but Sandi Metz, in the last chapter of POODR, lends some valuable insights to testing, specifically about writing <strong>cost-effective</strong> tests with an emphasis on <strong>changeable code</strong>. In this post, I simply reference some of her comments on testing that I found most helpful.
+
+<h3>Why Test?</h3>
+Metz starts by describing, "Writing changeable code is an art whose practice relies on three different skills" (191). These three skills, as she sees them, are:
+
+* Understanding object-oriented design
+* Refactoring code
+* Writing high-value tests
+
+
+<h3>What if the tests are costly themselves?</h3>
+"The true purpose of testing, just like the true purpose of design, is to reduce costs. If writing, maintaining, and running tests consumes more time than would otherwise be needed to fix bugs, write documentation, and design applications tests are clearly not worth writing and no rational person would argue otherwise" (192).
+
+"The solution to the problem of costly tests, however, is not to stop testing but instead to get better at it. Getting good value from tests requires clarity of intention and knowing what, when, and how to test" (192).
+
+<h3>Benefits of Testing</h3>
+
+* <u>Finding Bugs [and finding them early]</u> - "Fixing bugs early always lowers costs" (193).
+* <u>Supplying Documentation</u> - "Tests provide the only reliable documentation of design...long after paper documents become obsolete and human memory fails" (193).
+* <u>Deferring Design Decisions</u> - "Tests allow you to safely defer design decisions...when you are aware of just one concrete case in the present but you fully expect new cases to arrive in the near future" (193).
+* <u>Supporting Abstractions</u> - "There is a level of design abstraction where it is almost impossible to safely make any change unless the code has tests" (194).
+* <u>Exposing Design Flaws</u> - "Tests are the canary in the coal mine; when the design is bad, testing is hard" (194).
+
+<h3>Know what to test</h3>
+"Most programmers write too many tests...The safest way to [write fewer tests] is to test everything just once and in the proper place" (194).
+
+<h3>Know when to test</h3>
+"You should write tests first, whenever it makes sense to do so...Be warned, however, that writing tests first is no substitute for and does not guarantee a well-designed application" (197).
+
+<h3>Know how to test</h3>
+"There are many good reasons to stay within the testing mainstream [with frameworks like MiniTest and RSpec]...Both [TDD and BDD] are completely acceptable. Each has costs and benefits" (199).
+
+<h3>In conclusion</h3>
+{% blockquote Sandi Metz http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330  Practical Object-Oriented Design in Ruby (240)  %}
+Tests are indispensable. Well-designed applications are highly abstract and under constant pressure to evolve; without tests these applications can neither be understood nor safely changed. The best tests are loosely coupled to the underlying code and test everything once and in the proper place. They add value without increasing costs.
+
+A well-designed application with a carefully crafted test suite is a joy to behold and a pleasure to extend. It can adapt to every new circumstance and meet any unexpected need.
+{% endblockquote %}

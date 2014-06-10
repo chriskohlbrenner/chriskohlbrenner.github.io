@@ -17,7 +17,7 @@ Having confidence in one web development framework, Ruby on Rails, I've recently
 
 <u>Translated</u>: Two key features:[^2]
 
-* "Event-driven": in contrast to a 'thread-based' model, the web server accepts the request, spins it off to be handled, and then goes on to service the next web request. This is faster than the traditional thread-based model of web apps, which holds a connection open until it has performed the request and/or whatever other transaction was sent.</li>
+* "Event-driven": in contrast to a 'thread-based' model, the web server accepts the request, spins it off to be handled, and then goes on to service the next web request. This is faster than the traditional thread-based model of web apps, which holds a connection open until it has performed the request and/or whatever other transaction was sent.
 * "Non-blocking": see "event-driven. Because the web server is always accepting requests instead of waiting for read or write operations, it is a non-blocking I/O (input/output). That's faster.[^3]
 
 <h4>Express</h4>
