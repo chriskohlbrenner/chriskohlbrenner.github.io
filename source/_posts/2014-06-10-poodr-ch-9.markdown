@@ -18,6 +18,7 @@ Metz starts by describing, "Writing changeable code is an art whose practice rel
 * Refactoring code
 * Writing high-value tests
 
+<!--more-->
 
 <h3>What if the tests are costly themselves?</h3>
 "The true purpose of testing, just like the true purpose of design, is to reduce costs. If writing, maintaining, and running tests consumes more time than would otherwise be needed to fix bugs, write documentation, and design applications tests are clearly not worth writing and no rational person would argue otherwise" (192).
