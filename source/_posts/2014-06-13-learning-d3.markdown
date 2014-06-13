@@ -1,0 +1,66 @@
+---
+layout: post
+title: "learning d3"
+date: 2014-06-13 15:22:52 -0400
+comments: true
+categories: 
+---
+<link rel="stylesheet" type="text/css" href="/stylesheets/d3-style.css" />
+<script type="text/javascript" src="/javascripts/libs/d3/d3.v3.js"></script>
+
+I spent some time today learning the basics of D3.js. D3.js, or "Data-Driven Documents", is:
+
+{% blockquote D3.js http://d3js.org/  "Data-Driven Documents"  %}
+a JavaScript library for manipulating documents based on data. D3 helps you bring data to life using HTML, SVG and CSS. D3’s emphasis on web standards gives you the full capabilities of modern browsers without tying yourself to a proprietary framework, combining powerful visualization components and a data-driven approach to DOM manipulation.
+{% endblockquote %}
+
+Basically, D3 makes data visualizations easy, enabling manipulation of numeric, geographic, or any other kind of data into good-looking graphics. For example, these Flatiron classmates of mine developed visualizations of Twitter data. Or, more simply, you could chart out blog page views per day (redisplaying what Google Analytics already does), as below. Pretty handy.
+
+-------
+<div>
+  <strong>Pageviews by date (hover over bar to see date):</strong><u><p class="date">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p></u>
+  <script type="text/javascript" src="/javascripts/libs/d3/script.js"></script>
+</div>
+
+-------
+
+I just wanted to look into the basics, which I did by following <a href="http://alignedleft.com/tutorials/d3">this tutorial by Scott Murray</a>. It's a pretty quick walkthrough of a bar graph and scatterplot, from the fundamentals of HTML and CSS all the way to polishing off a graph with axes and scale. What follows is an overview of my own lessons learned from the walkthrough.
+
+<!--more-->
+
+<h3>Visualizing, mapping, and binding data</h3>
+A few verbs, all of which relate to data visualization. To quote Scott Murray, 
+
+{% blockquote Scott Murray http://alignedleft.com/tutorials/d3/binding-data  "http://alignedleft.com/tutorials/d3/binding-data"  %}
+What is binding, and why would I want to do it to my data?
+
+Data visualization is a process of <strong>mapping</strong> data to visuals. Data in, visual properties out. Maybe bigger numbers make taller bars, or special categories trigger brighter colors. The mapping rules are up to you.
+
+With D3, we bind our data input values to elements in the DOM. Binding is like “attaching” or associating data to specific elements, so that later you can reference those values to apply mapping rules. Without the binding step, we have a bunch of data-less, un-mappable DOM elements. No one wants that."
+{% endblockquote %}
+
+Relatively straightforward, but hugely important for two reasons:
+<ol>
+  <li>The <strong>whole point</strong> of data visualization is to "map" data input values so as to <strong>communicate effectively</strong>. Mike Bostock <a href="http://bost.ocks.org/mike/bar/3/">calls it</a> the "critical component of effective visualization: effective communication. It doesn’t matter how good a chart looks if it doesn’t communicate anything!"</li>
+  <li><strong>Data binding</strong> is huge. It's central to front end frameworks like Angular JS, because it connects the front end user interface with the back end business logic, thus "binding", or <strong>making the data accessible</strong> between the two.</li> 
+</ol>
+
+<h3>Getting started</h3>
+Import the <a href="http://d3js.org/d3.v3.js">D3 library</a> into your project. Get familiar with <a href="http://alignedleft.com/tutorials/d3/chaining-methods">D3 selectors and chain syntax</a>. Basically, <code>d3</code> references the D3 object so we can access D3 methods. From there, it's easy to select, add, and <strong>bind data</strong>.
+
+The <code>enter</code> method is essential. We bring a dataset, select which part of the DOM we want to work with, and bind data to create a visualization. But we also want to create new data-bound elements so as to visualize it fully. And we want to do it without creating every element manually. Enter the <code>enter</code> method, which creates new placeholder elements for us.
+
+<h3>Making it more interactive</h3>
+As I described, the tutorial is pretty straightforward and has us up and running with some graphs in no time. But a real visualization needs to be more dynamic, more interactive, right? There's a million directions to go with this, but the easiest for me to get started were two things:
+<ol>
+  <li><strong>CSS</strong>: I'm embarassed that I didn't even know the <code>:hover</code> selector. I mean, in retrospect, I'm sure I've used CSS selectors like <code>:hover</code> or <code>:visited</code>, but they didn't come immediately to mind. In any case, something as simple as <code>.bar:hover { fill: blue; }</code> can make a big difference--now when I "hover" my mouse over a bar of class "bar" in the bar graph, that bar will change colors. A simple UI addition.</li>
+  <li><strong>JQuery</strong>: being familiar with JQuery already, it was the easiest way to implement some more interactivity. For example, when hovering a point on the scatterplot, it's nice to display the coordinates. JQuery enables that in typical event listener (<code>[element].on("hover", function(){ [handler] })</code>) and handler (modify the content with the <code>.text()</code> method) fashion.</li>
+</ol>
+
+You can see how the scatterplot looks below! The code is also accessible <a href="https://github.com/chriskohlbrenner/Learning-D3/tree/master/basics">on Github</a>.
+
+<h3>Scatterplot of randomized data</h3>
+<strong>Coordinates: </strong><p class="coords">---</p>
+<script type="text/javascript" src="/javascripts/libs/d3/scatterplot.js"></script>
+
+</div>
