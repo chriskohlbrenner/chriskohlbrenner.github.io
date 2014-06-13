@@ -3,7 +3,7 @@ layout: post
 title: "learning d3"
 date: 2014-06-13 15:22:52 -0400
 comments: true
-categories: 
+categories: [D3, JavaScript, Data Visualization, Front End]
 ---
 <link rel="stylesheet" type="text/css" href="/stylesheets/d3-style.css" />
 <script type="text/javascript" src="/javascripts/libs/d3/d3.v3.js"></script>
@@ -60,7 +60,7 @@ As I described, the tutorial is pretty straightforward and has us up and running
 You can see how the scatterplot looks below! The code is also accessible <a href="https://github.com/chriskohlbrenner/Learning-D3/tree/master/basics">on Github</a>.
 
 <h3>Scatterplot of randomized data</h3>
-<strong>Coordinates: </strong><p class="coords">---</p>
+<strong>Coordinates: </strong><p class="coords">--</p>
 <script type="text/javascript" src="/javascripts/libs/d3/scatterplot.js"></script>
 
 </div>
