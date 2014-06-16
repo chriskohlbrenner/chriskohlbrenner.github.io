@@ -8,11 +8,11 @@ footer: true
 ---
 <p>Below are a few of the apps I've built in the last several months:</p>
 <ul>
-  <li><a href="http://world-cup-14.herokuapp.com/">WorldCupApp</a> (June 2014) - an app tracking the 2014 World Cup(<a href="https://github.com/chriskohlbrenner/world-cup">code on Github</a>).
+  <li><a href="http://world-cup-14.herokuapp.com/">WorldCupApp</a> (June 2014) - 2014 World Cup tracker (<a href="https://github.com/chriskohlbrenner/world-cup-2014">code on Github</a>).
     <ul>
       <li>Rails app with multiple models and associations</li>
       <li>Real-time updates using Rake tasks and Heroku scheduler</li>
-      <li>Built using the <a href="http://www.kimonolabs.com/worldcup/explorer">"(un)Official World Cup API"</a></li>
+      <li>Built using the <a href="http://www.kimonolabs.com/worldcup/explorer">"(un)official World Cup API"</a></li>
     </ul>
   </li>
   <br>
