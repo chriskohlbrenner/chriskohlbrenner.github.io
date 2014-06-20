@@ -16,6 +16,9 @@ a JavaScript library for manipulating documents based on data. D3 helps you brin
 
 Basically, D3 makes data visualizations easy, enabling manipulation of numeric, geographic, or any other kind of data into good-looking graphics. For example, these Flatiron classmates of mine developed visualizations of Twitter data. Or, more simply, you could chart out blog page views per day (redisplaying what Google Analytics already does), as below. Pretty handy.
 
+
+<!--more-->
+
 -------
 <div>
   <strong>Pageviews by date (hover over bar to see date):</strong><u><p class="date">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p></u>
@@ -25,8 +28,6 @@ Basically, D3 makes data visualizations easy, enabling manipulation of numeric, 
 -------
 
 I just wanted to look into the basics, which I did by following <a href="http://alignedleft.com/tutorials/d3">this tutorial by Scott Murray</a>. It's a pretty quick walkthrough of a bar graph and scatterplot, from the fundamentals of HTML and CSS all the way to polishing off a graph with axes and scale. What follows is an overview of my own lessons learned from the walkthrough.
-
-<!--more-->
 
 <h3>Visualizing, mapping, and binding data</h3>
 A few verbs, all of which relate to data visualization. To quote Scott Murray, 
