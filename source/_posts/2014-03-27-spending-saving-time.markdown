@@ -3,7 +3,7 @@ layout: post
 title: "Wasting, Spending, and Saving Time on Active Support"
 date: 2014-03-27 13:08:38 -0400
 comments: true
-categories: Ruby Rails ActiveSupport Time
+categories: Ruby Rails ActiveSupport Time Database
 ---
 
 <strong>Summary:</strong> Dealing with time can be difficult. <a href="http://api.rubyonrails.org/classes/Time.html">ActiveSupport</a> helps. Store daily time values (e.g., daily schedules, irrespective of date) in a database as offsets from midnight (in seconds).
