@@ -5,7 +5,7 @@ date: 2014-05-02 09:42:24 -0400
 comments: true
 categories: Books POODR Rails Ruby Polymorphism Duck_Type
 ---
-<strong>Having recently graduated from the Flatiron School, I am working my way through programming-related reading, beginning with Sandi Metz's "Practical Object-Oriented Design in Ruby". Click <a href="/blog/categories/POODR/">here for more posts about POODR</a>.</strong>
+<strong>Having recently graduated from the Flatiron School, I am working my way through programming-related reading, beginning with Sandi Metz's "Practical Object-Oriented Design in Ruby". Click <a href="/blog/categories/poodr/">here for more posts about POODR</a>.</strong>
 
 My hope for this blog post is not to intimidate (as Sandi Metz suggests below), but to communicate the concepts of polymorphism and duck typing in Ruby, as Metz describes them in Chapter 5 of POODR.
 

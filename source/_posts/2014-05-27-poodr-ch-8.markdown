@@ -5,7 +5,7 @@ date: 2014-05-27 09:57:39 -0400
 comments: true
 categories: Books POODR Rails Ruby Modules Inheritance
 ---
-<strong>I am working my way through programming-related reading, currently with Sandi Metz's "Practical Object-Oriented Design in Ruby". Click <a href="/blog/categories/POODR/">here for more posts about POODR</a>.</strong>
+<strong>I am working my way through programming-related reading, currently with Sandi Metz's "Practical Object-Oriented Design in Ruby". Click <a href="/blog/categories/poodr/">here for more posts about POODR</a>.</strong>
 
 -------
 <br>

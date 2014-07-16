@@ -5,7 +5,7 @@ date: 2014-05-26 11:52:50 -0400
 comments: true
 categories: Books POODR Rails Ruby Modules Inheritance
 ---
-<strong>I am working my way through programming-related reading, currently with Sandi Metz's "Practical Object-Oriented Design in Ruby". Click <a href="/blog/categories/POODR/">here for more posts about POODR</a>.</strong>
+<strong>I am working my way through programming-related reading, currently with Sandi Metz's "Practical Object-Oriented Design in Ruby". Click <a href="/blog/categories/poodr/">here for more posts about POODR</a>.</strong>
 
 <strong>Summary</strong>: When multiple objects play a common role, modules allow objects to share behavior. Ruby does not support multiple inheritance directly, but does so through mixins, or classes mixed with modules. The <a href="/blog/2014/05/26/poodr-ch-7#code">Memorial Day example below</a> illustrates modules and mixins.
 
