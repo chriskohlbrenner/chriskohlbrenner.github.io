@@ -3,7 +3,7 @@ layout: post
 title: "JavaScript's historical context (according to Douglas Crockford)"
 date: 2014-07-21 10:01:39 -0400
 comments: true
-categories: [JavaScript, History]
+categories: [JavaScript, History, Douglas Crockford]
 ---
 <strong>Summary</strong>: I'm working my way through a few <a href="https://github.com/bolshchikov/js-must-watch">must-watch videos about JavaScript</a>. If you know JavaScript, pretend to know JavaScript, or hope to learn JavaScript, check out those videos. Or read this and the <a href="/blog/2014/07/21/intro-to-javascript-crockford">following post</a> (and save yourself three hours of video-watching), in which I pull some of my favorite quotes from what <a href="https://en.wikipedia.org/wiki/Douglas_Crockford">Douglas Crockford</a> has to say about JavaScript.
 
