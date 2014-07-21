@@ -7,7 +7,7 @@ categories:
 ---
 <strong>Summary</strong>: I'm working my way through a few <a href="https://github.com/bolshchikov/js-must-watch">must-watch videos about JavaScript</a>. If you know JavaScript, pretend to know JavaScript, or hope to learn JavaScript, check out those videos. Or read this and the <a href="/blog/2014/07/21/javascripts-historical-context-crockford">previous post</a> (and save yourself three hours of video-watching), in which I pull some of my favorite quotes from what <a href="https://en.wikipedia.org/wiki/Douglas_Crockford">Douglas Crockford</a> has to say about JavaScript.
 
-<strong>Notes</strong>: The quotes below represent some of the key statements (as I judge them) in order of their appearance in Crockford's first and second talks on JavaScript. Read together, they outline the main trajectory of Crokford's presentation, but they are not intended to replace the entirety of the talk.
+<strong>Notes</strong>: The quotes below represent some of the key statements (as I judge them) in order of their appearance in Crockford's <a href="http://youtu.be/RO1Wnu-xKoY">second talk</a> on JavaScript. Read together, they outline the main trajectory of Crokford's presentation, but they are not intended to replace the entirety of the talk.
 
 <h3>Crockford on JavaScript's key features</h3>
 
