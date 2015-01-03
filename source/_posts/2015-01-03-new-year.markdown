@@ -35,3 +35,5 @@ He defines those four computing properties as digital, binary, electronic, and g
 Incredible how much took place--or was at least initiated--over the course of a single year, and telling that the contributions that persisted were ones of collaboration, whether as partnerships of key individuals (e.g., Turing, Max Newman, and Alonzo Church) or in settings with collaborative resources (e.g., Bell Labs and major universities). Without diminishing their significance, those lone innovators were ultimately unable to mark history in the same way (e.g., Atanasoff, whose prototype was forgotten and dismantled, or Zuse, whose work with a single college friend was interrupted and lost when he was pulled into engineering airplanes for the German military).
 
 As we head into this new year, I can only hope 2015 will be half as innovative as 1937, and that I can apply those lessons of collaboration to my blog and my continued growth as a developer.
+
+CEK
