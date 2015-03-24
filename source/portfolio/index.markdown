@@ -6,7 +6,7 @@ comments: true
 sharing: true
 footer: true
 ---
-<p>Below are a few of the apps I've built in the last several months:</p>
+<p>Below are a few of the apps I've built:</p>
 <ul>
   <li><a href="http://world-cup-14.herokuapp.com/">WorldCupApp</a> (June 2014) - 2014 World Cup tracker (<a href="https://github.com/chriskohlbrenner/world-cup-2014">code on Github</a>).
     <ul>
