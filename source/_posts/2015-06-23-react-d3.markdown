@@ -1,0 +1,93 @@
+---
+layout: post
+title: "Rethinking UI patterns: D3 and React"
+date: 2015-06-23 08:17:36 -0400
+comments: true
+categories: [User Interface, UI, JavaScript, Front End, React, D3, Ember, Data Visualization]
+---
+
+Imagine the entirety of your organization's chatroom communications. Imagine making sense of those communications in a single interactive visualization, one that factors in date and time, chatroom name, individual participants' names, and message content.
+
+I recently implemented just such a feature. While something like this of course requires back end analytics, aggregations of data, and "data science" that can handle such "big data," it also relates to user interface (UI), the subject of this blog post.
+
+<!--more-->
+
+<h3>UI background</h3>
+
+Until recently, this app's client-side UI was built entirely in [Ember.js](http://emberjs.com/), a framework intended for "ambitious" applications (and thus a good fit!). Over time, however, the UI team came to realize some of Ember's limitations, some of those conventions and patterns inherent to the framework that--rather than making developers' lives easier, as is any framework's aim--posed challenges to the organization and maintenance of our codebase.
+
+Enter [React.js](https://facebook.github.io/react/), a UI library that solely addresses issues in the view layer. Over the last 5-6 months, we have been porting Ember code over to React, started using React for all greenfield components, and made React the standard for our UI. This blog post won't cover the litany of (fiercely debated) pros and cons of Ember vs. React, but suffice it to say that React has made us on the product development team unanimously happier.
+
+
+<h3>D3</h3>
+
+All of that is just background to the feature I initially described, because a data visualization isn't implemented solely in Ember or React. Or is it?
+
+<h4>The old way</h4>
+
+The short answer is no. To effectively create data visualizations, we have leveraged [D3.js](http://d3js.org/), a JavaScript library for manipulating documents. D3 functions similarly to jQuery in that it emphasizes selectors and listeners; for example, to initialize a D3 svg, we might write `d3.select('body').append('svg') #...` and, from there, append rectangles and lines, bind click and hover actions, etc. Not so different from a basic jQuery application (`$('button').on('click', function()...)`).
+
+That said, what D3 ultimately produces is a series of DOM elements, specifically SVG elements. Some basic D3 code might look like:
+
+
+{% codeblock lang:javascript d3-viz.js %}
+d3.select('body').append('svg')
+        .attr('width', 500)
+        .attr('height', 500)
+        .selectAll('rect')
+                .data([10,20,30])
+                .enter()
+                .append('rect')
+                        .attr('width', function(d){ return d * 10 })
+                        .attr('height', 20)
+                        .attr('fill', 'blue')
+                        .attr('y', function(d, i) { return i * 50 });
+{% endcodeblock %}
+
+That code then maps to SVG elements in the DOM, looking something like this:
+
+{% codeblock lang:html d3-svg.html %}
+<svg width="500" height="500">
+                <rect width="100" height="20" fill="blue" y="0"></rect>
+                <rect width="200" height="20" fill="blue" y="50"></rect>
+                <rect width="300" height="20" fill="blue" y="100"></rect>
+</svg>
+{% endcodeblock %}
+
+There are multiple ways to wire D3 up to a given web framework, but it's ultimately a script that runs to build the component in the DOM. Our old pattern was loosely the following:
+
+  - fetch model in the route
+  - set up component properties in the controller
+  - render the component in the template:      
+  - in Ember's `didInsertElement` hook in the component, run the D3 script that selects body and appends SVG
+
+<h4>Made new</h4>
+
+Until recently, we had been able to maintain and reuse our Ember D3 components, but this chat timelines visualization required a brand new D3 component, one we decided to write in React.
+
+My initial instinct, as with simpler React components, was to render the component with properties and run the D3 script in React's `render` or `componentDidMount` hook. What became clear, however, was that we didn't need to run the D3 script at all. In place of `d3.select(...).append(...)` we could simply build up svg elements in the `render` hook.
+
+This approach, while going against my initial instinct of using D3's pattern, aligns well with React's strengths of one-way data flow and components that are easier to reason about than traditional data binding. It's a declarative approach that expresses what it does, as opposed to an imperative approach that expresses how it's done. And it has benefits of composibility and extensibility--rather than selecting and appending as additional design specs come in, we can componentize everything--bars, axes, labels, plots--to reuse later or modify with greater control.
+
+And that earlier question about data visualizations being written entirely in a framework? Considered this way, we can construct the SVG elements directly in React, something like this:
+
+
+{% codeblock lang:javascript d3-viz-react.js %}
+var D3BarGraph = React.createClass({
+        render: function() {
+                <svg width={this.props.width} height={this.props.height}>
+                        <rect width="100" height="20" fill="blue" y="0"></rect>
+                        <rect width="200" height="20" fill="blue" y="50"></rect>
+                        <rect width="300" height="20" fill="blue" y="100"></rect>
+                </svg>
+        }
+});
+React.render(<D3BarGraph width=500 height=500 data={[10,20,30]} />, mountNode);
+{% endcodeblock %}
+
+You can pretty quickly see how the inner rectangles could be pulled out as components of their own, as could axes, labels, etc. We've found this pattern to be much easier to reason about when building visualizations in our UI. So here's to rethinking UI patterns and, as a result, writing code that's easier to reason through.
+
+<h3>Further Resources</h3>
+
+  - [D3 and React - the future of charting components?](http://10consulting.com/2014/02/19/d3-plus-reactjs-for-charting/)
+  - [React & Data Visualization](https://fraserxu.me/2015/06/03/react-data-visualization/)
