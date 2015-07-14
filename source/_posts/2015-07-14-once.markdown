@@ -32,3 +32,7 @@ It is an issue, however, when scope and `this` matter. For example, using Ramda'
 This occurs (on the left) because without passing the correct value for `this`, `x` in the `addOne` function becomes `"[object Arguments]"`, which, when 1 is added, becomes `"[object Arguments]1"`. On the other hand (on the right), given the correct value for `this`, `x` becomes 10 (or whatever argument we pass) and the result is correct.
 
 And that about concludes this post, with one open question remaining: currying? Ramda's implementation of `once` uses `curry1`, in keeping with its API (functions first, data last) and functional style. Currying is just a way of turning a function that expects n parameters into one that, when supplied less than n parameters, returns a new function awaiting the remaining parameters. It's a handy way that Ramda enables us to build functions, pass those functions around as first-class objects, and call when ready. Back to our `once` examples, currying is what's happening when we call `once(addOne)` and see `function anonymous()`. `once(addOne)` expects one more parameter, so we call `once(addOne)(10)` and get 11.
+
+<h3>Resources</h3>
+<a href="http://fr.umio.us/why-ramda/">Why Ramda?</a><br>
+<a href="http://fr.umio.us/favoring-curry/">Favoring Curry</a><br>
