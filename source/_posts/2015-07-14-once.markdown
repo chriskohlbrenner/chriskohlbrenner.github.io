@@ -1,0 +1,34 @@
+---
+layout: post
+title: "Once"
+date: 2015-07-14 11:29:18 -0400
+comments: true
+categories: [JavaScript, Functional Programming, Ramda]
+---
+Someone recently described to me that, in an interview, he was asked to implement a function that would only run once, even if invoked multiple times. This immediately made me think of [Ramda](http://ramdajs.com/)--my go-to JavaScript library (think [Underscore](http://underscorejs.org/) or [lodash](https://lodash.com/), but with a little more functional programming flavor)--and its [`once` function](http://ramdajs.com/docs/#once):
+
+{% img /images/ramda-once.png %}
+
+<!--more-->
+
+Great, `once` "accepts a function fn and returns a function that guards invocation of fn such that fn can only ever be called once, no matter how many times the returned function is invoked." Getting back to the original question (i.e., in an interview), this would be one kind of answer. It would show knowledge of the JavaScript ecosystem, some of its libraries (and [why to use them](http://fr.umio.us/why-ramda/)), and how to apply it to a specific problem.
+
+That said, let's go deeper--how would we implement `once` from scratch? Since Ramda's implementation worked so well for us, let's look no further than Ramda. [Looking at the source](https://github.com/ramda/ramda/blob/master/src/once.js), it's relatively straightforward to see what's going on:
+
+{% include_code ramda/once.js %}
+
+Let's ignore `_curry1` for now (though we'll get to it), and rewrite as follows:
+
+{% img /images/ramda-once-2.png %}
+
+And there we have it! So what's actually happening here? The first several lines are simple: we declare the variables `called` (initialized to `false`) and `result`, return `result` if `called` is true, otherwise set `called` to true and then assign `result = fn.apply(this, arguments);`.
+
+What is that line doing? It's using `apply()`, which ["calls a function with a given this value and arguments provided as an array"](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply). It's a way of dealing with scope, making sure we pass the right value of `this` to `fn`. In our example above (`console.log...`), this isn't an issue, so we could plausibly replace the line in question with `result = fn(arguments);`.
+
+It is an issue, however, when scope and `this` matter. For example, using Ramda's example of wrapping an `addOne` function (`var addOneOnce = R.once(function(x){ return x + 1; });`) using `once`, we can see that not using `apply()` (left) breaks the adding behavior, but it works when using `apply()` (right).
+
+{% img /images/ramda-apply-no-apply.png %}
+
+This occurs (on the left) because without passing the correct value for `this`, `x` in the `addOne` function becomes `"[object Arguments]"`, which, when 1 is added, becomes `"[object Arguments]1"`. On the other hand (on the right), given the correct value for `this`, `x` becomes 10 (or whatever argument we pass) and the result is correct.
+
+And that about concludes this post, with one open question remaining: currying? Ramda's implementation of `once` uses `curry1`, in keeping with its API (functions first, data last) and functional style. Currying is just a way of turning a function that expects n parameters into one that, when supplied less than n parameters, returns a new function awaiting the remaining parameters. It's a handy way that Ramda enables us to build functions, pass those functions around as first-class objects, and call when ready. Back to our `once` examples, currying is what's happening when we call `once(addOne)` and see `function anonymous()`. `once(addOne)` expects one more parameter, so we call `once(addOne)(10)` and get 11.
