@@ -8,6 +8,6 @@ footer: true
 ---
 {% img right /images/profile.png 200 200 %}
 
-Chris EK is a web developer in New York City. He graduated from the Flatiron School in April 2014, and now works for RedOwl Analytics as a software engineer, primarily developing in Ember.js, Node.js, and D3.js.
+Chris EK is a developer in New York, NY. He studied liberal arts, lived in the Middle East, went to the Flatiron School, and now works for RedOwl Analytics as a software engineer. Chris focuses primarily on JavaScript and the web, using technologies like Ember, React, Node, and D3.
 
-Chris is on on <a href="https://twitter.com/cek_io">Twitter</a> and <a href="https://github.com/chriskohlbrenner">Github</a>, and is reachable by <a href="mailto:cekohlbrenner@gmail.com">email</a>.
+Reach out to Chris on <a href="https://twitter.com/cek_io">Twitter</a> and <a href="https://github.com/chriskohlbrenner">Github</a>.
