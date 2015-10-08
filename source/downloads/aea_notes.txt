@@ -1,0 +1,277 @@
+--------------------------------------------------------------------------------------------------------
+DAY 1
+
+"Career Advice from a Cranky Old Man"
+Jeffrey Zeldman
+
+ - never talk about aesthetics, talk about business problems you're solving
+ - attitude trumps work in most companies
+ - "blog like no one's reading" ... "the more I write, the more I understand what I think"
+
+
+
+"Design Decisions Through the Lens of Performance"
+Yesenia Perez-Cruz
+
+ - "Slow, heavy sites are the result of poor planning, poor communicatiin, and poor awareness."
+ - Design is a balancing act between business goals and user needs
+ - "Performance isn't this additional thing that we're tacking on, it's part of the user experience"
+ - expensive pizzas (amount of data transferred to order a 2-topping pizza)
+ - style guides showcase the best way to implement code and assets, and ensure that we're not creating new styles (or are purposeful about doing it). They improve performance.
+ - Five steps:
+    1. Include performance in project documents
+    2. Get designs into the browser as soon as possible
+    3. Test on real devices
+    4. Collaborate
+    5. Educate and document (write about why)
+ - This isn't a battle between beauty and function... instead we need to think about creating beautiful user experiences
+
+
+
+"Modern Layouts: Getting Out of Our Ruts"
+Jen Simmons
+
+ - really the only thing you should put in the sidebar is what your boss asks you to put (which you don't want anyone to see)
+ - a lot of people think: responsive web design is just moving the sidebars around
+ - panes are the new page...experience of going through one page after another by scrolling through panes
+ - the original layout of the web: the no-layout layout.
+ - "Where are we going next? we're about to see a renaissance in web layouts"
+ - Layout should serve the content
+ - css shapes     img {shape-outside: circle();}
+ - labs.thewebahead.net
+ - chrome extension: css shapes editor
+ - viewport units
+ - new spash page (e.g., NY Times Magazine)
+ - "93% of people using the internet today have support for flexbox"
+ - developers, make some examples, write a blog post, share with your designer
+
+
+
+"Unified UX"
+Cameron Moll
+
+ - the best interface is the one within reach
+ - unity first
+ - branding is the initial form of unity for the consumers
+ - Store session data in the cloud, rather than locally
+
+
+
+"Content in a Zombie Apocalypse"
+Karen McGrane
+
+ - True separation of content from form
+ - structured content, not a blob
+ - when content and form are independent, the interface can change more easily
+
+"Laziness in the Time of Responsive Design"
+Ethan Marcotte
+
+ - Time Magazine webpage hamburger menu:
+    - "either stakeholders weren't confident that the icon could stand on its own...or maybe the hamburger didn't do well in tests" (correct quote?)
+    - at least 15 layers of help text
+    - http://alistapart.com/article/good-help-is-hard-to-find
+
+--------------------------------------------------------------------------------------------------------
+DAY 2
+
+[Resources: http://aneventapart.com/news/post/aea-resources-from-an-event-apart-austin-2015]
+
+"Designing for Performance"
+Lara Callender Hogan
+
+ - "we may optimize for design and layout, but we don't optimize for page speed"
+ - "what we're looking for is a happy medium of aesthetics and speed"
+ - http://gfycat.com/about
+ - "if you don't need transparency, just use jpeg [instead of png]. it's lossy!"
+ - "SVG...it's so great, you guys."
+ - optimize images:
+    - ImageOptim CLI :    github.com/JamieMason/ImageOptim-CLI
+    - Wordpress plugin :  wordpress.org/plugins/ewww-image-optimizer/
+    - SVG scrubber :      codedread.com/scour/ OR github.com/svg/svgo
+ - only load fonts at larger screen sizes
+    @media (min-width: 1000px) {   body {
+      font-family: 'FontName', Georgia, serif;   }
+    }
+  - character subsetting issues led to four-and-a-horse stars
+  - Good design patterns help you save development time and page load time
+  - every color in etsy's codebase sized by the number of times it appears in the codebase -- need to normalize this
+  - "I firmly believe that there should be no performance cops or janitors. It's not sustainable. You need a culture of performance."
+  - Web page test is the be-all-end-all for performance testing.
+  - Other tools on github for scripting web page test, also zoompf
+  - Performance testing vendors: both synthetic (load time, etc.) and real user monitoring (RUM) tools
+  - I can tell you why we use icons at Etsy and the reason is legacy. If could do it now, I might use SVG icons instead of font icons.
+  - how to set performance busget?
+      - see what competitors do, go under by 20%.
+      - look at median page weight, backend time, frontend time, by region
+      - per-page basis doing fancy-pants math
+  - how did you decide image size for uploads?
+      - ongoing question
+      - most of image sizes are legacy, realizing we need to create patterns
+      - when we have an image, where are all the places across the site that it's used?
+
+"Designing for Crisis"
+Eric Meyer
+
+ - design your site with crisis-driven personas in mind. design with empathy.
+
+
+"Responsive Images are Here. Now What?"
+Jason Grigsby
+
+ - responsive images
+    - resolution switching
+    - art direction
+        - cropping/roatating based on size
+        - images with text (text too small or formatted differently at different sizes)
+ - srcset, provide images for 1x/2x or for 160w/320w/etc. (width of image stored on disk) -- browser picks best
+ - *how* doe browser pick best resolution?
+ - there's very little relationship--no relationship, really--between size of image and the page
+ - look ahead pre-parser: "this improvement was the biggest boon to web development in the last decade" (20% in chrome, 19% in firefox)
+ - JPEG 2000 way smaller file than PNG, but can't support JPEG 2000 since browsers don't support JPEG 2000. but safari does. picture element with JPEG 2000 as format
+
+
+"Atomic Design"
+Brad Frost
+
+ - print language (pages) carried over to web
+ - what are our interfaces made of? what are the web's lego bricks?
+ - we're not designing pages, we're designing systems of components
+ - atoms, molecules, organisms... (templates, pages)
+ - http://madebymike.com.au/html5-periodic-table
+ - designers tiptoe over to the code cave, drop off the new (and late) design--developers climb out of cave, pick up designs, and say "this is all wrong, assholes!"
+ - http://stylifyme.com/
+ - we as developers need to do a better job of the "prep chef" work to be better able to collaborate with designers and others
+ - For as hard as this stuff is, it's a hell of a lot of fun. We get paid to build legos!
+
+
+"Empathy Is Good Business: How Front-Line Customer Support Can Make You A Better Designer"
+Matt Haughey
+
+ - "the best sites and apps and projects I've done, paid the most attention to users. and the ones that ignored users, tended to not go so great"
+ - having everyone do support
+
+
+"Resilience: Building a Robust Web That Lasts"
+Jeremy Keith
+
+ - geo-stationary orbit (Clarke orbit) for satellites for telecommunications
+ - most internet cables are underwater, following telegraph cable lines
+ - how to make a resilient network? packet switching (routing things through any node)
+ - 1969 leonard kleinrock with arpanet -- december 1969 first message sent ("lo" of "log in")
+ - the secret sauce for tcp/ip, for packet switching in general, is that it's a dumb network
+ - vague but exciting
+ - they're all flawed in their own way, but they're all good enough and *simple* enough that we're all using them.
+ - one browser can create an element, other browsers like it, it becomes a standard
+ - you think about CSS, and how it's used on the web. websites have such different styling, but it all comes down to selector {property:value}. that's all of css. if there's a property or value that it doesn't recognize, it *doesn't* error. that's why we can expand on CSS (same for HTML)
+ - All of our current CSS patterns could've existed for 15 years. it's like they were hiding in plain sight
+ - A sweeping generalization: declarative labguages tend to be more resilient; imperative languages tend to be more fragile.
+  CSS, HTML are very resilient; JavaScript is more fragile, and kind of has to be
+ - a couple years ago, there was a day when nobody could download Google Chrome. Because the link didn't point to a file, but to a JS file with an error. Beause of javascrtip's error-handling, the parsing stopped and the download couldn't happen
+ - of course you hope for the best, that no one will crash their car into the wall at high speed, but you have to prepare for the worst
+ website's should be built for the inherent variability
+ - 1. Identify core functionality. 2. Make that functionality available using the simplest technology. 3. Only then, enhance!
+ - "If you build pages with the idea that parts other than HTML are optional, you will create a better and stronger web page."
+ - if anything goes wrong with the javascript layer, what nasa.gov gives you is a sneak peak of what deep space looks like
+ - I do want developer convenience, same as everyone else, but not at the expense of user needs
+ - "Any sufficiently advanced technology is indistinguishable from magic." —Arthur C. Clarke
+      - at first
+
+--------------------------------------------------------------------------------------------------------
+DAY 3 (A Day Apart)
+
+"A Responsive Design Workshop"
+Karen McGrane
+Ethan Marcotte
+
+
+Why go responsive?
+ - kind of a no-brainer (rather than trying to create device-specific versions of site)
+ - mobile growth
+ - for most organizations, about 50% of traffic comes from mobile
+ - even though mobile use has skyrocketed, it hasn't cut into time on desktop
+ - tbh, users never looked at just one screen size, but today the reality is we have to give up that consensual hallucination
+ - build a strategy to send device-specific layouts/content? problem is that we have no good way of knowing what type of device someone is using based on what comes over the internet. it doesn't broadcast "I'm a tablet device"
+ - when people adopt device-specific approaches, the smartphone layout gets sent to larger android devices and tablet layout to larger ios devices. user agent detection doesn't work.
+ - the only thing we can reliably know is the size of the browser window
+ - Access to content "any way I want" is consumers' most important criteria
+ - 34% of mobile internet users say that's the primary way they go online (way more than no-javascript or old IE)
+ - google changed its ranking algorithm to better rank mobile-friendly
+ - all of this adds up to 
+ - what CEOs care most about: responsive design delivers more business value (higher brand awareness, revenue, conersion rates, engagement rates, order values)
+
+Responsive design: a flexible foundation
+ - embrace that the web doesn't have same constraints as print
+ - a responsive layout is flexible in nature, but changes and adapts at certain breakpoints
+ - the one question that karen and I hear is: "where do I begin?"
+ - responsive design values: thinking "mobile first", flexibiity in design, flexibility in delivery
+ - define priority, not layout (see prioritize Wells Fargo notes below)
+ - we're now designing for screens 80% smaller, so if we go mobile first we focus on what's really important
+ - people think it's ok to have focused UX on mobile, but throw in the kitchen sink on desktop. Responsive design forces us to make those mobile decisions on desktop
+ - desktop sites aren't for throwing in the kitchen sink. we should design for focus on mobile AND desktop sites.
+ - "Snap" (adaptive, snap into place at certain breakpoints) vs. "Smooth" (responsive, flexibly fill the whole screen)
+ - ask the browser if it's sufficiently modern to handle scripts/styles. if not, fall back to basic defaults
+
+Content strategy for mobile
+ - 72% of responsive sites download all the content to every device
+ - Remove that 1 mb picture of a woman smiling at a salad! It's unnecessary content that doesn't provide any value.
+ - move from managing pages to managing content itself. content is not locked to a particular page, but can be broken into reusable pieces for presentation
+
+Responsive design: the fundamentals
+ - target / context = result
+    - target: pixel width for, e.g, column
+    - context: screen size
+    - arrive at a result which is a percentage -- drop this into css (.col {width:result})
+    - translates your comp into a fluid grid; sizes change but proportions remain consistent
+ - media query
+    - is your viewport at least X px wide...
+    - conditional logic you can use to set breakpoints
+ - start by defining a sensible content hierarchy, then upgrade that as needed
+ - A sad truth. There's no one true solution for tables in a responsive format.
+ - @beep "doesn't sports much", but even he can get excited about a responsive March Madness bracket.
+
+Designing a better process
+ - what we're trying to do is move beyond the devices we have right now. build responsive design systems that can outlast those devices.
+ - The three most common words @beep hears in a responsive project are "mobile", "tablet", and "desktop". Also the three least helpful words.
+
+Designing for performance
+ - Performance is the measure of how quickly you can deliver your sites and services to your udience
+ - How to design for performance
+    - know thine enemies: images, javascript, stylesheets
+    - performance budget. not a hard "no", but a conversation about tradeoffs.
+    - competitor analysis, improve perf by 20%
+
+
+
+    --------------------------------------------------------
+     Prioritize Wells Fargo site -- desktop site to mobile
+    --------------------------------------------------------
+
+    Logo (branding first, identify who we are, in the right place)
+
+    Global utility links (sign on, etc.)
+    [could maybe go to bottom?]
+
+    Main Navigation
+    Search
+    Subnav
+    Breadcrumbs
+
+    Page Title
+    Hero image/caption (what's the business case?)
+    [page branding]
+
+    [tasks first]
+    Links: How do I...
+    Stil have questions
+    (make an appt, find a location, find a consultant, call us)
+
+    Promos: protect business, put savings to work, ready for retirment
+
+    Disclosures
+    Sublinks
+
+    Social links (sharing)
+    Print
+    Was this content helpful?
+    [actions to take after they've read]
