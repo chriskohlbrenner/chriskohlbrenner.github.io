@@ -3,7 +3,7 @@ layout: post
 title: "An Event Apart"
 date: 2015-10-08 16:09:32 -0500
 comments: true
-categories: ["Conferences", "Design", "Front End", "UI"]
+categories: ["Conferences", "Design", "Front End", "UI", "User Interface", "Performance"]
 ---
 This week, I had the good fortune of attending [An Event Apart in Austin, TX](http://aneventapart.com/event/austin-2015). Coordinated by the same great people behind [A List Apart](http://alistapart.com/), An Event Apart (AEA) is two days of fantastic talks about the web--content, design, development--and a full-day workshop (A Day Apart). Many of the concepts we now take for granted as web best practices, like mobile first and responsive design, have been introduced and elaborated at AEA events.
 
