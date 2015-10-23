@@ -31,11 +31,11 @@ Thus began my quest to answer those three questions. (1) What *is* the differenc
 
 ###Defining the Question(s)###
 
-I first tried to make sense of the critique I'd received on StackOverflow: "...your example of 'declarative' programming is an example of functional programming." I suppose that's what rendered my answer inappropriate for the question "What is the difference between declarative and imperative programming?". Easy solution--just look back to the [accepted answer](http://stackoverflow.com/a/1784702)...and find that the same commented left [a very similar critique](https://stackoverflow.com/questions/1784664/what-is-the-difference-between-declarative-and-imperative-programming#comment52439156_1784702).
+I first tried to make sense of the critique I'd received on StackOverflow: "...your example of 'declarative' programming is an example of functional programming." I suppose that's what rendered my answer inappropriate for the question "What is the difference between declarative and imperative programming?". Easy solution--just look back to the [accepted answer](http://stackoverflow.com/a/1784702)...and find that the same commenter left [a very similar critique](https://stackoverflow.com/questions/1784664/what-is-the-difference-between-declarative-and-imperative-programming#comment52439156_1784702).
 
-This seemed to imply that functional programming and declarative programming are *not* synonomous (which I already believed), but also that there's a significant difference between declarative programming and functional programming (which I hadn't recognized). So what is it? Going back even farther, if this is a valid critique, what's the difference between imperative and declarative to begin with? I decided to reassess my answer.
+This seemed to imply that functional programming and declarative programming are *not* synonymous (which I already believed), but also that there's a significant difference between declarative programming and functional programming (which I hadn't recognized). So what is it? Going back even farther, if this is a valid critique, what's the difference between imperative and declarative to begin with? I decided to reassess my answer.
 
-###Some definitions###
+###Definitions###
 
 <strong>Imperative Programming:</strong>
 
@@ -49,7 +49,7 @@ This seemed to imply that functional programming and declarative programming are
  - "A programming paradigm...that expresses the logic of a computation without describing its control flow. Many languages applying this style attempt to minimize or eliminate side effects by describing what the program should accomplish in terms of the problem domain, rather than describing how to go about accomplishing it as a sequence of the programming language primitives (the how being left up to the language's implementation)." [(Wikipedia)](https://en.wikipedia.org/wiki/Declarative_programming)
  - "Any relational language or functional language. These kinds of programming language describe relationships between variables in terms of functions or inference rules, and the language executor (interpreter or compiler) applies some fixed algorithm to these relations to produce a result." [(Foldoc)](http://foldoc.org/declarative%20languages)
 
-<strong>Some takeaways:</strong>
+<strong>Takeaways:</strong>
 
  - How (imperative) vs. what (declarative)
  - Using control flow and mutating state (imperative) vs. minimizing/eliminating control flow and side effects
