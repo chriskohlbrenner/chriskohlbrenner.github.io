@@ -3,7 +3,7 @@ layout: post
 title: "Advanced Message Queuing Protocol (AMQP) using RabbitMQ in Ruby"
 date: 2014-04-30 17:08:10 -0400
 comments: true
-categories: Ruby AMQP RabbitMQ Message_Queueing
+categories: [Ruby, AMQP, RabbitMQ, Message Queueing]
 ---
 <strong>Summary</strong>: message queueing with RabbitMQ helps software applications connect and scale, by enabling messaging patterns like data delivery, push notifications, publish/subscribe, and text messages. It can be easily implemented in Ruby.
 

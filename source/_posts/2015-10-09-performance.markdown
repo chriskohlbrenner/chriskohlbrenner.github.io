@@ -3,7 +3,7 @@ layout: post
 title: "Performance Process: takeaways from AEA"
 date: 2015-10-09 12:39:03 -0500
 comments: true
-categories: ["Performance", "Front End", "UI", "User Interface", "Conferences"]
+categories: ["Performance", "Front End", "UI", "User Interface", "Conferences", "Workflow"]
 ---
 
 The stars have aligned lately to focus my attention on performance. Consider the following:
