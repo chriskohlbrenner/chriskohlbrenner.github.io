@@ -71,6 +71,7 @@ github_skip_forks: true
 # Twitter
 twitter_user: cek_io
 twitter_tweet_button: true
+twitter_widget_id: 695237085264007168
 
 # Google +1
 google_plus_one: false
