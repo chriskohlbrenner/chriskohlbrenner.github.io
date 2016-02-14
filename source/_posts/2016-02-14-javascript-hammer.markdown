@@ -38,4 +38,8 @@ In this case, I skipped the step of analyzing the problem. I didn't think about 
 
 {% img left https://imgs.xkcd.com/comics/automation.png 300 %}
 
-For a problem like this, why use another language or abstraction when it can be done via the command line, the text interface for the computer itself and a much more direct interface with the filesystem? Why use a language like JavaScript that's best suited for the web or pull in Node just for the sake of using a tool I know? These are questions I won't soon forget to ask myself when I take on a new problem. Hopefully that'll prevent me from falling into traps that webcomics are made of.
+For a problem like this, why use another language or abstraction when it can be done via the command line, the text interface for the computer itself and a much more direct interface with the filesystem? Why use a language like JavaScript that's best suited for the web or pull in Node just for the sake of using a tool I know?
+
+These are questions I won't soon forget to ask myself when I take on a new problem. Hopefully that'll prevent me from falling into traps that webcomics are made of. I know for sure that, next time I'm presented with a problem of finding text within a filesystem, I'll remember that tools like `grep` were made for exactly that. A simpler, less time-instensive, and more appropriate solution.
+
+`egrep "\b[[:digit:]]{3}(-|\s|.)?[[:digit:]]{3}(-|\s|.)?[[:digit:]]{4}\b" ./* > ./nums.txt`
