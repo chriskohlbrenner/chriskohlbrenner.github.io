@@ -1,0 +1,500 @@
+Notes to self:
+ - draft JS
+ - check out service workers
+ - relay/graphQL
+ - look at necolas' react-native-web
+ - consider options for reducing startup time (app intiialization)
+ - flow
+ - Elm
+
+
+Day 1
+------------------------------------
+"Keynote", Nick Schrock
+  - "React is much more than a JS library"
+  - "React is becoming an entire ecosystem of technology"
+  - Breadth: chrome extension installs
+  - Depth: lots of companies (startups to corporations)
+  - Fervor: CTO gets asked most about React
+  - React as cross-platform; people respond that they've heard this before
+  - Ideas don't work before they work (like Google and search)
+  - When do ideas work? Taste/timing/technology
+  - iOS component kit stole shamelessly from React, uses same values, mirrors React component syntax
+  - "The reports of my death have been gretly exaggerated" - Twain/PCs/web
+  - Facebook investing in JS (Babel/Flow/Nuclide? IDE)
+  - Multicore is becoming universal -> React Native architectuer is uniquely suited for multicore (implicit parallelism)
+  - Not "write once, run anywhere"
+      - Proprietary platforms will always differentiate and compete
+      - Learn once, write anywhere?
+      - Actually horizontal platform
+  - Horizontal platform. Share when possible, go native when necessary
+      - share APIs, tools, languages, code
+      - got native for proprietary capabilities, performance, existing investments  
+  - All abstractions leak. Well-designed abstractions account for this. Bend and not break.
+  - What's next?
+      - ambitious vision from last year takes time to execute
+      - top three priorities for 2016: execution, execution, execution
+      - Production Android and iOS React Native apps
+      - Relay and GraphQL
+      - React Native adoption within Facebook is accelerating
+  - What React Native means to the industry
+      - Mobile revolution: Giant leap forward for consumers; a huge step backwars for developers and product organizations
+  - "Moving from web to native was like being ripped back in time. And not in a fun way"
+  - but moving from native to react native moved from:
+      - proprietary platforms to open standards
+       - ...
+  - GraphQL: another horizonatal platform (works with JS, Ruby, SQL, Mongo, etc.)
+
+
+"React, What Lies Ahead", Ben Alpert
+  - How can React help make great apps? (UX and DX)
+      - the product/user experience has to be great
+      - but also the developer experience
+  - UX
+      - Animations
+          - helpful for spatial reasoning
+          - in a pretty good place
+      - Gestures
+          - pan, pinch, double-tap, etc. can't be built with browser events
+          - goal: simple component API, pure JS
+      - Performance (making lists fast)
+          - windowing (only render what's on screen)
+          - render in chunks (break up rendering to avoid jank)
+          - layout (avoid unnecessary reflows)
+          - what if layout was done in React?
+              - Layout info available in render()
+              - Avoid unnecessary reflows
+              - Makes windowing simpler
+              - Skip creation of layout-only views
+              - Easily build new layout primitives
+
+  - DX
+      - Focusing on developer experience means devs can build apps faster and leads to higher-quality apps
+      - New project experiences
+          - honestly right now, it's a big pain (node, npm, gulp, webpack, babel)
+          - ideally, you should be able to create a single file for your root component and run that
+              - e.g., `react run --platform=web app.js`
+              - goal: quickly prototype with one file, then grow app slowly over time
+      - Devtools
+          - Inspector for Chrome/Firefox (react-devtools)
+          - hot loading (react-transform-hmr)
+          - IDE support for React Native
+          - these are awesome, build more
+      - Data management
+          - React setState
+          - Flux/Redux
+          - Relay
+          - Goal: combine best of three, with easy setup and code reuse
+  - Getting there
+      - we should build it
+      - React today
+          - 0.14 now, production ready and stable since 2013
+          - DOM: full SVG support, no <span> text wrappers
+          - Internal refactors (no more React IDs, 10% faster)
+  - React is a growing community
+      - 300 commiters to react 2015, 600 react-native
+      - 36,000 Github stars
+
+
+"Rich Text Editing with React", Isaac Salier-Hellendag
+  - Why rich text? Facebook comment input
+      - mentions, hashtags
+  - pre 2014 solution
+      - <textarea>
+      - blue highlighters using <div> tags behind structured input (hashtags/mentioned)
+  - what's the problem?
+      - managing structures user input is really hard
+      - undo/redo, copy/paste is broken for mentions
+      - limited rich text capabilities (bold, etc)
+      - requires DOM measureent hacks (growing the text input size)
+      - bad UX (constant bug: highlighting is off)
+  - let's make our inputs better
+      - Goal 1: imporvide flexibility and behavior of rich inputs on facebook. Options:
+          - text area with highlighters
+          - draw all contents manually (must draw and position a fake cursor)
+          - ContentEditable (wysywig, old circa 2000 browser feature)
+              - yes, it has problems
+                  - combines DOM and state (cuts against idea of separating state from DOM)
+                  - browsers handle events differently (return -> break tag vs. new div)
+              - the good pats
+                  - works in all browsers
+                  - native cursor and selection behavior
+                  - native input events (key events, IME)
+                  - any rich text features we want
+                  - automatic autogrowing
+                  - accessible
+      - Goal 2: integrate seamlessly into React aps
+          - state -> render() (i.e., not state === DOM)
+  - Solution: build a controlled ContentEditable
+      - strict Control of contents (React)
+          1. keydown RETURN -> prevent default (since browsers handle differently)
+          2. model: split 1 block into two blocks
+          3. render
+      - strict control of cursor (Native Selection API)
+          1. We know where cursor belongs (after RETURN)
+          2. Use Native Selection API
+      - Declarative, understandable API
+      - Support IME, cut/copy/paste, spellcheck
+      - Support arbitrary rich text
+      - What does state look like? A snapshot of the complete state of the text editor
+          - Gettysburg address example
+          - break it into discrete chunks/blocks (Immutable record)
+              - {text: "Four score...", type: "paragraph"}
+              - list of blocks of text
+          - Persistent data: I type into the second paragraph, only second paragraph needs to be updated
+          - Cursor snapshot: key on each block
+              - Record { startKey: 'b', endKey: 'b', startOffset: 0, endOffset: 0 }
+              - press arrow-down, create new cursor snapshot record, garbage collect old one
+          - Undo/Redo
+              - could record every event that occurred, undo/redo that way
+              - based on a few different heuristics, can identify boundary states and get rid of intermediate states (if I type a lot of text, undo doesn't undo one char at a time). Only keep a handful of snapshots.
+          - Functional state updates
+              - a mentions example:
+                  - complex operation. one string, read it, find metadata from it
+                  - function addMention()
+                      - removeText() -> remove "@Grand Hyatt" -> new record has removed @...
+                      - insertText() -> add "Grand Hyatt SF" -> new record has "Live from the Grand Hyatt SF"
+                      - applyMention() -> include metadata in text blocks
+  - Demos:
+      - Facebook comments
+      - Facebook notes editor
+  - Open Source! draft js
+
+
+"A Cartoon Guide to the Wilds of Data Handling", Lin Clark
+  - wilds
+  - model-view pong game (Facebook notification bug)
+  - Unidirectional data flow (action -> dispatcher -> store -> view)
+  - Characters
+  - Redux
+  - Relay ("where's the cloud?")
+  - how to handle caching, query optimization, network errors
+  - Flux: fix the cycle of unpredictablity (uni-directional data flow)
+  - Redux: split where state is held, and where it is changed (where new state is created)
+  - Relay: connect graph in the cloud to graph in the client
+
+
+"Demystifying Tech Recruiting", Helena Milosevic
+  - tshirts as currency in tech
+  - recruiting process != black box
+  - Q to self: are you passionate about your work?
+  - share the passion: open source, published work, social media, meetups
+
+
+"Web-like Release Agility for Native Apps", Parashuram
+  - using webworker sped up a list app by 30%
+  - web-like release agility (on demand, etc.)
+  - this is inhibted for mobile
+      - apps are offline by default
+  - what can be done?
+      - side load updates
+      - take advantage of available opportunities
+  - codepush
+      - CLI to release a mobile app update
+
+
+"React, Meet Virtual Reality", Eric Florenzano
+  - webdev -> burnout -> virtual reality
+  - not just video games, but: creative tools, educational experiences, togetherness
+  - UI rules still being written
+  - VR built on lisps
+  - let's grow a VR environment for JS
+  - what makes VR hard?
+      - latency vs sickness (how nauseous people will feel)
+      - 60 fps minimum
+      - each eye sees a dofferent view
+  - immediate mode vs. retained mode
+
+
+"Building a Progressive Web App", Aditya Punjani
+  - what makes native apps better than the web?
+      - high performance
+      - immersive
+      - engaging
+  - we want instant load (within 1 second)
+  - try isomorphic/universal
+      - went with app shell architecture (html outlines of your app with loading state and loaded state)
+      - declarative app shell
+      - isLoaded ? loadedState : loadingState
+      - can render from the server
+      - shift all heavy lifting to buildtime, eliminate server-side processing time
+      - reduced time to first paint by ~40%
+  - offline first. treat network requests as progressive enhancements
+  - do this with service workers
+  - service worker strategies
+      - cache first
+      - network first
+      - fastest (race)
+  - SW toolbox ("react for service worker", declarative routes to set strategies)
+  - it's all about perceived performance
+  - reuse resources (images, etc.) across pages
+  - <meta name="rasterization" ... (something like this? https://www.chromium.org/developers/design-documents/chromium-graphics/how-to-get-gpu-rasterization)
+  - http://bit.ly/webpushguide
+  - the future of the web is here
+
+
+Day 2
+------------------------------------
+
+
+"Team × Technology", James Ide
+  - most of career in web dev, shifted to mobile ~2 years ago
+  - a new era: mobile (mobile devices are the future) and React Native (will change how teams are organized)
+  - contrast React Native with DOM
+      - higher ceiling (map, camera, video can be added to a view)
+      - extensible runtime (can use your own layout instead of waiting for browser vendors, specs, etc.)
+      - mobile first (React Natives feel great by default)
+  - app development: cross-platform, fast feedback, continuous deployment
+  - performance: multithreaded, important because mobile processing isn't getting much faster
+  - open-source: can read the code and contribute back to it
+  - "Choosing React Native is one of the most important technical decisions you will make"
+  - How did we take React Native all the way to production? (not just publishing an app, but making apps that people want to use)
+      - not just React Native, but the team
+  - necessary team qualities
+      - open to React Native (doing something different)
+      - unafraid to look under the hood
+  - success with React Native came from hustler mindset, not experience with React
+  - experience with mobile was more important than experience with web
+  - cross-stack engineers: work across stacks at same level (iOS and Android)
+
+
+"Universal GL Effects for Web and Native", Gaetan Renaudeau
+  - gl-react-native (OpenGL wrapper for React Native)
+  - gl-react-dom (WebGL wrapper for React DOM)
+  - React solves problem of Virtual DOM -> DOM
+  - functional rendering
+      - unlimited (not limited to primitives)
+      - vectorial by design
+      - efficient (stateless and scalable to GPU units)
+  - Wrap-up
+      - OpenGL is ambiguous paradigm (imperative)
+      - gl-react hides the imperative part
+      - universal GL with DOM and Native implementations
+      - GL Component use effects degined by others
+      - Compone <GL*>, <video/> and <Text/> together
+      - VDOM referential transparency
+
+
+"Redux, Re-frame, Relay, Om/next, oh my!" (Managing App State), Jared Forsyth
+  - What's the problem?
+      - React is the V
+      - M(data), V(present date), C(manage data)
+      - Do we just not model or control?
+      - React is opinionated about data/state. Fitting React in with a two-way data binding model or subscription model goes against the grain.
+  - React came out in June 2013, Flux in May 2014 as solution (paradigm) for app state
+  - Solutions
+      - PORC (plain old React components)
+          - setup: root component has state and update methods
+          - great for simple apps/components, but nested data problem, parents knopw about child state, and few conventions
+      - Redux
+          - action creators (describe state mutations) and reducers ((state, action) -> new state)
+          - get shared state with a wrapper function declaring data needs
+          - benefits: declarative, immutable state, parents know nothing about child's data needs, mutation separate from views, great for testing
+          - costs: creating a new action requires touching 3 files
+      - Re-frame (clojurescript library similar to redux)
+          - similar to redux, but with subscriptions
+          - benefits: subscriptions separate "deriving view data" from the views, subscriptions memoize so less redundant work is done
+          - costs: more complexity
+      - Relay
+          - graphql schema defined server-side, mutations defined client- and server-side
+          - wrapper component declares own (and child) data needs with graphql
+          - create mutation, give to relay to update shared state
+          - benefits: more declarative, no custom getter logic, tight server integration (caching, updates, minimal fetching, static query validation)
+          - costs: need a GraphQL backend, doesn't handle client-only state, tons more complexity, elss flexible, parents need some knowledge of childen's data needs
+      - Om/next
+          - like Relay (+ ClojureScript)
+          - benefits: custom query resolution, both client/remote state fully supported, fairly server agnostic, very flixible
+          - costs: less optimized than Relay, still under development, clojurescript?
+  - Recommendations
+      - have conventions
+      - use pure components (only receive props, don't need state, don't get state). This makes it easier to swap out app state management methods (Redux to Relay, etc.)
+      - examine tradeoffs
+          - effort vs. app size
+          - setup/moving parts, maintenance, understandability vs. team size, support
+
+
+"Performance Without Compromise", Steve McGuire
+  - React, treat UI as pure function of state
+  - purity came at a cost using on all sorts of streaming devices (like a $30 streaming device, 485x slower than V8 on laptop)
+  - Gibbon
+      - custom rendering framework
+      - no HTML or CSS, just primitive boes
+      - async JS -> 60fps render loop
+      - react-gibbon
+          - based on react-native
+          - place for hooks
+  - want to be pure and fast
+  - architecture
+      - unidirectional flow
+          - not observation hell
+              - publish here, subscribe there, no ownership of events
+              - race conditions
+              - improved by Flux model
+          - Immutable, unified state
+      - composition over inheritance
+          - no mixins
+          - higher order components (output of one feeds into input of the next, not clean separation, but separation)
+      - always declarative
+          - LRUD (left/right/up/down)
+          - focus with refs
+              - onRightKey -> this.items[1].focus() -> this.image.focus()
+              - null checking
+              - becomes a bit of a mess
+          - declarative focus
+              - setState){focusId: 1} -> <Log {...props} -> <Item focused={true} -> <Image .../>
+              - our rule: no refs, ever
+  - responsiveness: 100ms
+  - animations: 60fps
+  - measure, measure, measure
+  - higher order components were great, but costly (1.2ms per render, 6 HoCs/list, 8 lists + ancestors = 60ms of mandatory overhead)
+  - what to do? not mixins
+  - not higher order components, higher order functions (transducers)
+  - Components : Transducers (isomorphic to)
+      - componentWillReceiveProps : reduce
+      - setState : onNext
+      - render : map
+      - this : (nothing)
+  - problems to solve
+      - no `this`
+      - merging still costs time
+      - customize ReactCompositeComponent instead?
+  - perf after transducers (cut off 150ms)
+  - no refs ever and top down rendering, more diffing...
+  - separate static props from dynamic props (staticStyle key)
+  - JSX is a compiler hint, lets us know a diff is going to happen
+  - future work
+      - static child diff
+      - specialize diff cross-module via flow?
+      - use JSX for automatic, fast merge/diff
+  - perf after static work (cut off 40ms, down to 110ms)
+  - Babel element inliner
+      - React.createElement is expensive
+          - new ReactElement()
+          - Prop copy
+  - perf after inlining (cut off 20ms, down to 90ms)
+  - pure AND fast
+
+
+"A GraphQL Framework in Non-JS Servers", Syrus Akbary
+  - "you cannot isolate backend without frontend"
+  - Django + React, great, but what about SEO?
+  - why does the server have to know the data the component needs?
+  - what happens when the data needd by mobile vs. web clients differs?
+  - REST limitations
+      - different endpoint urls per type
+      - hypermedia > more HTTP latency
+      - pagination through Link header doesn't affect nested resources
+  - consequences of using REST
+      - a page usually renders more than one type
+      - lot of networking effort
+  - solution?
+      - glue all data into one API endpoint
+      - same question: why does the server have to know the data the component needs?
+  - conclusiont: let the component decide the data it wants and resovlve it in one request
+      - Falcor and GraphQL
+      - GraphQL query is JSON without data
+  - differences
+      - GraphQL is a query language, Falcor is a library
+      - falcor response data is modeled as a graph (json-graph). GraphQL is more like a tree
+      - GraphyQL allows introspection
+      - GraphQL fields accept arguments, Falcor paths do not
+  - chose GraphQL
+      - but only one JS implementation and backend in Python
+      - decided to implement GraphQL server in Python: Graphene Python
+  - main goals of graphene
+      - simplicity
+      - compatible with the spec
+      - focus on the syntax, make devs happy
+      - use it, make it better, with community involvement
+  - features
+      - simple, concise, powerful
+      - built-in relay support
+      - well-tested with 95%+ coverage
+      - automatic mapping from django models
+      - playground demo
+
+
+"Speeding up Startup for Large React Apps", Bhuwan Khattar
+  - imagine you had to download an app from the app store every time you wanted to check your email. that's kinda how web apps work
+  - branches in code (ternary, switch, if/else). even if number of branches grow linearly, number of dependency graphs grow exponentially
+  - features -- performance fork in road
+  - build infrastructure and abstraction to get rid of the fork altogeher
+  - no one size fits all solution
+      - overall byte size
+      - browser caching
+      - parallel HTTP downloads
+      - roundtrip overhead
+  - minimizing download time (packaging)
+      - machine learning
+      - algorithm to determine modules used together
+      - minimizing extraneous bytes
+      - reasonable number of parallel downloads
+      - which modules are used together?
+          - static analysis not helpful
+  - server rendering
+      - not the answer to slow application initialization
+  - minimizing initial JS bytes
+  - route-based branching
+      - matchRoute
+          {matchRoute(this.props.route, {
+            Route:A: () => <BodyA />
+          })}
+  - pit of success. great DX, performant by default
+  - bottlenecks other than downloading (other than reducing byte size and roundtrips)
+  - recap
+      - packager (imrpove site-wide downlad efficiency)
+      - module aliases (reduce extraneous bytes)
+      - JS::call (reduce round trips for data)
+      - incremental loading 
+          - bootloading (download any resource only when needed)
+          - matchRoute (get route specific resources on transitions)
+      - manage execution
+  - implementations will be app-specific
+
+
+"Rethinking All Practices: Building Applications in Elm", Jamison Dance
+  - isomorphic - doesn't mean server-rendered javascript
+  - size of JS applications
+      - average size 100kb - 360kb from ...
+  - lots of tools, underlying substrate is javascript
+  - rethink best practices (replace semicolons with monkeys...actually, just because you do something a certain way doesn't make it the right way)
+  - Elm
+  - undefined is not a function. can be addressed by:
+      - knowing when they happen (century, raygun.io, etc.)
+      - prevent them (flow, etc.)
+  - "code that is hard to typecheck is code you will not typecheck"
+  - Elm has a static type system
+      - no runtime errors
+      - no null
+      - `type Maybe a = Just a | Nothing`
+  - I should do what I'm good at, computer shoudl do what it's good at: computer is good at tracing flow of values through a program
+  - elm architecture (similar tree pattern to React)
+      - tree of functions
+      - user action, re-call functions
+      - stateless functions: no side effects
+      `add a b = a + b`
+      - Immutable data: data doesn't modify in place, you modify a copy and swap out
+      - functional reactive programming
+          function takes in an observable, passed into UI, when clicked, call function on observable, update, rerender view
+  - constraints vs guidelines, "tradeoff between constraints and freedom"
+  - Elm has made design decisions to guide you towards building good programs
+  - Constraints can guide you to better programs
+  - caveats
+      - smaller community
+      - server rendering is not easy
+      - elm does best when it runs everything
+      - still early
+
+
+"Optimising React Native: Tools and Tips", Tadeu Zagallo
+  - Don't assume, profile
+
+"Back to React", Andrew Clark
+  - Post-React UI architectures OR React-adjacent architectures
+  - React ecosystem has been shameless in stealing from other communities
+  - Elm architecture
+  - Cycle: reactive daa flow using observables
+      - observables are streams
+      - streams represent values that change over time
+      - rxmarbles.com
+  - Elm
