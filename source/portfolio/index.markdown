@@ -3,7 +3,7 @@ layout: page
 title: "portfolio"
 date: 2016-02-27 18:00
 comments: true
-sharing: false
+sharing: true
 footer: true
 ---
 Coming soon.

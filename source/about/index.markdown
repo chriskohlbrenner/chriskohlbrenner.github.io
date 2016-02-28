@@ -1,9 +1,9 @@
 ---
 layout: page
 title: "about"
-date: 2016-02-27 18:00
+date: 2014-01-03 09:31
 comments: true
-sharing: false
+sharing: true
 footer: true
 ---
 Coming soon.
