@@ -1,0 +1,6 @@
+@import "../theme/colors";
+
+.my-special-component {
+  background-color: var(--white);
+  color: var(--red);
+}
