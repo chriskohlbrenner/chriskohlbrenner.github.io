@@ -22,6 +22,8 @@ Straightforward, keeps things DRY, makes it easy to change colors when it strike
 
 For a long time, while our CSS colors were nicely organized, our JS colors weren't. We have colors in our D3 visualizations and our inline styles on React components. As a simple improvement, I decided to pull all our colors into a single map that could be read by both our CSS and JS files. *NB*: this post is about CSS _colors_, but can apply to any CSS variables you'd like shared to JS.
 
+<!--more-->
+
 <h3>Enter PostCSS (Problem Solved)</h3>
 
 [PostCSS](https://github.com/postcss/postcss) does a lot of things. I'll leave it as an exercise to the reader to explore the [various plugins](https://github.com/postcss/postcss/blob/master/docs/plugins.md) (or just [some of the most popular ones](https://github.com/postcss/postcss#plugins)).
