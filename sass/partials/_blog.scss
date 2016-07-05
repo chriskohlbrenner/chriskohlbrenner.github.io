@@ -1,5 +1,4 @@
 article {
-  padding-top: 1em;
   a { @extend .force-wrap; }
   header {
     position: relative;
@@ -29,7 +28,7 @@ article {
     }
   }
   h2 {
-    padding-top: 0.8em;
+    padding-top: 0.3em;
     background: $img-border top left repeat-x;
   }
   .entry-content & h2:first-child, header + h2 { padding-top: 0; }

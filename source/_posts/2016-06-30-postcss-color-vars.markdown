@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "PostCSS to Use a Single Set of Color Variables (for both JS and CSS)"
+title: "A Single Set of Color Vars with PostCSS"
 date: 2016-06-30 08:05:35 -0400
 comments: true
-categories: 
+categories: ["CSS", "PostCSS", "JavaScript", "Style", "Design", "Front End", "UI", "User Interface"]
 ---
 
 In this post, I describe how to create a single list of color variables (in JavaScript) so that those colors can be shared across JavaScript files and CSS stylesheets. Using PostCSS within a Webpack app, I outline the problem of sharing styles between CSS and JS and how it can be solved. For step-by-step code examples, skip ahead to "Enter PostCSS (Problem Solved)".
