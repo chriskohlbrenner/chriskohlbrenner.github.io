@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Once"
+title: "Ramda's Once"
 date: 2015-07-14 11:29:18 -0400
 comments: true
 categories: [JavaScript, Functional Programming, Ramda]

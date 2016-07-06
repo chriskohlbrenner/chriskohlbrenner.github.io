@@ -30,6 +30,7 @@
   color: $text-color-light;
   .entry-content { display: none; }
   time {
+    padding-top: .1em;
     font-size: .7em;
     line-height: 1.2em;
     .month, .day { display: inline-block; }
@@ -69,3 +70,4 @@
   }
   .year { display: inline; }
 }
+span.categories { font-size: .7em; }
