@@ -6,6 +6,10 @@ comments: true
 categories: [User Interface, UI, JavaScript, Front End, React, D3, Ember, Data Visualization]
 ---
 
+**Author's note:** I've followed up on this post with [another one](/blog/2016/07/06/d3-and-react-faux-dom/). I'm no longer a fan of building up SVG elements in React components the way I propose in this post. You should read the other post to see what I recommend.
+
+<hr>
+
 Imagine the entirety of your organization's chatroom communications. Imagine making sense of those communications in a single interactive visualization, one that factors in date and time, chatroom name, individual participants' names, and message content.
 
 I recently implemented just such a feature. While something like this of course requires back end analytics, aggregations of data, and "data science" that can handle such "big data," it also relates to user interface (UI), the subject of this blog post.
