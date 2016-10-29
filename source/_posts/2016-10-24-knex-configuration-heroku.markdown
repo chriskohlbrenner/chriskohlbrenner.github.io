@@ -30,10 +30,9 @@ Heroku requires SSL for PostgreSQL connections. There are two options (and poten
  - **(Confirmed)** Set an environment variable using Heroku CLI: `heroku config:set PGSSLMODE=require`
  - **(Unsupported, but may be implemented in future versions of Knex)** Add a `'?ssl=true'` query parameter to your database URL (knexfile's `connection`).
 
-```
-
 With those two things in mind, a Knexfile like the following will work just fine:
 
+```
 module.exports = {
     client: 'pg',
     debug: true,
