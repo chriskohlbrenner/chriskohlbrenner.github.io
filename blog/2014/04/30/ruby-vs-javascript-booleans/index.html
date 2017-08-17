@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Two Truths and a [False]: Booleans and Truthiness in Ruby and JavaScript - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="We all know the icebreaker game &ldquo;Two Truths and a Lie&rdquo;: each individual in a group tells three statements about themselves; the rest of &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2014/04/30/ruby-vs-javascript-booleans">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Two Truths and a [False]: Booleans and Truthiness in Ruby and JavaScript</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-30T10:34:23-04:00" pubdate data-updated="true">Apr 30<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>We all know the icebreaker game &ldquo;Two Truths and a Lie&rdquo;: each individual in a group tells three statements about themselves; the rest of the group tries to distinguish which of the three is a lie. For example:</p>
+
+<ol>
+  <li>I speak Arabic, French, German, Spanish, and Hebrew.</li>
+  <li>I once broke my collarbone in a game of wiffleball.</li>
+  <li>I have been to Staten Island.</li>
+</ol>
+
+
+<p>(The lie is revealed below).</p>
+
+<h3>Context in Programming: Ruby vs. JavaScript</h3>
+
+
+<p>What&rsquo;s Boolean? <a href="http://en.wikipedia.org/wiki/Boolean_data_type">Per Wikipedia</a>, &ldquo;the Boolean or logical data type is a data type, having two values (usually denoted true and false), intended to represent the truth values of logic and Boolean algebra. It is named after George Boole, who first defined an algebraic system of logic in the mid 19th century.&rdquo;</p>
+
+<!--more-->
+
+
+<p>Some context in JavaScript:</p>
+
+<blockquote><p>JavaScript makes a somewhat arbitrary distinction between values:<ul><br/>  <li>The primitive values are Booleans, numbers, strings, null, and undefined.</li><br/>  <li>All other values are objects.</li></ul></p><footer><strong>&#8220;Speaking JavaScript&#8221;</strong> <cite><a href='http://speakingjs.com/es5/ch01.html#basic_prim_vs_obj'>{ &#8220;Primitive Values Versus Objects&#8221; }</a></cite></footer></blockquote>
+
+
+<p>This distinction between primitives and objects is important, as we&rsquo;ll see in a minute.</p>
+
+<h3>What&#8217;s False in JavaScript?</h3>
+
+
+<p>JavaScript interprets the following values as false (i.e., if these values were to follow a conditional (<code>if</code>), the conditional code wouldn&rsquo;t run:</p>
+
+<ul>
+  <li>undefined, null</li>
+  <li>Boolean: false</li>
+  <li>Number: -0, NaN</li>
+  <li>String: &#8221;</li>
+</ul>
+
+
+<p>All other values are considered true, particularly <strong>all objects</strong>.</p>
+
+<h3>And Ruby?</h3>
+
+
+<p>It&rsquo;s even simpler in Ruby. The following are false:</p>
+
+<ul>
+  <li>nil</li>
+  <li>Boolean: false</li>
+</ul>
+
+
+<p>Everything else is true!</p>
+
+<h3>Is it really that simple?</h3>
+
+
+<p>Yes and no. In terms of how Ruby and JavaScript evaluate certain values, yes. Where a Boolean is expected, Ruby evaluates nil as false, JavaScript evaluates NaN as false.</p>
+
+<p>That said, what we&rsquo;re doing is evaluating non-Boolean values as Boolean. For that reason, values like 8, &ldquo;abc&rdquo;, undefined, and nil are &ldquo;truthy&rdquo; or &ldquo;falsey&rdquo;. They&rsquo;re not technically true or false, because only true and false are Booleans.</p>
+
+<p><a href="https://gist.github.com/jfarmer/2647362">Note</a>: &ldquo;In some languages, like C and Python, 0 counts as false. In fact, in Python, empty arrays, strings, and hashes all count as false. In JavaScript, empty strings count as false, but empty arrays count as true.&rdquo; Again, in Ruby, only nil and false evaluate as false. Even 0 evaluates as true.</p>
+
+<h3>Proof that this is accurate</h3>
+
+
+<p>The best way to become familiar with Boolean values is to try them out in the console. In JavaScript, the <code>Boolean([value])</code> object evaluates the Boolean value (i.e., converts non-Boolean to Boolean). In Ruby, the double bang (<code>!!</code>) converts non-Boolean values to Boolean. See some examples below: first JavaScript, then Ruby.</p>
+
+<p><img class="center" src="/images/js-boolean.png">
+<img class="center" src="/images/ruby-boolean.png">
+(note, that warning&mdash;&ldquo;string literal in condition&rdquo;&mdash;is telling us what we already know: that a string literal like &ldquo;abc&rdquo; is non-Boolean but being evaluated as such.)</p>
+
+<h3>My lie revealed</h3>
+
+
+<p>For those readers interested in my personal truths and lies&hellip;</p>
+
+<ol>
+  <li>I speak Arabic, French, German, Spanish, and Hebrew.
+      <strong>FALSE[Y]</strong> - I speak (to some degree) Arabic, French, German, and Spanish. I do not speak Hebrew.
+  </li>
+  <li>I once broke my collarbone in a game of wiffleball.
+      <strong>TRUE</strong> - I ran (very quickly) into someone much bigger than myself.</li>
+  <li>I have been to Staten Island.
+      <strong>TRU[THY]</strong> - I haven&#8217;t <u>really</u> been to Staten Island, but I&#8217;ve taken the ferry a few times and driven across the Verrazano Bridge.
+  </li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-30T10:34:23-04:00" pubdate data-updated="true">Apr 30<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/boolean/'>Boolean</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>, <a class='category' href='/blog/categories/truthiness/'>Truthiness</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2014/04/30/ruby-vs-javascript-booleans/" data-via="heychrisek" data-counturl="http://cek.io/blog/2014/04/30/ruby-vs-javascript-booleans/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/29/reblog-introducing-tender/" title="Previous Post: Introducing Tender">&laquo; Introducing Tender</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/04/30/amqp-rabbitmq-ruby/" title="Next Post: Advanced Message Queuing Protocol (AMQP) using RabbitMQ in Ruby">Advanced Message Queuing Protocol (AMQP) using RabbitMQ in Ruby &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Few Notes on Classical Inheritance in Ruby (POODR: Chapter 6) - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="Having recently graduated from the Flatiron School, I am working my way through programming-related reading, beginning with Sandi Metz&rsquo;s &ldquo &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2014/05/06/poodr-ch-6">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Few Notes on Classical Inheritance in Ruby (POODR: Chapter 6)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-06T09:55:11-04:00" pubdate data-updated="true">May 6<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Having recently graduated from the Flatiron School, I am working my way through programming-related reading, beginning with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
+
+<hr />
+
+<br>
+
+
+<p>What&rsquo;s inheritance?</p>
+
+<blockquote><p>The idea of inheritance may seem complicated but as with all complexity, there’s a simplifying abstraction. Inheritance is, at its core, a mechanism for automatic message delegation. It defines a forwarding path for not-understood messages. It creates relationships such that, if one object cannot respond to a received message, it delegates that message to another. You don’t have to write code to explicitly delegate the message, instead you define an inheritance relationship between two objects and the forwarding happens automatically.</p><footer><strong>Sandi Metz</strong> <cite><a href='http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330'>&#8220;Practical Object-Oriented Design in Ruby (105)&#8221;</a></cite></footer></blockquote>
+
+
+
+
+<!--more-->
+
+
+<p>That&rsquo;s it, that&rsquo;s all there is to inheritance. Not really. There&rsquo;s a lot to inheritance, and it&rsquo;s one of the things that makes Ruby the language that it is, in all its object-oriented glory.</p>
+
+<p>In this post, I&rsquo;ll speed through a couple key lessons about <strong>classical</strong> inheritance. Some of it was old news, some of it brand new.</p>
+
+<h3>Classical?</h3>
+
+
+<p>Referring specifically to &ldquo;classical&rdquo; inheritance is simply to refer to &ldquo;class&rdquo;-based inheritance. This distinguishes it from other inheritance techniques (like modules in Ruby, prototypical inheritance in JavaScript, or any number of others). Classical inheritance deals with subclasses and superclasses (from which subclasses inherit).</p>
+
+<h3>Single vs. Multiple Inheritance</h3>
+
+
+<p>Multiple inheritance can get complicated (how do we know from which ancestor a descendant will inherit?). Metz explains that &ldquo;Many object-oriented languages [including Ruby] sidestep these complications by providing single inheritance, whereby a subclass is allowed only one parent superclass. Ruby does this; it has single inheritance. A superclass may have many subclasses, but each subclass is permitted only one superclass&rdquo; (112).</p>
+
+<h3>Inherent Inheritance (inheritance and <code>nil?</code>)</h3>
+
+
+<p>Whether you&rsquo;ve implemented a class hierarchy or not, if you&rsquo;ve used Ruby then you&rsquo;ve used inheritance. An example: <code>nil?</code>. Ruby contains two implementations of that method, one in <code>NilClass</code> and the other in <code>Object</code>. When <code>nil?</code> is called on an instance of <code>NilClass</code>, it returns <code>true</code>. On everything else, because everything elses is a subclass of <code>Object</code>, the <code>nil?</code> message travels up the superclass hierarchy to <code>Object</code>, which will then return <code>false</code>. See the image below for a depiction of this.</p>
+
+<p><img class="center" src="/images/nil-inheritance.png"></p>
+
+<h3>Creating a Hierarchy has Costs (to duplicate or inherit?)</h3>
+
+
+<p>Any decision to implement inheritance should take into consideration the costs. Metz presents an example of a <code>MountainBike</code> and a <code>RoadBike</code> class, both of which could inherit from the <code>Bicycle</code> superclass. But she asks, &ldquo;Even though you now have a requirement for two kinds of bikes, this still may not be the right moment to commit to inheritance&rdquo; and continues &ldquo;A decision to proceed with the hierarchy accepts the risk that you may not yet have enough information to identify the correct abstraction. Your choice about whether to wait or to proceed hinges on how soon you expect a third bike to appear versus how much you expect the duplication to cost&rdquo; (118-119).</p>
+
+<h3>&#8220;Push-everything-down-and-then-pull-some-things-up strategy&#8221;</h3>
+
+
+<p>That&rsquo;s a technical term, I think. It&rsquo;s a direct quote, anyway. Metz describes that, in implementing inheritance, it is important to push certain things down to the subclass, then pull them back up to the superclass to be inherited (and vice versa), even though it means moving code around multiple times. Her reasoning? Every programmer needs to ask themself: &ldquo;What will happen when I’m wrong?&rdquo;. Metz argues that &ldquo;Every decision you make includes two costs: one to implement it and another to change it when you discover that you were wrong. Taking both costs into account when choosing among alternatives motivates you to make conservative choices that minimize the cost of change&rdquo; (123).</p>
+
+<h3><code>Super</code> keywords</h3>
+
+
+<p>&ldquo;Sending <code>super</code> in any method passes that message up the superclass chain&rdquo; (115). This is essential for inheritance. Adding <code>super</code> to a method in a subclass will inherit the code of that same method of the subclass&#8217; parent. If you&rsquo;re confused, <a href="http://stackoverflow.com/questions/4632224/super-keyword-in-ruby">Stack Overflow&rsquo;s got you covered</a>.</p>
+
+<!--more-->
+
+
+
+
+<h3>Metz&#8217;s code</h3>
+
+
+<p>I&rsquo;ve copied Metz&rsquo;s final example of inheritance using <code>RoadBike</code>, <code>MountainBike</code>, and <code>Bicycle</code> classes. As you can see, many of the methods (<code>initialize</code>, <code>spares</code>, different <code>default</code>s, etc.) are shared by the superclass, but some are unique to the subclasses.</p>
+
+<figure class='code'><figcaption><span> (bicycle_inheritance.rb)</span> <a href='/downloads/code/bicycle_inheritance.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Bicycle</span>
+</span><span class='line'><span class="kp">attr_reader</span> <span class="ss">:size</span><span class="p">,</span> <span class="ss">:chain</span><span class="p">,</span> <span class="ss">:tire_size</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">{})</span>
+</span><span class='line'>    <span class="vi">@size</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:size</span><span class="o">]</span>
+</span><span class='line'>    <span class="vi">@chain</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:chain</span><span class="o">]</span> <span class="o">||</span> <span class="n">default_chain</span>
+</span><span class='line'>    <span class="vi">@tire_size</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:tire_size</span><span class="o">]</span> <span class="o">||</span> <span class="n">default_tire_size</span>
+</span><span class='line'>    <span class="n">post_initialize</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">spares</span>
+</span><span class='line'>    <span class="p">{</span>  <span class="n">tire_size</span><span class="p">:</span> <span class="n">tire_size</span><span class="p">,</span>
+</span><span class='line'>       <span class="ss">chain</span><span class="p">:</span> <span class="n">chain</span><span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">local_spares</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_tire_size</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="no">NotImplementedError</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">post_initialize</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span><span class='line'>    <span class="kp">nil</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">local_spares</span>
+</span><span class='line'>    <span class="p">{}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_chain</span>
+</span><span class='line'>    <span class="s1">&#39;10-speed&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">RoadBike</span> <span class="o">&lt;</span> <span class="no">Bicycle</span>
+</span><span class='line'>    <span class="kp">attr_reader</span> <span class="ss">:tape_color</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">post_initialize</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@tape_color</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:tape_color</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">local_spares</span>
+</span><span class='line'>    <span class="p">{</span><span class="n">tape_color</span><span class="p">:</span> <span class="n">tape_color</span><span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_tire_size</span>
+</span><span class='line'>    <span class="s1">&#39;23&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MountainBike</span> <span class="o">&lt;</span> <span class="no">Bicycle</span>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:front_shock</span><span class="p">,</span> <span class="ss">:rear_shock</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">post_initialize</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@front_shock</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:front_shock</span><span class="o">]</span>
+</span><span class='line'>    <span class="vi">@rear_shock</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:rear_shock</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">local_spares</span>
+</span><span class='line'>    <span class="p">{</span><span class="n">rear_shock</span><span class="p">:</span> <span class="n">rear_shock</span><span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_tire_size</span>
+</span><span class='line'>    <span class="s1">&#39;2.1&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a finished example, but Metz likes to go through what she calls &ldquo;antipatterns&rdquo;&mdash;common patterns that appear beneficial but are actually detrimental&mdash;to demonstrate a concept, so make sure to read <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">the full text</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-06T09:55:11-04:00" pubdate data-updated="true">May 6<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/books/'>Books</a>, <a class='category' href='/blog/categories/inheritance/'>Inheritance</a>, <a class='category' href='/blog/categories/poodr/'>POODR</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2014/05/06/poodr-ch-6/" data-via="heychrisek" data-counturl="http://cek.io/blog/2014/05/06/poodr-ch-6/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/05/02/poodr-ch-5/" title="Previous Post: Polymorphism and Duck Typing (POODR: Chapter 5)">&laquo; Polymorphism and Duck Typing (POODR: Chapter 5)</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/05/06/redis/" title="Next Post: An introduction to redis">An introduction to redis &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

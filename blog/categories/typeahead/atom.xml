@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Typeahead | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/typeahead/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Typeahead: A How-To Guide (Part 2 of 2)]]></title>
+    <link href="http://cek.io/blog/2014/04/16/typeahead-2/"/>
+    <updated>2014-04-16T09:00:00-04:00</updated>
+    <id>http://cek.io/blog/2014/04/16/typeahead-2</id>
+    <content type="html"><![CDATA[<p><i><strong>Note:</strong> If you haven&rsquo;t already read Part 1, which covers the Gon gem in detail, you can see it <a href="http://cek.io/blog/2014/04/15/typeahead/">here</a>. In this post, I&rsquo;ll cover the <code>.typeahead</code> JavaScript method.</i></p>
+
+<h2>The How-To (cont.)</h2>
+
+
+
+
+<ul>
+  Typeahead.js depends on having a source of data available. In fact, <a href="http://twitter.github.io/typeahead.js/examples/#the-basics">Twitter's "basic" typeahead example</a> includes <code>var states</code>, with all 50 states input as strings, directly in the JavaScript file. That's effectively what I did in the previous post with Gon: I made Rails variables available in JavaScript. I'll use those same variables here.
+  <!--more-->
+  <br><br>
+  <h3>2. Typeahead.js</h3>
+  <li>
+      Add the gem: <code>gem <a href="https://github.com/yourabi/twitter-typeahead-rails/">'twitter-typeahead-rails'</a></code>.
+  </li><br>
+  <li>
+      Add <code>//= require twitter/typeahead</code> to the application.js manifest.
+  </li><br>
+  <li>
+      Determine the css selector for the input on which you want to implement typeahead. In my case, I added a class of "typeahead" to my targeted text field as follows:
+        <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (form.html.erb)</span> <a href='/downloads/code/form.html.erb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&lt;!-- ...preceding html/erb... --&gt;</span>
+</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">text_field_tag</span> <span class="ss">:name_or_email</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="ss">placeholder</span><span class="p">:</span> <span class="s2">&quot;To: name or email&quot;</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s2">&quot;typeahead&quot;</span> <span class="cp">%&gt;</span><span class="x"> </span>
+</span><span class='line'><span class="x">&lt;!-- ... --&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li><br>
+  <li>
+      In whichever JavaScript file you've made the dataset available, add <code>$('.typeahead').typeahead()</code>. Replace ".typeahead" with whatever CSS selector you're using (see previous step). You now have the entire structure into which you can try the various <a href="http://twitter.github.io/typeahead.js/examples/">typeahead.js examples</a>.
+  </li><br>
+  <li>
+      I started with <a href="http://twitter.github.io/typeahead.js/examples/#the-basics">the basics</a>, copying line 1-23 above my typeahead method, and everything withing the curly braces from line 37-44 into my typeahead method. Make sure to change the example's default variable ("states" in the basic example, "best-pictures" in the custom templates example) to whatever variable you assigned using Gon. Depending on how your Rails app is structured--particularly what your asset pipeline looks like--this may be all you need.
+  </li><br>
+  <li>
+      <p>I had conflicting stylesheets and JavaScript files, plus I wanted more flexibility creating templates for the typeahead, so I implemented the <a href="http://twitter.github.io/typeahead.js/examples/#custom-templates">custom templates example</a>. Full code for what I describe is below.
+      </p>
+      <p>
+      To begin, I added the templates (lines 28-40). The "empty" template worked easily--the code copied from Twitter's example worked on its own. I had more difficulty with the "suggestion" template, primarily because I didn't immediately realize that it's a function, as opposed to the string that the "empty" template was. At this point, I was able to style the template as I liked, even including an image.
+      </p>
+      <p>
+      Next I had to configure the typeahead to use the pictures connected to each user. Gon and typeahead seem to support a pattern of passing entire objects and calling two or more different attributes (best pictures' names and years in the custom template example), but I was unable to configure my JavaScript this way. Instead, knowing that my "gravatars" array directly mirrored my "usernames", I used JavaScript's <code>indexOf()</code> method, as seen in line 37. This enabled me to the the index of a given username and find the gravatar url at that index of the gravatars array. Not ideal, but it worked.
+      </p>
+        <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (typeahead.js)</span> <a href='/downloads/code/typeahead.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// Twitter Typeahead</span>
+</span><span class='line'><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">substringMatcher</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">strs</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kd">function</span> <span class="nx">findMatches</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">matches</span><span class="p">,</span> <span class="nx">substringRegex</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">matches</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>      <span class="nx">substrRegex</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">strs</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">substrRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">str</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">matches</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">str</span> <span class="p">});</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>      <span class="nx">cb</span><span class="p">(</span><span class="nx">matches</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">gravatars</span> <span class="o">=</span> <span class="nx">gon</span><span class="p">.</span><span class="nx">gravatars</span><span class="p">;</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">usernames</span> <span class="o">=</span> <span class="nx">gon</span><span class="p">.</span><span class="nx">usernames</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.typeahead&#39;</span><span class="p">).</span><span class="nx">typeahead</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">hint</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">highlight</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">minLength</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;usernames&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">displayKey</span><span class="o">:</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">source</span><span class="o">:</span> <span class="nx">substringMatcher</span><span class="p">(</span><span class="nx">usernames</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">templates</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">empty</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s1">&#39;&lt;div class=&quot;empty-message&quot;&gt;&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;No username matches found. Enter an email instead!&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;&lt;/div&gt;&#39;</span>
+</span><span class='line'>      <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="nx">suggestion</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">return</span>  <span class="s1">&#39;&lt;div id=&quot;user-selection&quot;&gt;&#39;</span> <span class="o">+</span>
+</span><span class='line'>                <span class="s1">&#39;&lt;p&gt;&lt;strong&gt;&#39;</span> <span class="o">+</span> <span class="nx">username</span><span class="p">.</span><span class="nx">value</span> <span class="o">+</span> <span class="s1">&#39;&lt;/strong&gt;&lt;/p&gt;&#39;</span> <span class="o">+</span>
+</span><span class='line'>                <span class="s1">&#39;&lt;img src=&quot;&#39;</span> <span class="o">+</span> <span class="nx">gravatars</span><span class="p">[</span><span class="nx">usernames</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">username</span><span class="p">.</span><span class="nx">value</span><span class="p">)]</span> <span class="o">+</span> <span class="s1">&#39;&quot;/&gt;&#39;</span> <span class="o">+</span>
+</span><span class='line'>                <span class="s1">&#39;&lt;/div&gt;&#39;</span> <span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li><br>
+  <li>
+    My final issue came with the highlighting. The <code>highlight:true</code> line within the typeahead method indicates that it should work right out of the box, but it did not for me (again, due to conflicting other assets). For this reason, I needed to debug in my JavaScript console, eventually finding that an item selected using typeahead was situated in a div with class of "tt-cursor". A lot of the default styling was fine with me but, since the highlighting itself did not work, I added the following to my css, thus giving the selected item a background color.
+      ``` css styling.css
+        div .tt-cursor {
+          background-color: #16A085;
+        }
+      ```
+    (that selector, ".tt-cursor", was very important!)
+  </li>
+</ul>
+
+
+<p>And that concludes my adventures with typeahead. It took some time, but, as I described before, it&rsquo;s those seemingly minor finishing touches that can end up taking the most time. This exercise was certainly proof of that. But it was worth it to get a working&mdash;and good-looking&mdash;typeahead form input.</p>
+
+<h3>Resources</h3>
+
+
+<ul>
+  <li><a href="http://stackoverflow.com/questions/10873312/how-to-customize-bootstrap-typeahead-layout-function-for-more-than-just-text">Relevant StackOverflow question</a></li>
+  <li><a href="http://fusiongrokker.com/post/heavily-customizing-a-bootstrap-typeahead">Great blog post chronicling similar struggles with typeahead</a></li>
+  <li><a href="http://twitter.github.io/typeahead.js/">Twitter Typeahead.js source code</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Typeahead and Gon: A How-To Guide (Part 1 of 2)]]></title>
+    <link href="http://cek.io/blog/2014/04/15/typeahead/"/>
+    <updated>2014-04-15T17:15:42-04:00</updated>
+    <id>http://cek.io/blog/2014/04/15/typeahead</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m currently working on <a href="http://www.tendermessenger.com/">a project</a> with users and messages (<a href="https://github.com/AlexPatriquin/BitcoinMessenger">full Github repo here</a>). The main functionality is complete&mdash;the first 80%, if you will&mdash;but there&rsquo;s plenty more to do&mdash;Avi has emphasized that the finishing touches, the final 20%, can drag on for much longer than anticipated. One aspect of that final 20% was a key front end feature: typeahead.</p>
+
+<p>If you think you don&rsquo;t know what typeahead is, you&rsquo;re mistaken. You do know what typeahead is, you just might now it as autocomplete. I choose to refer to it specifically as typeahead, because I used <a href="http://twitter.github.io/typeahead.js/">Twitter&rsquo;s typeahead.js</a> (Twitter&rsquo;s engineers wrote <a href="https://blog.twitter.com/2013/twitter-typeaheadjs-you-autocomplete-me">a handy blog post about it</a>).</p>
+
+<p>Typeahead.js is &ldquo;a flexible JavaScript library that provides a strong foundation for building robust typeaheads,&rdquo; which means it supplements jQuery with the <code>.typeahead()</code> method. This method, when passed a dataset, can compute suggestions for a given suggestion. At the end of the day, it makes form inputs dynamic and prettier.</p>
+
+<!--more-->
+
+
+
+
+<h2>The How-To</h2>
+
+
+<p>I implemented this into my Rails app and&mdash;surprise!&mdash;there&rsquo;s <a href="https://github.com/yourabi/twitter-typeahead-rails/">a Ruby Gem</a> that packages typeahead.js specifically for the Rails asset pipeline. This guide will cover that twitter-typeahead-rails gem and a couple other requisite pieces (the <a href="https://github.com/gazay/gon">Gon gem</a>, javascript assets, html in the views, etc.).</p>
+
+<p>This process really breaks down to two main steps: (1) making a dataset accessible to the view by getting Rails variables into Javascript (Gon does that) and (2) using that dataset with the <code>.typeahead</code> JavaScript method.</p>
+
+<h3>1. The Gon gem</h3>
+
+
+<ul>
+  <li>
+    Watch <a href="http://railscasts.com/episodes/324-passing-data-to-javascript">this RailsCast</a>. Seriously, Ryan Bates covers Gon very well and in just over six minutes. Then again, you could try to save those six minutes by skipping ahead to the next couple steps.
+  </li><br>
+  <li>
+    Add the gem (copy the following to your Gemfile): <code>gem 'gon'</code>.
+  </li><br>
+  <li>
+    Add <code><%= include_gon %></code> to the head of your html, right under the title attribute (probably in the application.html.erb view). Your html should look something like this:
+        <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (application.html.erb)</span> <a href='/downloads/code/application.html.erb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&lt;!DOCTYPE html&gt;</span>
+</span><span class='line'><span class="x">&lt;html&gt;</span>
+</span><span class='line'><span class="x">  &lt;head&gt;</span>
+</span><span class='line'><span class="x">    &lt;title&gt;TenderMessenger&lt;/title&gt;</span>
+</span><span class='line'><span class="x">    </span><span class="cp">&lt;%=</span> <span class="n">include_gon</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      ...other scripts, etc.</span>
+</span><span class='line'><span class="x">  &lt;/head&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li><br>
+  <li>
+    Add Gon to your controllers. The idea is to assign your Rails variable to a Gon variable (which will become a JavaScript variable). In my case, trying to pass users' names and images, it looked like this:
+        <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (some_controller.rb)</span> <a href='/downloads/code/some_controller.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">def</span> <span class="nf">index</span>
+</span><span class='line'>  <span class="n">gon</span><span class="o">.</span><span class="n">usernames</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:name</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">gon</span><span class="o">.</span><span class="n">gravatars</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">user</span><span class="o">|</span> <span class="n">user</span><span class="o">.</span><span class="n">gravatar</span> <span class="p">}</span>
+</span><span class='line'>  <span class="c1"># ...other code that belongs in the controller action</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+    You can assign any array to the Gon variable. Both of my examples return arrays by calling methods (ActiveRecord query for usernames and mapping image links), but you could just as easily do <code>gon.variable = [example1, example2, example3]</code> (though, as we'll see, you could add this data straight into your JavaScript file)
+  </li><br>
+  <li>
+    Assign that Gon variable to a JavaScript variable. In whatever .js file you choose, assign <code>gon.whatever</code> to <code>var whateverVariable</code>. Continuing my example:
+        <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (random.js)</span> <a href='/downloads/code/random.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// Other javascript...</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">gravatars</span> <span class="o">=</span> <span class="nx">gon</span><span class="p">.</span><span class="nx">gravatars</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">usernames</span> <span class="o">=</span> <span class="nx">gon</span><span class="p">.</span><span class="nx">usernames</span><span class="p">;</span>
+</span><span class='line'><span class="c1">// More javascript</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+        <img class="right" src="/images/gon_alert.png" width="400">
+    Try adding <code>alert(whateverVariable)</code> (in my example <code>alert(users)</code>). Look at that--your dataset has made it from Rails to JavaScript! (Yes, I have funny test users).
+  </li><br>
+</ul>
+
+
+<p>I will post Part 2 of this blog tomorrow, which will cover using this JavaScript variable with the <code>.typeahead()</code> method to create a fancy typeahead like the one with Tenderlove below. I may combine it all into one post. But this seems long enough for now.</p>
+
+<p><i><strong>Edit:</strong>Here&rsquo;s <a href="http://cek.io/blog/2014/04/16/typeahead-2/">part 2!</a></i>
+<img src="/images/typeahead.png"></p>
+
+<h3>Resources</h3>
+
+
+<ul>
+  <li><a href="http://railscasts.com/episodes/324-passing-data-to-javascript">Ryan Bates (RailsCast) on Gon</a></li>
+  <li><a href="https://github.com/gazay/gon">Gon source code</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

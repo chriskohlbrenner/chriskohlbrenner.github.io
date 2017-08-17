@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Github | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/github/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[I'm a Rails Contributor!]]></title>
+    <link href="http://cek.io/blog/2014/03/19/im-a-rails-contributor/"/>
+    <updated>2014-03-19T17:03:24-04:00</updated>
+    <id>http://cek.io/blog/2014/03/19/im-a-rails-contributor</id>
+    <content type="html"><![CDATA[<p>I can now count myself among the 2,000 or so contributors to Ruby on Rails. Pretty elite company&mdash;but I got in on a technicality.</p>
+
+<p><img class="left" src="/images/rails_contribution.png"></p>
+
+<!--more-->
+
+
+<p>When I say I got in on a technicality, I mean that quite literally. The technicality was a typo in a Rails guide. A missing &ldquo;s&rdquo;, to be exact.</p>
+
+<p>Visit section 12.2 of the <a href="http://guides.rubyonrails.org/active_record_querying.html#joining-tables">ActiveRecord Querying guide</a> and you&rsquo;ll see a line that says &ldquo;Active Record lets you use the names of the associations defined onthe model as a shortcut for specifying JOIN <strong>clause</strong> when using the joins method.&rdquo; Emphasis is mine, because that word &ldquo;clause&rdquo; is the typo. I added an &ldquo;s&rdquo;, which should be reflected shortly.</p>
+
+<p><img class="right" src="/images/merged_rails_pull_request.png"></p>
+
+<p>Of course that&rsquo;s a trivial change to the code base that is <a href="http://github.com/rails/rails">github.com/rails/rails</a>. And yet, because it&rsquo;s such a significant open-source project, Rails has a whole <a href="http://guides.rubyonrails.org/contributing_to_ruby_on_rails.html">guide devoted to contributing</a>.</p>
+
+<p>There are a few formalities (a significant one: it&rsquo;s a good idea to inlude &ldquo;[ci skip]&rdquo; in the commit message, so that Rails skips the build for that commit), but the whole process can be completed very quickly. In fact, my pull request was accepted and closed just minutes after submitting, so it only took me 20-30 minutes from start to finish.</p>
+
+<h4>Postscript</h4>
+
+
+<p>Apparently Rails is listed on <a href="http://tip4commit.com/">Tip4Commit</a>, which enables donors to sponsor open-source projects, thus granting a tip for merged commits. I didn&rsquo;t know any of that. But it means I was tipped 0.00015659 Ƀ, the first bitcoins (or fractions thereof) I&rsquo;ve ever owned&mdash;even if it&rsquo;s only $0.10.</p>
+]]></content>
+  </entry>
+  
+</feed>

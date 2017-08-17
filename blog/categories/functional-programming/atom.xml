@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Functional Programming | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/functional-programming/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ramda.js Array Sorting (With Tiebreakers) Using R.comparator, Variadic R.either, and R.reduce]]></title>
+    <link href="http://cek.io/blog/2016/10/29/ramda-sort-tiebreakers-comparators-either/"/>
+    <updated>2016-10-29T12:50:14-04:00</updated>
+    <id>http://cek.io/blog/2016/10/29/ramda-sort-tiebreakers-comparators-either</id>
+    <content type="html"><![CDATA[<p>A recent exercise in data processing with <a href="http://ramdajs.com/">Ramda.js</a>: I wanted to sort an array of objects by their key/value pairs. More specifically, I wanted to sort an array that looked like this:</p>
+
+<p>``` javascript
+[</p>
+
+<pre><code>{
+    "code": "AUT",
+    "gold": 9,
+    "silver": 5,
+    "bronze": 7
+},
+{
+    "code": "USA",
+    "gold": 9,
+    "silver": 7,
+    "bronze": 10
+},
+{
+    "code": "EGY",
+    "gold": 2,
+    "silver": 3,
+    "bronze": 12
+}
+</code></pre>
+
+<p>]
+```</p>
+
+<p>A basic implementation is easy enough:</p>
+
+<p><code>javascript R.sortBy defaults to ascending order
+R.sortBy(R.prop('silver'), array);  // [{"code": "EGY", "silver": 3}, {"code": "AUT", "silver": 5}, {"code": "USA", "silver": 7}]
+</code></p>
+
+<p><code>R.sortBy</code> sorts according to a given function, in this case <code>R.prop</code> (where <code>'silver'</code> could be substituted for any other property).</p>
+
+<p>To ensure the order (ascending vs. descending), we can introduce <code>R.comparator</code>:</p>
+
+<p>``` javascript R.comparator enforces descending order, but &ldquo;AUT&rdquo; and &ldquo;USA&rdquo; tie
+const goldComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;gold&rsquo;, a), R.prop(&lsquo;gold&rsquo;, b)));
+R.sort(goldComparator, array);    //  [{&ldquo;code&rdquo;: &ldquo;AUT&rdquo;, &ldquo;gold&rdquo;: 9}, {&ldquo;code&rdquo;: &ldquo;USA&rdquo;, &ldquo;gold&rdquo;: 9}, {&ldquo;code&rdquo;: &ldquo;EGY&rdquo;, &ldquo;silver&rdquo;: 3}]</p>
+
+<p>```</p>
+
+<p>How can we handle tiebreakers? That is, as in the example abolve, what if two elements in the array have identical <code>gold</code> values and we attempt to sort by <code>gold</code> &mdash; which should be sorted first? We can ensure a deterministic result with predictable tiebreaks using comparators and <code>R.either</code>.</p>
+
+<p>``` javascript R.comparator enforces descending order and second R.comparator passed to R.either breaks ties
+const goldComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;gold&rsquo;, a), R.prop(&lsquo;gold&rsquo;, b)));
+const silverComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;silver&rsquo;, a), R.prop(&lsquo;silver&rsquo;, b)));</p>
+
+<p>R.sort(R.either(goldComparator, silverComparator), array);    // [{&ldquo;code&rdquo;: &ldquo;USA&rdquo;, &ldquo;gold&rdquo;: 9, &ldquo;silver&rdquo;: 7}, {&ldquo;code&rdquo;: &ldquo;AUT&rdquo;, &ldquo;gold&rdquo;: 9, &ldquo;silver&rdquo;: 5}, {&ldquo;code&rdquo;: &ldquo;EGY&rdquo;, &ldquo;gold&rdquo;: 2, &ldquo;silver&rdquo;: 3}]
+```</p>
+
+<p>Finally, what if we need more than one tiebreaker? How do we handle objects that have identical <code>gold</code> AND <code>silver</code> values? <code>R.either</code> expects two arguments, so the solution is to create a variadic implementation of <code>R.either</code>, one that will accept an unknown number of arguments, so we can pass tiebreaker comparators for all possible situations:</p>
+
+<p>``` javascript Addresses all edge cases: sort by gold; if gold ties sort by silver; if silver ties sort by bronze; if bronze ties sort by country code
+const variadicEither = (head, &hellip;tail) => R.reduce(R.either, head, tail);</p>
+
+<p>const goldComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;gold&rsquo;, a), R.prop(&lsquo;gold&rsquo;, b)));
+const silverComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;silver&rsquo;, a), R.prop(&lsquo;silver&rsquo;, b)));
+const bronzeComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;bronze&rsquo;, a), R.prop(&lsquo;bronze&rsquo;, b)));
+const codeComparator = R.comparator((a, b) => R.lt(R.prop(&lsquo;code&rsquo;, a), R.prop(&lsquo;code&rsquo;, b)));    // sorts alphabetically by country code</p>
+
+<p>R.sort(variadicEither([goldComparator, silverComparator, bronzeComparator, codeComparator]), array);
+```</p>
+
+<p>The crux of this solution is <code>variadicEither</code>, a <a href="https://en.wikipedia.org/wiki/Variadic_function">variadic</a> re-implementation of <code>R.either</code> that can accept a variable number of arguments. It uses <code>head</code> (first argument) and <code>...tail</code> (all remaining arguments) to reduce over all arguments and return a function that addresses all tiebreak possibilities. R.sort expects a comparator function, which <code>R.either</code> and <code>variadicEither</code> both return.</p>
+
+<p>Of course this solution still has a bit of boilerplate (repetition of <code>R.comparator(...)</code>). For a reusable <code>sortByProps</code> implementation that takes an array of props and a list, see <a href="https://github.com/ramda/ramda/wiki/Cookbook#sort-a-list-by-array-of-props-if-first-prop-equivalent-sort-by-second-etc">this Ramda.js recipe</a> that I recently added.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[React Conf Reactions]]></title>
+    <link href="http://cek.io/blog/2016/02/27/react-conf/"/>
+    <updated>2016-02-27T16:43:32-05:00</updated>
+    <id>http://cek.io/blog/2016/02/27/react-conf</id>
+    <content type="html"><![CDATA[<p>The React.js Conf was a blast. All the talks were recorded and can be watched <a href="https://www.youtube.com/playlist?list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">here</a>. My full bullet point notes are <a href="/downloads/react_conf_notes.txt">here</a>, but what follows are some more readable reactions to the conference.</p>
+
+<p>First of all, a special thanks to the organizers and speakers. This was a very well run conference with some high-class talks. From breakfast Monday through to the closing reception on Tuesday, with the single exception of <a href="https://twitter.com/kentcdodds/status/702201425133064192">jackhammer noises during some of the talks</a> (what are you gonna do about construction next door?), everything was very well done.</p>
+
+<p>Moving on, I learned a ton, got to know some awesome members of this community, and met some incredible people who&rsquo;ve influenced my career (by giving talks, authoring open-source, or otherwise helping me write better code). Here&rsquo;s a couple of my main takeaways, in no particular order.</p>
+
+<!--more-->
+
+
+<ol>
+<li><p>I came into the conference with React.js and Redux experience, but little to no knowledge of GraphQL, Relay, or React Native. I was not disappointed then, that the majority (maybe two-thirds?) of the talks addressed exactly those things. For a long time, React Native has been on my list of new tech to explore, as someone who&rsquo;s never written anything for mobile. GraphQL and Relay, meanwhile, could be directly applicable to my everyday work. And I&rsquo;m of course always pleased to learn new things about what I already &ldquo;know&rdquo;, like aspects of React performance that I haven&rsquo;t thought about.</p></li>
+<li><p>If the majority of the talks addressed React.js, React Native, GraphQL, and Relay, the remainder focused on areas of tech that I rarely if ever consider. Talks covered subjects like <a href="https://www.youtube.com/watch?v=ty2bFeOdGeI&amp;index=7&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">virtual reality</a>, <a href="https://www.youtube.com/watch?v=GnIrNYtmRDg&amp;index=8&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">hardware</a>, and <a href="https://www.youtube.com/watch?v=Xnqy_zkBAew&amp;index=18&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">graphics</a>. I may never focus the majority of my time on any of these, but it&rsquo;s eye-opening and motivating to see people pushing the limits of what can be done.</p></li>
+<li><p>A few of my favorite talks:</p>
+
+<ul>
+<li>Andy Matuschak, who worked on the gesture system for iOS, <a href="https://www.youtube.com/watch?v=uBYPqb83C7k&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY&amp;index=9">presented some of the problems (and potential solutions) facing mobile gestures</a>. I don&rsquo;t even do mobile, but his talk was engaging, entertaining, and informative.</li>
+<li><a href="https://www.youtube.com/watch?v=feUYwoLhE_4&amp;index=3&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">Isaac Salier-Hellendag announced Draft.js</a>, a new open-source framework for building rich text editors. I&rsquo;ve worked on exactly this problem, implementing a textarea that allows for Facebook-style (using <code>@</code>) mentions, so I totally resonated with his walkthrough of the problem and implementation, and I&rsquo;m excited to give Draft.js a try.</li>
+<li>Jared Forsyth addressed exactly the situation I&rsquo;m in, providing <a href="https://www.youtube.com/watch?v=-jwQ3sGoiXg&amp;index=34&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">an overview of React, Redux, and Relay</a> (with discussions of ClojureScript and Om/next mixed in) and how to determine which to use and when.</li>
+<li>Nicolas Gallagher, who&rsquo;s SUIT CSS project I&rsquo;ve used, pushed things a step farther and proposed taking styles a step farther (moving CSS entirely into JS) in his <a href="https://www.youtube.com/watch?v=RBg2_uQE4KM&amp;index=22&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">talk on React Native for Web</a>.</li>
+<li>Jamison Dance stepped away from React long enough to discuss <a href="https://www.youtube.com/watch?v=txxKx_I39a8&amp;index=30&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">Elm and what JavaScript can learn from it</a> (read: immutability, types, pure functions). Fantastic talk with great examples and fun slides.</li>
+</ul>
+</li>
+<li><p>Any post-conference list would be incomplete without mentioning the things I&rsquo;m excited to explore and implement:</p>
+
+<ul>
+<li>As I already mentioned, I want to give Draft.js a long look and consider using it in production.</li>
+<li>I was already interested in GraphQL and Relay, and want to take a few days to see if it could make sense at work.</li>
+<li>I&rsquo;m all for moving away from CSS in favor of JavaScript solutions, so I want to learn from React Native for Web and consider the OSS solutions for JS styles.</li>
+<li>My app at work, like so many others, is slow on app initialization, so I want to consider how to improve that based on ideas presented at the conference.</li>
+<li>I want to finally give React Native a try in a side project.</li>
+<li>Finally, I&rsquo;m already sold on ideas from functional programming like immutability and reducing side effects, but I want to check out Flow for gradual type checking and I want to learn Elm rather than only doing FP in JavaScript.</li>
+</ul>
+</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[An Imperative Declaration]]></title>
+    <link href="http://cek.io/blog/2015/10/23/imperative-declaration/"/>
+    <updated>2015-10-23T16:42:28-04:00</updated>
+    <id>http://cek.io/blog/2015/10/23/imperative-declaration</id>
+    <content type="html"><![CDATA[<p>A few hours ago, my understanding of imperative and declarative programming was effectively: imperative is about &ldquo;how&rdquo; something should happen and declarative is about &ldquo;what&rdquo; should happen. Not exactly authoritative, so I spent these last couple hours trying to clear that up by finding conclusive answers to the following questions:</p>
+
+<ul>
+<li>What&rsquo;s the difference between imperative programming and declarative programming?</li>
+<li>Is functional programming a subset of declarative programming?</li>
+<li>If so, what&rsquo;s an example of declarative programming that&rsquo;s not functional?</li>
+</ul>
+
+
+<p>Unfortunately, no definitive answers. Or perhaps too many &ldquo;definitive&rdquo; answers. So here&rsquo;s where I stand.</p>
+
+<!--more-->
+
+
+<h3>The Backstory</h3>
+
+<p>Let me back up for a second. I went through a similar exercise a little while back. Google even pointed me to <a href="http://latentflip.com/imperative-vs-declarative/">this handy article</a>, which I found so useful that I summarized it in a <a href="http://stackoverflow.com/a/28216263">StackOverflow answer</a>.</p>
+
+<p>I was pleasantly surprised by the three upvotes that came over the next few months, but of course all pleasant things must come to an end:</p>
+
+<p><blockquote><p>As with frighteningly many answers to this question, your example of &lsquo;declarative&rsquo; programming is an example of functional programming. The semantics of &lsquo;map&rsquo; are &lsquo;apply this function to the elements of the array in order&rsquo;. You&rsquo;re not allowing the runtime any leeway in the order of execution.</p></blockquote></p>
+
+<p>Silly me, thinking I&rsquo;d grasped a complex but fundamental concept, and sillier me, thinking I should share it. On the internet.</p>
+
+<p>Thus began my quest to answer those three questions. (1) What <em>is</em> the difference between imperative and declarative? (2) Can I safely call functional programming a subset of declarative programming? (3) If so, what&rsquo;s an example of declarative programming that isn&rsquo;t functional?</p>
+
+<h3>Defining the Question(s)</h3>
+
+<p>I first tried to make sense of the critique I&rsquo;d received on StackOverflow: &ldquo;&hellip;your example of &lsquo;declarative&rsquo; programming is an example of functional programming.&rdquo; I suppose that&rsquo;s what rendered my answer inappropriate for the question &ldquo;What is the difference between declarative and imperative programming?&rdquo;. Easy solution&mdash;just look back to the <a href="http://stackoverflow.com/a/1784702">accepted answer</a>&hellip;and find that the same commenter left <a href="https://stackoverflow.com/questions/1784664/what-is-the-difference-between-declarative-and-imperative-programming#comment52439156_1784702">a very similar critique</a>.</p>
+
+<p>This seemed to imply that functional programming and declarative programming are <em>not</em> synonymous (which I already believed), but also that there&rsquo;s a significant difference between declarative programming and functional programming (which I hadn&rsquo;t recognized). So what is it? Going back even farther, if this is a valid critique, what&rsquo;s the difference between imperative and declarative to begin with? I decided to reassess my answer.</p>
+
+<h3>Definitions</h3>
+
+<p><strong>Imperative Programming:</strong></p>
+
+<ul>
+<li>&ldquo;Telling the &lsquo;machine&rsquo; how to do something, and as a result what you want to happen will happen.&rdquo; <a href="http://latentflip.com/imperative-vs-declarative/">(Latentflip)</a></li>
+<li>&ldquo;A programming paradigm that uses statements that change a program&rsquo;s state. In much the same way that the imperative mood in natural languages expresses commands, an imperative program consists of commands for the computer to perform. Imperative programming focuses on describing how a program operates.&rdquo; <a href="https://en.wikipedia.org/wiki/Imperative_programming">(Wikipedia)</a></li>
+<li>&ldquo;Any programming language that specifies explicit manipulation of the state of the computer system.&rdquo; <a href="http://foldoc.org/imperative%20programming">(Foldoc)</a></li>
+</ul>
+
+
+<p><strong>Declarative Programming:</strong></p>
+
+<ul>
+<li>&ldquo;Telling the &lsquo;machine&rsquo; what you would like to happen, and let the computer figure out how to do it.&rdquo; <a href="http://latentflip.com/imperative-vs-declarative/">(Latentflip)</a></li>
+<li>&ldquo;A programming paradigm&hellip;that expresses the logic of a computation without describing its control flow. Many languages applying this style attempt to minimize or eliminate side effects by describing what the program should accomplish in terms of the problem domain, rather than describing how to go about accomplishing it as a sequence of the programming language primitives (the how being left up to the language&rsquo;s implementation).&rdquo; <a href="https://en.wikipedia.org/wiki/Declarative_programming">(Wikipedia)</a></li>
+<li>&ldquo;Any relational language or functional language. These kinds of programming language describe relationships between variables in terms of functions or inference rules, and the language executor (interpreter or compiler) applies some fixed algorithm to these relations to produce a result.&rdquo; <a href="http://foldoc.org/declarative%20languages">(Foldoc)</a></li>
+</ul>
+
+
+<p><strong>Takeaways:</strong></p>
+
+<ul>
+<li>How (imperative) vs. what (declarative)</li>
+<li>Using control flow and mutating state (imperative) vs. minimizing/eliminating control flow and side effects</li>
+</ul>
+
+
+<p>Here&rsquo;s where we already see some divergence in definition. <em>Minimizing</em> vs <em>eliminating</em> opens us up to an ambiguity. Does declarative programming necessitate absolutely no side effects, or just a preference for immutability? Is imperative programming about the lowest level of specified instructions, or just less abstraction?</p>
+
+<h3>Arriving Back Full Circle</h3>
+
+<p>With these thoughts in mind, I&rsquo;d argue that declarative and imperative are <em>relative</em> terms, not absolute black and white, but a spectrum of lighter and darker gray. Generalizing, declarative programming is about specifying the &ldquo;what&rdquo;, by way of certain abstractions (for example, functional operations like <code>map</code>) or by removing abstractions (for example, plain HTML rather than jQuery DOM manipulation), whereas declarative programming is about the &ldquo;how&rdquo;, using lower level steps (for example, <code>for</code> loops).</p>
+
+<p>So I stand by my original sentiments, and my original answer on StackOverflow. If we think of imperative and declarative as a spectrum rather than a binary either-or, we can use it as an effective part of our vocabulary rather than a confusing semantic argument.</p>
+
+<p>That&rsquo;s where I&rsquo;m at anyway. I hope you don&rsquo;t find it &ldquo;frighteningly&rdquo; off-target.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ramda's Once]]></title>
+    <link href="http://cek.io/blog/2015/07/14/once/"/>
+    <updated>2015-07-14T11:29:18-04:00</updated>
+    <id>http://cek.io/blog/2015/07/14/once</id>
+    <content type="html"><![CDATA[<p>Someone recently described to me that, in an interview, he was asked to implement a function that would only run once, even if invoked multiple times. This immediately made me think of <a href="http://ramdajs.com/">Ramda</a>&mdash;my go-to JavaScript library (think <a href="http://underscorejs.org/">Underscore</a> or <a href="https://lodash.com/">lodash</a>, but with a little more functional programming flavor)&mdash;and its <a href="http://ramdajs.com/docs/#once"><code>once</code> function</a>:</p>
+
+<p><img src="/images/ramda-once.png"></p>
+
+<!--more-->
+
+
+<p>Great, <code>once</code> &ldquo;accepts a function fn and returns a function that guards invocation of fn such that fn can only ever be called once, no matter how many times the returned function is invoked.&rdquo; Getting back to the original question (i.e., in an interview), this would be one kind of answer. It would show knowledge of the JavaScript ecosystem, some of its libraries (and <a href="http://fr.umio.us/why-ramda/">why to use them</a>), and how to apply it to a specific problem.</p>
+
+<p>That said, let&rsquo;s go deeper&mdash;how would we implement <code>once</code> from scratch? Since Ramda&rsquo;s implementation worked so well for us, let&rsquo;s look no further than Ramda. <a href="https://github.com/ramda/ramda/blob/master/src/once.js">Looking at the source</a>, it&rsquo;s relatively straightforward to see what&rsquo;s going on:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (once.js)</span> <a href='/downloads/code/ramda/once.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">_curry1</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./internal/_curry1&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">_curry1</span><span class="p">(</span><span class="kd">function</span> <span class="nx">once</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">called</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">called</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="nx">called</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">result</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Let&rsquo;s ignore <code>_curry1</code> for now (though we&rsquo;ll get to it), and rewrite as follows:</p>
+
+<p><img src="/images/ramda-once-2.png"></p>
+
+<p>And there we have it! So what&rsquo;s actually happening here? The first several lines are simple: we declare the variables <code>called</code> (initialized to <code>false</code>) and <code>result</code>, return <code>result</code> if <code>called</code> is true, otherwise set <code>called</code> to true and then assign <code>result = fn.apply(this, arguments);</code>.</p>
+
+<p>What is that line doing? It&rsquo;s using <code>apply()</code>, which <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply">&ldquo;calls a function with a given this value and arguments provided as an array&rdquo;</a>. It&rsquo;s a way of dealing with scope, making sure we pass the right value of <code>this</code> to <code>fn</code>. In our example above (<code>console.log...</code>), this isn&rsquo;t an issue, so we could plausibly replace the line in question with <code>result = fn(arguments);</code>.</p>
+
+<p>It is an issue, however, when scope and <code>this</code> matter. For example, using Ramda&rsquo;s example of wrapping an <code>addOne</code> function (<code>var addOneOnce = R.once(function(x){ return x + 1; });</code>) using <code>once</code>, we can see that not using <code>apply()</code> (left) breaks the adding behavior, but it works when using <code>apply()</code> (right).</p>
+
+<p><img src="/images/ramda-apply-no-apply.png"></p>
+
+<p>This occurs (on the left) because without passing the correct value for <code>this</code>, <code>x</code> in the <code>addOne</code> function becomes <code>"[object Arguments]"</code>, which, when 1 is added, becomes <code>"[object Arguments]1"</code>. On the other hand (on the right), given the correct value for <code>this</code>, <code>x</code> becomes 10 (or whatever argument we pass) and the result is correct.</p>
+
+<p>And that about concludes this post, with one open question remaining: currying? Ramda&rsquo;s implementation of <code>once</code> uses <code>curry1</code>, in keeping with its API (functions first, data last) and functional style. Currying is just a way of turning a function that expects n parameters into one that, when supplied less than n parameters, returns a new function awaiting the remaining parameters. It&rsquo;s a handy way that Ramda enables us to build functions, pass those functions around as first-class objects, and call when ready. Back to our <code>once</code> examples, currying is what&rsquo;s happening when we call <code>once(addOne)</code> and see <code>function anonymous()</code>. <code>once(addOne)</code> expects one more parameter, so we call <code>once(addOne)(10)</code> and get 11.</p>
+
+<h3>Resources</h3>
+
+
+<p><a href="http://fr.umio.us/why-ramda/">Why Ramda?</a><br>
+<a href="http://fr.umio.us/favoring-curry/">Favoring Curry</a><br></p>
+]]></content>
+  </entry>
+  
+</feed>

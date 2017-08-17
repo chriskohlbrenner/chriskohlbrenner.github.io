@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Database | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/database/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Knexfile Configuration for Heroku Deployment]]></title>
+    <link href="http://cek.io/blog/2016/10/24/knex-configuration-heroku/"/>
+    <updated>2016-10-24T09:29:50-04:00</updated>
+    <id>http://cek.io/blog/2016/10/24/knex-configuration-heroku</id>
+    <content type="html"><![CDATA[<p>I recently deployed a simple Express server to Heroku. The project used <a href="http://knexjs.org/">Knex.js</a> for SQL queries and database migrations.</p>
+
+<p>While deploying, I ran into some issues with my knexfile. That is, I was able to create the database using the Heroku CLI, but running the migrations and configuring the database connection took a bit of finessing.</p>
+
+<p>Long story short, two parts:</p>
+
+<h3>1. Database URL (Connection)</h3>
+
+
+<p>Find your database url. Using Heroku CLI, running <code>heroku config</code> (or <code>heroku config --app [app name]</code>) will return something like the following:</p>
+
+<p><code>
+cek app $ heroku config
+=== app Config Vars
+DATABASE_URL: postgres://asdghjlkjh:sadv09787-vnbmvliHJV@ec7-23-123-986-12.compute-1.amazonaws.com:5432/asfhlkjh1234
+</code></p>
+
+<p>Copy and paste the DATABASE_URL as your Knexfile&rsquo;s <code>connection</code> value.</p>
+
+<h3>2. SSL</h3>
+
+
+<p>Heroku requires SSL for PostgreSQL connections. There are two options (and potentially a third in the future):</p>
+
+<ul>
+<li><strong>(Confirmed)</strong> Add an <code>ssl: true</code> key/value pair to the Knexfile</li>
+<li><strong>(Confirmed)</strong> Set an environment variable using Heroku CLI: <code>heroku config:set PGSSLMODE=require</code></li>
+<li><strong>(Unsupported, but may be implemented in future versions of Knex)</strong> Add a <code>'?ssl=true'</code> query parameter to your database URL (knexfile&rsquo;s <code>connection</code>).</li>
+</ul>
+
+
+<p>With those two things in mind, a Knexfile like the following will work just fine:</p>
+
+<p>```
+module.exports = {</p>
+
+<pre><code>client: 'pg',
+debug: true,
+connection: DB_URL,
+migrations: {
+    tableName: 'migrations'
+},
+ssl: true
+</code></pre>
+
+<p>}
+```</p>
+
+<h3>Further resources:</h3>
+
+
+<ul>
+<li><a href="https://github.com/tgriesser/knex/issues/239#issuecomment-42278076">Related Github issue on Knex project</a></li>
+<li><a href="https://github.com/HalahRaadSalih/deploy-to-heroku-with-db">Heroku/Knex walkthrough</a></li>
+<li><a href="http://jakehp.github.io/2015/07/10/Knex-Postgres-Heroku/">Similar issue</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Translating Verbs: CRUD, SQL, and HTTP]]></title>
+    <link href="http://cek.io/blog/2014/06/20/crud-sql-http-translation/"/>
+    <updated>2014-06-20T17:12:40-04:00</updated>
+    <id>http://cek.io/blog/2014/06/20/crud-sql-http-translation</id>
+    <content type="html"><![CDATA[<p>Recently I was asked two interview questions about basic CRUD functions, specifically (1) how they correspond to HTTP verbs and (2) how to perform those actions on the database side with SQL statements.</p>
+
+<p>I was able to list the HTTP verbs relatively quickly. I&rsquo;ve built enough simple CRUD applications in Rails to know <a href="http://guides.rubyonrails.org/routing.html#crud-verbs-and-actions">the CRUD operations as they relate to creating, reading, updating, or deleting database records</a>.</p>
+
+<p>On the other hand, it took me a second to recall the SQL statements. Crud. I remember hearing at Flatiron that a shortcoming of many junior developer candidates is SQL, that they don&rsquo;t know to retrieve a record with <code>SELECT expression FROM table WHERE conditions;</code>.</p>
+
+<p>I remember thinking &ldquo;I know my SQL&mdash;I&rsquo;ll never run into such a problem.&rdquo; Well, I almost did! It&rsquo;s amazing how easy it is to forget even the most basic syntax when you don&rsquo;t use it. So I&rsquo;ll be sure to commit the following table to memory:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th> CRUD            </th>
+<th> SQL         </th>
+<th> HTTP         </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td> Create          </td>
+<td> INSERT      </td>
+<td> Put/Post</td>
+</tr>
+<tr>
+<td></td>
+<td> Read (Retrieve) </td>
+<td> SELECT      </td>
+<td> Get</td>
+</tr>
+<tr>
+<td></td>
+<td> Update (Modify) </td>
+<td> UPDATE      </td>
+<td> Put/Patch</td>
+</tr>
+<tr>
+<td></td>
+<td> Delete (Destroy)</td>
+<td> DELETE      </td>
+<td> Delete</td>
+</tr>
+</tbody>
+</table>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Wasting, Spending, and Saving Time on Active Support]]></title>
+    <link href="http://cek.io/blog/2014/03/27/spending-saving-time/"/>
+    <updated>2014-03-27T13:08:38-04:00</updated>
+    <id>http://cek.io/blog/2014/03/27/spending-saving-time</id>
+    <content type="html"><![CDATA[<p><strong>Summary:</strong> Dealing with time can be difficult. <a href="http://api.rubyonrails.org/classes/Time.html">ActiveSupport</a> helps. Store daily time values (e.g., daily schedules, irrespective of date) in a database as offsets from midnight (in seconds).</p>
+
+<p>---------------------------------------------------</p>
+
+
+<p>I&rsquo;m working on a trip planner app using NJ Transit data to find the next departure time for a trip, given its origin and destination. For example, what&rsquo;s the next train leaving Hoboken for Secaucus?</p>
+
+<p><img src="/images/hoboken_secaucus.png"></p>
+
+<h4>It works!</h4>
+
+
+<p>At least as a proof of concept (<a href="https://github.com/chriskohlbrenner/njtransit">full code here</a>). I know, it&rsquo;s Jersey&mdash;not that great. Also messy SQL/Active Record queries&hellip; Those things aside, the fact that it&rsquo;s working means an annoying hurdle is behind me (or I at least better understand how to get around it). That hurdle is <strong>comparing time</strong>.</p>
+
+<!--more-->
+
+
+
+
+<!-- Making sense of Arel and ActiveRecord queries is an issue unto itself (and perhaps the subject of a future post), but  -->
+
+
+<h3>About Time Comparisons</h3>
+
+
+<p>To determine the <i>next</i> departure time, I need to determine a time from the database with the current time. Not as easy as it seems.</p>
+
+<!-- the There's a lot going on behind the scenes--Rails and ActiveRecord and database associations and all--but some of the main code is below. -->
+
+
+<p>The code below is a big part of what enabled the screenshot above. That&rsquo;s good, it works. But it&rsquo;s not pretty.</p>
+
+<p><code>Time.now</code> is straightforward enough. And <code>.where(&ldquo;departure_time&rdquo; > ?, &lt;time>)</code> makes sense&mdash;it&rsquo;s an <a href="http://guides.rubyonrails.org/active_record_querying.html">Active Record query</a> that fires a SQL statement comparing the departure times from the database with the current time. But what about the <code>.change(year: 2000, month: 01, day: 01)</code>, especially with the appended <code>&ndash; 18000</code>?</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (time.rb)</span> <a href='/downloads/code/time.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># Given an origin and destination, I want to get all departure times from origin</span>
+</span><span class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">all_departures</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">destination</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">destination</span><span class="o">.</span><span class="n">upcase!</span>
+</span><span class='line'>  <span class="n">where</span><span class="p">(</span><span class="s2">&quot;stop_id = ?&quot;</span><span class="p">,</span> <span class="no">Stop</span><span class="o">.</span><span class="n">find_old_stop_id_by_name</span><span class="p">(</span><span class="n">origin</span><span class="p">))</span><span class="o">.</span><span class="n">joins</span><span class="p">(</span><span class="ss">:trip</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s1">&#39;trip_destination = ?&#39;</span><span class="p">,</span> <span class="n">destination</span><span class="p">)</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="ss">:departure_time</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">next_departure_from_to</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">destination</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">current_time</span> <span class="o">=</span> <span class="p">(</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">change</span><span class="p">(</span><span class="ss">year</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span> <span class="ss">month</span><span class="p">:</span> <span class="mo">01</span><span class="p">,</span> <span class="ss">day</span><span class="p">:</span> <span class="mo">01</span><span class="p">)</span> <span class="o">-</span> <span class="mi">18000</span><span class="p">)</span>
+</span><span class='line'>  <span class="nb">self</span><span class="o">.</span><span class="n">all_departures</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">destination</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;departure_time &gt; ?&quot;</span><span class="p">,</span> <span class="n">current_time</span><span class="p">)</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:departure_time_string</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># want to find departure time from stop_times where departure time is between now and 2 hours from now</span>
+</span><span class='line'>      <span class="c1"># self.all_departures(origin).where(departure_time: current_hour..(current_hour + 2)).pluck(:departure_time)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># helpful answer: https://stackoverflow.com/questions/11973225/rails-how-to-store-time-of-day-for-schedule/15350965#15350965</span>
+</span><span class='line'>      <span class="c1"># &quot;open_at &gt; ? and close_at &lt; ?&quot;, Time.now.seconds_since_midnight, Time.now.seconds_since_midnight</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># newtime = Time.new.midnight</span>
+</span><span class='line'>  <span class="c1"># oldtime = Time.new(2000,01,01,0,0,0,&quot;-04:00&quot;)</span>
+</span><span class='line'>  <span class="c1"># time_to_add = (newtime - oldtime).to_i</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Active Support and the <code>change</code> helper</h3>
+
+
+<p>Enter <a href="http://guides.rubyonrails.org/active_support_core_extensions.html">Active Support</a>, specifically its <strong>Time</strong> class (<a href="http://api.rubyonrails.org/classes/Time.html">documentation</a> and <a href="https://github.com/rails/rails/blob/master/activesupport/lib/active_support/core_ext/time/calculations.rb">full source code</a>). Thanks to <a href="https://stackoverflow.com/questions/11973225/rails-how-to-store-time-of-day-for-schedule/15350965#15350965">this StackOverflow answer</a>, I was directed to the ActiveSupport helpers. These inlude <code>beginning_of_day()</code>, <code>seconds_until_end_of_day()</code>, <code>days_in_month(month, year = now.year)</code>, and dozens of other awesome helpers.</p>
+
+<p>As my code shows, I chose the <code><a href="http://api.rubyonrails.org/classes/Time.html#method-i-change">change(options)</a></code> helper. This helper returns a new Time based on a number of parameters. It got the job done, but it was only necessary because of a formatting issue (I also left my previous attempts in the code as artifacts&mdash;evidence of my failed attempts at hacking through the time comparison).</p>
+
+<p>The original values I used to populate my database were CSVs, meaning that the time values were strings, like <code>09:30:00</code> (hour/minute/second). Simple enough, except that when I seeded the database with those strings as time values, they created values like this: <code>2000-01-01 09:30:00 UTC</code>. Basically, those time values (as strings) were converted to instances of the Time class, which include year, month, day, and timezone with defaults of 2000, 01, 01, and UTC.</p>
+
+<p>My solution&mdash;hacky as it was&mdash;was to <code>change</code>my <code>Time.now</code> to match that format, hence my <code>Time.now</code> of <code>2014-03-27 09:30:00 -400</code> became <code>2014-03-27 09:30:00 -500</code>. This was still off because of the time zone, hence the <code>&ndash; 18000</code>. 18000 seconds is how many hours? Five, the exact number I needed to offset for the timezone (UTC, or Coordinated Universal Time, is treated as equivalent to Greenwich Mean Time).</p>
+
+<h3>There's got to be a better way</h3>
+
+
+<p>There is. A lot of what I did is unnecessary. In theory, the dates don&rsquo;t even need to match up&mdash;I could just calculate the difference and append a different value than the 18000 to compensate (though it&rsquo;d be more difficult to conceptualize). Even that is bad. What I really want to do is store those initial values (the time strings) as <strong>offsets from midnight in seconds</strong>.</p>
+
+<p>In a roundabout way, I&rsquo;m back to the original StackOverflow answer, which suggests storing database values as seconds from midnight. I&rsquo;m still working out how, given strings like &ldquo;06:48:00&rdquo;, I can populate my database with offsets from midnight (24480), but I&rsquo;ve played with irb enough (requiring &lsquo;active_support/time&rsquo;) to know that <code>Time.parse(&ldquo;06:48:00&rdquo;).seconds_since_midnight</code> works. Now I just need to refactor to make that work in my app.</p>
+]]></content>
+  </entry>
+  
+</feed>

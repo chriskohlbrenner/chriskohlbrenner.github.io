@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Git | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Debugging With Git: Log -S, Bisect, and Blame]]></title>
+    <link href="http://cek.io/blog/2014/06/04/debugging-with-git-bisect-log-blame/"/>
+    <updated>2014-06-04T11:24:44-04:00</updated>
+    <id>http://cek.io/blog/2014/06/04/debugging-with-git-bisect-log-blame</id>
+    <content type="html"><![CDATA[<p>At a recent <a href="http://meetup.com/nycruby/events/182591142/">meetup</a>, Danielle Sucher discussed debugging in Ruby. Be jealous&mdash;those who came were given rubber duckies, since no talk on debugging would be complete without mentioning <a href="http://en.wikipedia.org/wiki/Rubber_duck_debugging">rubber duck debugging</a>.</p>
+
+<p><img class="center" src="/images/git-debugging/rubberduck.png" width="600"></p>
+
+<p>Rubber ducks aside, Danielle mentioned some helpful git commands when it comes to debugging&mdash;<code>git bisect</code>, <code>git blame</code>, and <code>git log -S</code>&mdash;which I&rsquo;ll cover in more detail here.</p>
+
+<!--more-->
+
+
+<h3>Log -S</h3>
+
+
+<p><code>git log</code> is a common command. It shows the commit logs. But what happens with the <code>-S</code> flag? Quoting the <a href="http://git-scm.com/docs/git-log">documentation</a> here,
+<code>git log -S [string]</code> &ldquo;look[s] for differences that change the number of occurrences of the specified string (i.e. addition/deletion) in a file.&rdquo;</p>
+
+<p>In the Bitcoin payment app I built (with Alex, whose name appears below), the <code>send_bitcoin</code> method was an obviously important one. If I wanted to see all commits in which that method was newly introduced or called, I could run <code>git log -S &ldquo;send_bitcoin&rdquo;</code>, and I&rsquo;d see the log below.</p>
+
+<p><img class="center" src="/images/git-debugging/git-log-s.png"></p>
+
+<h3>Blame</h3>
+
+
+<p><code>git blame</code><a href="http://git-scm.com/docs/git-blame">&ldquo;show[s] what revision and author last modified each line of a file&rdquo;</a>. What does that mean? You can &ldquo;blame&rdquo; a given developer for a line of code they changed or, more generally, just understand who has made the most recent changes to each line.</p>
+
+<p>Sticking to the Bitcoin payment app, suppose I wanted to see the most recent change to the <code>send_bitcoin</code> message, within its context. Since that method occurs in the user model, I can run <code>git blame app/models/user.rb</code> to see the commit hash, the author, the date/time, and the actual code for each line in that file. I know that the method appears in lines 66-71, so I can add <code>-L [start, end]</code> to see a specific range of lines. In this case, <code> git blame -L 66,71 app/models/user.rb</code>:</p>
+
+<p><img class="center" src="/images/git-debugging/git-blame.png"></p>
+
+<p>Handy, no?</p>
+
+<h3>Bisect</h3>
+
+
+<p>Most anyone who&rsquo;s used git has heard of <code>git bisect</code>, but a lot of us know it as one of those advanced git commands that we shouldn&rsquo;t mess with. That&rsquo;s a mistake.</p>
+
+<p>Bisect&mdash;<a href="http://git-scm.com/docs/git-bisect">&ldquo;find[ing] by binary search the change that introduced a bug&rdquo;</a>&mdash;can be an invaluable debugging technique. When I first tried it, it seemed that there was a lot going on, but it&rsquo;s actually pretty simple (at least the basic bisect commands).</p>
+
+<p>The example below shows how it can be done. In a sample app with a long commit history, assume there&rsquo;s a bug that was introduced somewhere between commit cd27e52 and the current master. There are about a dozen commits between, so the &ldquo;bug&rdquo; could be in any one of them. Four main steps:</p>
+
+<ol>
+  <li>I run <code>git bisect start</code> to initiate the bisect process.</li>
+  <li>I mark the current commit (on master) as good with <code>git bisect bad</code>.</li>
+  <li>I indicate the most recent "good" commit (without the bug) with <code>git bisect good [commit]</code>. Bisect will now binary search through the recent commit history to determine where the bug got started.</li>
+  <li>Bisect will pull up commits to be checked, which I designate as <code>git bisect good</code> or <code>git bisect bad</code>. Do this enough times, and you'll see "[commit hash] is the first bad commit".</li>
+</ol>
+
+
+<p><img class="center" src="/images/git-debugging/bisect.png"></p>
+
+<p>Just a couple minutes of debugging, and we&rsquo;ve already determined the bad commit! (Some bug it must&rsquo;ve been, in a markdown file). The <a href="http://git-scm.com/docs/git-bisect">Git documentation</a> describes a lot of additional git bisect commands.</p>
+
+<h3>Bonus: commit messages</h3>
+
+
+<p>Write multi-line commit messages! Somehow I had missed that concept until recently. I thought &ldquo;good commit messages&rdquo; meant clearly summarizing the code that was changed and avoiding terrible messages like &ldquo;ok&rdquo; or &ldquo;change method&rdquo; (though we all know we&rsquo;ve done it). Tim Pope has written perhaps the best <a href="http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html">post on git commit messages</a>. If nothing else, write multi-line messages that summarize (first line) and give a detailed explanation of changes (in the full paragraph afterwards).</p>
+]]></content>
+  </entry>
+  
+</feed>

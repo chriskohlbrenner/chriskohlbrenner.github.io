@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Declarative Programming | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/declarative-programming/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[An Imperative Declaration]]></title>
+    <link href="http://cek.io/blog/2015/10/23/imperative-declaration/"/>
+    <updated>2015-10-23T16:42:28-04:00</updated>
+    <id>http://cek.io/blog/2015/10/23/imperative-declaration</id>
+    <content type="html"><![CDATA[<p>A few hours ago, my understanding of imperative and declarative programming was effectively: imperative is about &ldquo;how&rdquo; something should happen and declarative is about &ldquo;what&rdquo; should happen. Not exactly authoritative, so I spent these last couple hours trying to clear that up by finding conclusive answers to the following questions:</p>
+
+<ul>
+<li>What&rsquo;s the difference between imperative programming and declarative programming?</li>
+<li>Is functional programming a subset of declarative programming?</li>
+<li>If so, what&rsquo;s an example of declarative programming that&rsquo;s not functional?</li>
+</ul>
+
+
+<p>Unfortunately, no definitive answers. Or perhaps too many &ldquo;definitive&rdquo; answers. So here&rsquo;s where I stand.</p>
+
+<!--more-->
+
+
+<h3>The Backstory</h3>
+
+<p>Let me back up for a second. I went through a similar exercise a little while back. Google even pointed me to <a href="http://latentflip.com/imperative-vs-declarative/">this handy article</a>, which I found so useful that I summarized it in a <a href="http://stackoverflow.com/a/28216263">StackOverflow answer</a>.</p>
+
+<p>I was pleasantly surprised by the three upvotes that came over the next few months, but of course all pleasant things must come to an end:</p>
+
+<p><blockquote><p>As with frighteningly many answers to this question, your example of &lsquo;declarative&rsquo; programming is an example of functional programming. The semantics of &lsquo;map&rsquo; are &lsquo;apply this function to the elements of the array in order&rsquo;. You&rsquo;re not allowing the runtime any leeway in the order of execution.</p></blockquote></p>
+
+<p>Silly me, thinking I&rsquo;d grasped a complex but fundamental concept, and sillier me, thinking I should share it. On the internet.</p>
+
+<p>Thus began my quest to answer those three questions. (1) What <em>is</em> the difference between imperative and declarative? (2) Can I safely call functional programming a subset of declarative programming? (3) If so, what&rsquo;s an example of declarative programming that isn&rsquo;t functional?</p>
+
+<h3>Defining the Question(s)</h3>
+
+<p>I first tried to make sense of the critique I&rsquo;d received on StackOverflow: &ldquo;&hellip;your example of &lsquo;declarative&rsquo; programming is an example of functional programming.&rdquo; I suppose that&rsquo;s what rendered my answer inappropriate for the question &ldquo;What is the difference between declarative and imperative programming?&rdquo;. Easy solution&mdash;just look back to the <a href="http://stackoverflow.com/a/1784702">accepted answer</a>&hellip;and find that the same commenter left <a href="https://stackoverflow.com/questions/1784664/what-is-the-difference-between-declarative-and-imperative-programming#comment52439156_1784702">a very similar critique</a>.</p>
+
+<p>This seemed to imply that functional programming and declarative programming are <em>not</em> synonymous (which I already believed), but also that there&rsquo;s a significant difference between declarative programming and functional programming (which I hadn&rsquo;t recognized). So what is it? Going back even farther, if this is a valid critique, what&rsquo;s the difference between imperative and declarative to begin with? I decided to reassess my answer.</p>
+
+<h3>Definitions</h3>
+
+<p><strong>Imperative Programming:</strong></p>
+
+<ul>
+<li>&ldquo;Telling the &lsquo;machine&rsquo; how to do something, and as a result what you want to happen will happen.&rdquo; <a href="http://latentflip.com/imperative-vs-declarative/">(Latentflip)</a></li>
+<li>&ldquo;A programming paradigm that uses statements that change a program&rsquo;s state. In much the same way that the imperative mood in natural languages expresses commands, an imperative program consists of commands for the computer to perform. Imperative programming focuses on describing how a program operates.&rdquo; <a href="https://en.wikipedia.org/wiki/Imperative_programming">(Wikipedia)</a></li>
+<li>&ldquo;Any programming language that specifies explicit manipulation of the state of the computer system.&rdquo; <a href="http://foldoc.org/imperative%20programming">(Foldoc)</a></li>
+</ul>
+
+
+<p><strong>Declarative Programming:</strong></p>
+
+<ul>
+<li>&ldquo;Telling the &lsquo;machine&rsquo; what you would like to happen, and let the computer figure out how to do it.&rdquo; <a href="http://latentflip.com/imperative-vs-declarative/">(Latentflip)</a></li>
+<li>&ldquo;A programming paradigm&hellip;that expresses the logic of a computation without describing its control flow. Many languages applying this style attempt to minimize or eliminate side effects by describing what the program should accomplish in terms of the problem domain, rather than describing how to go about accomplishing it as a sequence of the programming language primitives (the how being left up to the language&rsquo;s implementation).&rdquo; <a href="https://en.wikipedia.org/wiki/Declarative_programming">(Wikipedia)</a></li>
+<li>&ldquo;Any relational language or functional language. These kinds of programming language describe relationships between variables in terms of functions or inference rules, and the language executor (interpreter or compiler) applies some fixed algorithm to these relations to produce a result.&rdquo; <a href="http://foldoc.org/declarative%20languages">(Foldoc)</a></li>
+</ul>
+
+
+<p><strong>Takeaways:</strong></p>
+
+<ul>
+<li>How (imperative) vs. what (declarative)</li>
+<li>Using control flow and mutating state (imperative) vs. minimizing/eliminating control flow and side effects</li>
+</ul>
+
+
+<p>Here&rsquo;s where we already see some divergence in definition. <em>Minimizing</em> vs <em>eliminating</em> opens us up to an ambiguity. Does declarative programming necessitate absolutely no side effects, or just a preference for immutability? Is imperative programming about the lowest level of specified instructions, or just less abstraction?</p>
+
+<h3>Arriving Back Full Circle</h3>
+
+<p>With these thoughts in mind, I&rsquo;d argue that declarative and imperative are <em>relative</em> terms, not absolute black and white, but a spectrum of lighter and darker gray. Generalizing, declarative programming is about specifying the &ldquo;what&rdquo;, by way of certain abstractions (for example, functional operations like <code>map</code>) or by removing abstractions (for example, plain HTML rather than jQuery DOM manipulation), whereas declarative programming is about the &ldquo;how&rdquo;, using lower level steps (for example, <code>for</code> loops).</p>
+
+<p>So I stand by my original sentiments, and my original answer on StackOverflow. If we think of imperative and declarative as a spectrum rather than a binary either-or, we can use it as an effective part of our vocabulary rather than a confusing semantic argument.</p>
+
+<p>That&rsquo;s where I&rsquo;m at anyway. I hope you don&rsquo;t find it &ldquo;frighteningly&rdquo; off-target.</p>
+]]></content>
+  </entry>
+  
+</feed>

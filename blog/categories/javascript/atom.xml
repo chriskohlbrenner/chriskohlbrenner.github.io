@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: JavaScript | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ramda.js Array Sorting (With Tiebreakers) Using R.comparator, Variadic R.either, and R.reduce]]></title>
+    <link href="http://cek.io/blog/2016/10/29/ramda-sort-tiebreakers-comparators-either/"/>
+    <updated>2016-10-29T12:50:14-04:00</updated>
+    <id>http://cek.io/blog/2016/10/29/ramda-sort-tiebreakers-comparators-either</id>
+    <content type="html"><![CDATA[<p>A recent exercise in data processing with <a href="http://ramdajs.com/">Ramda.js</a>: I wanted to sort an array of objects by their key/value pairs. More specifically, I wanted to sort an array that looked like this:</p>
+
+<p>``` javascript
+[</p>
+
+<pre><code>{
+    "code": "AUT",
+    "gold": 9,
+    "silver": 5,
+    "bronze": 7
+},
+{
+    "code": "USA",
+    "gold": 9,
+    "silver": 7,
+    "bronze": 10
+},
+{
+    "code": "EGY",
+    "gold": 2,
+    "silver": 3,
+    "bronze": 12
+}
+</code></pre>
+
+<p>]
+```</p>
+
+<p>A basic implementation is easy enough:</p>
+
+<p><code>javascript R.sortBy defaults to ascending order
+R.sortBy(R.prop('silver'), array);  // [{"code": "EGY", "silver": 3}, {"code": "AUT", "silver": 5}, {"code": "USA", "silver": 7}]
+</code></p>
+
+<p><code>R.sortBy</code> sorts according to a given function, in this case <code>R.prop</code> (where <code>'silver'</code> could be substituted for any other property).</p>
+
+<p>To ensure the order (ascending vs. descending), we can introduce <code>R.comparator</code>:</p>
+
+<p>``` javascript R.comparator enforces descending order, but &ldquo;AUT&rdquo; and &ldquo;USA&rdquo; tie
+const goldComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;gold&rsquo;, a), R.prop(&lsquo;gold&rsquo;, b)));
+R.sort(goldComparator, array);    //  [{&ldquo;code&rdquo;: &ldquo;AUT&rdquo;, &ldquo;gold&rdquo;: 9}, {&ldquo;code&rdquo;: &ldquo;USA&rdquo;, &ldquo;gold&rdquo;: 9}, {&ldquo;code&rdquo;: &ldquo;EGY&rdquo;, &ldquo;silver&rdquo;: 3}]</p>
+
+<p>```</p>
+
+<p>How can we handle tiebreakers? That is, as in the example abolve, what if two elements in the array have identical <code>gold</code> values and we attempt to sort by <code>gold</code> &mdash; which should be sorted first? We can ensure a deterministic result with predictable tiebreaks using comparators and <code>R.either</code>.</p>
+
+<p>``` javascript R.comparator enforces descending order and second R.comparator passed to R.either breaks ties
+const goldComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;gold&rsquo;, a), R.prop(&lsquo;gold&rsquo;, b)));
+const silverComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;silver&rsquo;, a), R.prop(&lsquo;silver&rsquo;, b)));</p>
+
+<p>R.sort(R.either(goldComparator, silverComparator), array);    // [{&ldquo;code&rdquo;: &ldquo;USA&rdquo;, &ldquo;gold&rdquo;: 9, &ldquo;silver&rdquo;: 7}, {&ldquo;code&rdquo;: &ldquo;AUT&rdquo;, &ldquo;gold&rdquo;: 9, &ldquo;silver&rdquo;: 5}, {&ldquo;code&rdquo;: &ldquo;EGY&rdquo;, &ldquo;gold&rdquo;: 2, &ldquo;silver&rdquo;: 3}]
+```</p>
+
+<p>Finally, what if we need more than one tiebreaker? How do we handle objects that have identical <code>gold</code> AND <code>silver</code> values? <code>R.either</code> expects two arguments, so the solution is to create a variadic implementation of <code>R.either</code>, one that will accept an unknown number of arguments, so we can pass tiebreaker comparators for all possible situations:</p>
+
+<p>``` javascript Addresses all edge cases: sort by gold; if gold ties sort by silver; if silver ties sort by bronze; if bronze ties sort by country code
+const variadicEither = (head, &hellip;tail) => R.reduce(R.either, head, tail);</p>
+
+<p>const goldComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;gold&rsquo;, a), R.prop(&lsquo;gold&rsquo;, b)));
+const silverComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;silver&rsquo;, a), R.prop(&lsquo;silver&rsquo;, b)));
+const bronzeComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;bronze&rsquo;, a), R.prop(&lsquo;bronze&rsquo;, b)));
+const codeComparator = R.comparator((a, b) => R.lt(R.prop(&lsquo;code&rsquo;, a), R.prop(&lsquo;code&rsquo;, b)));    // sorts alphabetically by country code</p>
+
+<p>R.sort(variadicEither([goldComparator, silverComparator, bronzeComparator, codeComparator]), array);
+```</p>
+
+<p>The crux of this solution is <code>variadicEither</code>, a <a href="https://en.wikipedia.org/wiki/Variadic_function">variadic</a> re-implementation of <code>R.either</code> that can accept a variable number of arguments. It uses <code>head</code> (first argument) and <code>...tail</code> (all remaining arguments) to reduce over all arguments and return a function that addresses all tiebreak possibilities. R.sort expects a comparator function, which <code>R.either</code> and <code>variadicEither</code> both return.</p>
+
+<p>Of course this solution still has a bit of boilerplate (repetition of <code>R.comparator(...)</code>). For a reusable <code>sortByProps</code> implementation that takes an array of props and a list, see <a href="https://github.com/ramda/ramda/wiki/Cookbook#sort-a-list-by-array-of-props-if-first-prop-equivalent-sort-by-second-etc">this Ramda.js recipe</a> that I recently added.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[D3 and React Faux DOM]]></title>
+    <link href="http://cek.io/blog/2016/07/06/d3-and-react-faux-dom/"/>
+    <updated>2016-07-06T19:56:50-04:00</updated>
+    <id>http://cek.io/blog/2016/07/06/d3-and-react-faux-dom</id>
+    <content type="html"><![CDATA[<p><strong>Author&rsquo;s Note:</strong> This post makes <a href="/blog/2015/06/23/react-d3/">my original post exploring React + D3</a> obselete. I strongly recommend <code>react-faux-dom</code> (<a href="https://github.com/Olical/react-faux-dom">on Github</a>) over my previous post&rsquo;s suggestion.</p>
+
+<hr>
+
+
+<p><strong>TL;DR</strong>, Hear it straight from the lib author: Oliver Caldwell wrote <a href="http://oli.me.uk/2015/09/09/d3-within-react-the-right-way/">this blog post</a> about <code>react-faux-dom</code>, which enables a cleanly organized and powerful combination of React and D3.</p>
+
+<p>That post in four bullet points:</p>
+
+<ul>
+<li>D3 works by <strong>mutating</strong> the DOM. Select a DOM element, append children, etc.</li>
+<li>React works by <strong>reconciling</strong> the DOM. Build a tree, compare to DOM, determine which elements to add/remove/change.</li>
+<li>DOM mutation (like D3 does) and DOM reconciliation (like React does) don&rsquo;t work together so well.</li>
+<li><code>react-faux-dom</code> makes a fake DOM to support D3. It might seem silly, but it enables us to support D3 while remaining within React.</li>
+</ul>
+
+
+<p>(<strong>Note</strong>: regarding the second bullet, <a href="https://facebook.github.io/react/docs/reconciliation.html">this post from the React docs</a> is worth a reread.)</p>
+
+<p>Using a fake DOM means we can drop D3 scripts into a React component&rsquo;s <code>render()</code> function and it&rsquo;ll just work. It was trivial to prove out in a production PR:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (sparkline.js)</span> <a href='/downloads/code/react-faux-dom/sparkline.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// inspired by: https://github.com/QubitProducts/d3-react-sparkline/blob/master/src/d3-react-sparkline.js</span>
+</span><span class='line'><span class="kr">import</span> <span class="nx">d3</span> <span class="nx">from</span> <span class="s1">&#39;d3&#39;</span>
+</span><span class='line'><span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span>
+</span><span class='line'><span class="kr">import</span> <span class="nx">ReactFauxDOM</span> <span class="nx">from</span> <span class="s1">&#39;react-faux-dom&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">export</span> <span class="kr">const</span> <span class="nx">Sparkline</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">propTypes</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">width</span><span class="o">:</span> <span class="nx">React</span><span class="p">.</span><span class="nx">PropTypes</span><span class="p">.</span><span class="nx">number</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">height</span><span class="o">:</span> <span class="nx">React</span><span class="p">.</span><span class="nx">PropTypes</span><span class="p">.</span><span class="nx">number</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">data</span><span class="o">:</span> <span class="nx">React</span><span class="p">.</span><span class="nx">PropTypes</span><span class="p">.</span><span class="nx">array</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">interpolation</span><span class="o">:</span> <span class="nx">React</span><span class="p">.</span><span class="nx">PropTypes</span><span class="p">.</span><span class="nx">oneOfType</span><span class="p">([</span>
+</span><span class='line'>      <span class="nx">React</span><span class="p">.</span><span class="nx">PropTypes</span><span class="p">.</span><span class="nx">string</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">React</span><span class="p">.</span><span class="nx">PropTypes</span><span class="p">.</span><span class="kd">function</span>
+</span><span class='line'>    <span class="p">])</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">render</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kr">const</span> <span class="p">{</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">interpolation</span><span class="p">,</span> <span class="nx">max</span><span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kr">const</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">ReactFauxDOM</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kc">null</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kr">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">])</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">domain</span><span class="p">(</span><span class="nx">d3</span><span class="p">.</span><span class="nx">extent</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">i</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kr">const</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="nx">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">max</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kr">const</span> <span class="nx">line</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">svg</span><span class="p">.</span><span class="nx">line</span><span class="p">()</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">x</span><span class="p">((</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">x</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">y</span><span class="p">((</span><span class="nx">d</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">y</span><span class="p">(</span><span class="nx">d</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">interpolate</span><span class="p">(</span><span class="nx">interpolation</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">el</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">datum</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">attr</span><span class="p">({</span>
+</span><span class='line'>        <span class="nx">key</span><span class="o">:</span> <span class="s1">&#39;sparkline&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;sparkline&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">d</span><span class="o">:</span> <span class="nx">line</span>
+</span><span class='line'>      <span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">el</span><span class="p">.</span><span class="nx">node</span><span class="p">().</span><span class="nx">toReact</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Rendering a sparkline is as simple as <code>&lt;Sparkline width={500} height={500} max={10} data={[1, 3, 2, 5, 4]} interpolation={"basis"} /&gt;</code>. We get the benefits of React semantics AND the D3 API, both neatly organized in their respective places.</p>
+
+<p>I consider it a clear win to maintain React component organization while leveraging the power of all that D3 offers, but I suppose what it comes down to is this:</p>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">For me, it&#39;s about worrying about the right &quot;lines&quot; to draw in your app, then fill the few shapes those lines create with garbage and ship.</p>&mdash; Ryan Florence (@ryanflorence) <a href="https://twitter.com/ryanflorence/status/702538809569726464">February 24, 2016</a></blockquote>
+
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>So many code design decisions boil down to the border between things. The interface. The &ldquo;line&rdquo; between where React component code belongs and where D3 code belongs. Ultimately, this still leaves us to fill in the lines with whatever we choose to write, but this library&rsquo;s placement of the &ldquo;line&rdquo; is an improvement over anything else I&rsquo;ve seen.</p>
+
+<p>As the author writes, &ldquo;All [React and D3] concepts remain the same, react-faux-dom is just the glue in the middle.&rdquo; This clean separation is hugely helpful in writing dataviz React components with D3.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Single Set of Color Vars With PostCSS]]></title>
+    <link href="http://cek.io/blog/2016/06/30/postcss-color-vars/"/>
+    <updated>2016-06-30T08:05:35-04:00</updated>
+    <id>http://cek.io/blog/2016/06/30/postcss-color-vars</id>
+    <content type="html"><![CDATA[<p>In this post, I describe how to create a single list of color variables (in JavaScript) so that those colors can be shared across JavaScript files and CSS stylesheets. Using PostCSS within a Webpack app, I outline the problem of sharing styles between CSS and JS and how it can be solved. For step-by-step code examples, skip ahead to &ldquo;Enter PostCSS (Problem Solved)&rdquo;.</p>
+
+<h3>The Problem We're Solving</h3>
+
+
+<p>At my day job, we&rsquo;d had a <code>colors.css</code> file for a while, where we define all the hex codes for our color scheme, as defined by our designers. It looked something like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (colors.css)</span> <a href='/downloads/code/postcss/colors.css'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nd">:root</span> <span class="p">{</span>
+</span><span class='line'>  <span class="o">--</span><span class="nb">black</span><span class="o">:</span> <span class="m">#1d3744</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">--</span><span class="nb">white</span><span class="o">:</span> <span class="m">#fff</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">--</span><span class="nb">red</span><span class="o">:</span> <span class="m">#c21e48</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This enabled us to use the same colors in any of our other CSS files using CSS modules:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (component-specific.css)</span> <a href='/downloads/code/postcss/component-specific.css'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="k">@import</span> <span class="s2">&quot;../theme/colors&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.my-special-component</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">background-color</span><span class="o">:</span> <span class="n">var</span><span class="p">(</span><span class="o">--</span><span class="nb">white</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">color</span><span class="o">:</span> <span class="n">var</span><span class="p">(</span><span class="o">--</span><span class="nb">red</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Straightforward, keeps things DRY, makes it easy to change colors when it strikes the designer&rsquo;s fancy, etc.</p>
+
+<p>For a long time, while our CSS colors were nicely organized, our JS colors weren&rsquo;t. We have colors in our D3 visualizations and our inline styles on React components. As a simple improvement, I decided to pull all our colors into a single map that could be read by both our CSS and JS files. <em>NB</em>: this post is about CSS <em>colors</em>, but can apply to any CSS variables you&rsquo;d like shared to JS.</p>
+
+<!--more-->
+
+
+
+
+<h3>Enter PostCSS (Problem Solved)</h3>
+
+
+<p><a href="https://github.com/postcss/postcss">PostCSS</a> does a lot of things. I&rsquo;ll leave it as an exercise to the reader to explore the <a href="https://github.com/postcss/postcss/blob/master/docs/plugins.md">various plugins</a> (or just <a href="https://github.com/postcss/postcss#plugins">some of the most popular ones</a>).</p>
+
+<p>For my purposes, I needed <a href="https://github.com/postcss/postcss-loader">postcss-loader</a> (a loader for Webpack), <a href="https://github.com/MoOx/postcss-cssnext">postcss-cssnext</a> (enables the latest CSS syntax, which we were already using through <a href="http://cssnext.io/">cssnext</a>), <a href="https://github.com/postcss/postcss-url">postcss-url</a>, and <a href="https://github.com/postcss/postcss-import">postcss-import</a>.</p>
+
+<p>The change was effectively X steps (X easy steps to a single list of color variables!):</p>
+
+<ol>
+  <li>
+    Add PostCSS plugins to package.json:
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (package.json)</span> <a href='/downloads/code/postcss/package.json'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="err">//</span> <span class="err">...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">&quot;devDependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">//</span> <span class="err">...</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-browser-reporter&quot;</span><span class="p">:</span> <span class="s2">&quot;^0.5.0&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-cssnext&quot;</span><span class="p">:</span> <span class="s2">&quot;^2.6.0&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-import&quot;</span><span class="p">:</span> <span class="s2">&quot;^8.1.2&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-loader&quot;</span><span class="p">:</span> <span class="s2">&quot;^0.9.1&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-reporter&quot;</span><span class="p">:</span> <span class="s2">&quot;^1.3.3&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-url&quot;</span><span class="p">:</span> <span class="s2">&quot;^5.1.2&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="err">//</span> <span class="err">...</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="err">//</span> <span class="err">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+
+  <li>
+    Since I had previously been using cssnext, I followed [these migration steps](http://cssnext.io/postcss/#postcss-loader) to upgrade to postcss-cssnext. This meant swapping the `cssnext-loader` for `postcss-loader` in my Webpack loaders, removing cssnext from my webpack config, and adding the postcss options to webpack config:
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (webpack.config.js)</span> <a href='/downloads/code/postcss/webpack.config.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">module</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">loaders</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="nx">test</span><span class="o">:</span>   <span class="sr">/\.css$/</span><span class="p">,</span>
+</span><span class='line'>          <span class="nx">loader</span><span class="o">:</span> <span class="s2">&quot;style-loader!css-loader!postcss-loader&quot;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">]</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">postcss</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">webpack</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span>
+</span><span class='line'>      <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;postcss-import&quot;</span><span class="p">)({</span> <span class="nx">addDependencyTo</span><span class="o">:</span> <span class="nx">webpack</span> <span class="p">}),</span>
+</span><span class='line'>      <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;postcss-url&quot;</span><span class="p">)(),</span>
+</span><span class='line'>      <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;postcss-cssnext&quot;</span><span class="p">)({</span>
+</span><span class='line'>        <span class="nx">features</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">customProperties</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">variables</span><span class="o">:</span> <span class="nx">colorVars</span> <span class="c1">// `colorVars` will be defined above, see step 4.</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">}),</span>
+</span><span class='line'>      <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;postcss-browser-reporter&quot;</span><span class="p">)(),</span>
+</span><span class='line'>      <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;postcss-reporter&quot;</span><span class="p">)(),</span>
+</span><span class='line'>    <span class="p">]</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+
+  <li>
+    Add a colors.js. I chose to CONSTANT_CASE the variables (for idiomatic JS).
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (colors.js)</span> <a href='/downloads/code/postcss/colors.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;BLACK&quot;</span><span class="o">:</span> <span class="s2">&quot;#1d3744&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;WHITE&quot;</span><span class="o">:</span> <span class="s2">&quot;#fff&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;RED&quot;</span><span class="o">:</span> <span class="s2">&quot;#c21e48&quot;</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+
+  <li>
+    Require `colors.js` in webpack.config.js.
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (require-colors.js)</span> <a href='/downloads/code/postcss/require-colors.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// to be added aboce `module.exports` of webpack.config.js</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">colorVars</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./app/constants/colors&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+
+  <li>
+    (OPTIONAL) Because I wanted CSS variables to be lowercase and hyphen-separated so I could maintain our old `color: var(--light-grey);` syntax, I added a transformation from the constant case (using Ramda's `curry` and `reduce`):
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (case-transform.js)</span> <a href='/downloads/code/postcss/case-transform.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// to be added above `module.exports` of webpack.config.js</span>
+</span><span class='line'><span class="c1">// color vars in JS are CONST_CASE, but need to be converted to hyphen-case for CSS</span>
+</span><span class='line'><span class="kr">const</span> <span class="nx">renameKeys</span> <span class="o">=</span> <span class="nx">R</span><span class="p">.</span><span class="nx">curry</span><span class="p">((</span><span class="nx">renameFn</span><span class="p">,</span> <span class="nx">obj</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">R</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">acc</span><span class="p">[</span><span class="nx">renameFn</span><span class="p">(</span><span class="nx">key</span><span class="p">)]</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">acc</span>
+</span><span class='line'>  <span class="p">},</span> <span class="p">{},</span> <span class="nx">R</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'><span class="kr">const</span> <span class="nx">constCaseToHyphenCase</span> <span class="o">=</span> <span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/_/g</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">).</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">colorVars</span> <span class="o">=</span> <span class="nx">renameKeys</span><span class="p">(</span><span class="nx">constCaseToHyphenCase</span><span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./app/constants/colors&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+  
+  <li>
+    Go forth and use styles!
+    
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (color-vars.js)</span> <a href='/downloads/code/postcss/color-vars.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// we can now do this in React components or any other JS file</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;app/constants/colors&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">// ...</span>
+</span><span class='line'><span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">style</span><span class="o">=</span><span class="p">{{</span><span class="nx">backgroundColor</span><span class="o">:</span> <span class="nx">colors</span><span class="p">.</span><span class="nx">white</span><span class="p">}}</span> <span class="o">/&gt;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (color-vars.css)</span> <a href='/downloads/code/postcss/color-vars.css'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="c">/* and this still works, without even needing to `@import &quot;../theme/colors&quot;;` */</span>
+</span><span class='line'><span class="nc">.my-special-component</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">background-color</span><span class="o">:</span> <span class="n">var</span><span class="p">(</span><span class="o">--</span><span class="nb">white</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">color</span><span class="o">:</span> <span class="n">var</span><span class="p">(</span><span class="o">--</span><span class="nb">red</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+
+</ol>
+
+
+<p>And that&rsquo;s it! Now, in addition to everything it already did, running <code>webpack-dev-server</code> will (1) compile using PostCSS, (2) read from colors.js, and (3) set all colors in colors.js as global CSS variables.</p>
+
+<h3>Limitations</h3>
+
+
+<p>The one limitation is hot-reloading. That is, hot reloading works perfectly on changes to JavaScript files and CSS files, with one exception: colors.js. Since colors.js is read on build, we need to restart the webpack dev server anytime we change or add a color variable. <a href="https://stackoverflow.com/questions/35174069/can-i-have-a-single-variables-file-using-cssnext-with-webpack">This question</a> poses effectively the same issue (&ldquo;&hellip;every time I change a variable I have to restart the webpack dev server&rdquo;). For now, that&rsquo;s a tradeoff I can live with.</p>
+
+<h3>Parting thoughts</h3>
+
+
+<p>This new pattern enables much more inline styling with JavaScript. That is, now our React components and D3 visualizations can, in theory, read style variables from JavaScript and never know about CSS.</p>
+
+<p>Following this to its extreme of no-CSS/all-JS may seem crazy, but I remain curious. <a href="https://www.youtube.com/watch?v=ERB1TJBn32c">A lot</a> <a href="https://twitter.com/necolas/status/718517376711405568">has been</a> <a href="https://speakerdeck.com/vjeux/react-css-in-js">said</a> about how inline styles with JavaScript may be the future. At a minimum, it&rsquo;s convenient and fun to do more JS and less CSS. I&rsquo;m excited to see how the community experiments with inline styling and if there come to be best practices around separation of concerns.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[React Conf Reactions]]></title>
+    <link href="http://cek.io/blog/2016/02/27/react-conf/"/>
+    <updated>2016-02-27T16:43:32-05:00</updated>
+    <id>http://cek.io/blog/2016/02/27/react-conf</id>
+    <content type="html"><![CDATA[<p>The React.js Conf was a blast. All the talks were recorded and can be watched <a href="https://www.youtube.com/playlist?list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">here</a>. My full bullet point notes are <a href="/downloads/react_conf_notes.txt">here</a>, but what follows are some more readable reactions to the conference.</p>
+
+<p>First of all, a special thanks to the organizers and speakers. This was a very well run conference with some high-class talks. From breakfast Monday through to the closing reception on Tuesday, with the single exception of <a href="https://twitter.com/kentcdodds/status/702201425133064192">jackhammer noises during some of the talks</a> (what are you gonna do about construction next door?), everything was very well done.</p>
+
+<p>Moving on, I learned a ton, got to know some awesome members of this community, and met some incredible people who&rsquo;ve influenced my career (by giving talks, authoring open-source, or otherwise helping me write better code). Here&rsquo;s a couple of my main takeaways, in no particular order.</p>
+
+<!--more-->
+
+
+<ol>
+<li><p>I came into the conference with React.js and Redux experience, but little to no knowledge of GraphQL, Relay, or React Native. I was not disappointed then, that the majority (maybe two-thirds?) of the talks addressed exactly those things. For a long time, React Native has been on my list of new tech to explore, as someone who&rsquo;s never written anything for mobile. GraphQL and Relay, meanwhile, could be directly applicable to my everyday work. And I&rsquo;m of course always pleased to learn new things about what I already &ldquo;know&rdquo;, like aspects of React performance that I haven&rsquo;t thought about.</p></li>
+<li><p>If the majority of the talks addressed React.js, React Native, GraphQL, and Relay, the remainder focused on areas of tech that I rarely if ever consider. Talks covered subjects like <a href="https://www.youtube.com/watch?v=ty2bFeOdGeI&amp;index=7&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">virtual reality</a>, <a href="https://www.youtube.com/watch?v=GnIrNYtmRDg&amp;index=8&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">hardware</a>, and <a href="https://www.youtube.com/watch?v=Xnqy_zkBAew&amp;index=18&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">graphics</a>. I may never focus the majority of my time on any of these, but it&rsquo;s eye-opening and motivating to see people pushing the limits of what can be done.</p></li>
+<li><p>A few of my favorite talks:</p>
+
+<ul>
+<li>Andy Matuschak, who worked on the gesture system for iOS, <a href="https://www.youtube.com/watch?v=uBYPqb83C7k&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY&amp;index=9">presented some of the problems (and potential solutions) facing mobile gestures</a>. I don&rsquo;t even do mobile, but his talk was engaging, entertaining, and informative.</li>
+<li><a href="https://www.youtube.com/watch?v=feUYwoLhE_4&amp;index=3&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">Isaac Salier-Hellendag announced Draft.js</a>, a new open-source framework for building rich text editors. I&rsquo;ve worked on exactly this problem, implementing a textarea that allows for Facebook-style (using <code>@</code>) mentions, so I totally resonated with his walkthrough of the problem and implementation, and I&rsquo;m excited to give Draft.js a try.</li>
+<li>Jared Forsyth addressed exactly the situation I&rsquo;m in, providing <a href="https://www.youtube.com/watch?v=-jwQ3sGoiXg&amp;index=34&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">an overview of React, Redux, and Relay</a> (with discussions of ClojureScript and Om/next mixed in) and how to determine which to use and when.</li>
+<li>Nicolas Gallagher, who&rsquo;s SUIT CSS project I&rsquo;ve used, pushed things a step farther and proposed taking styles a step farther (moving CSS entirely into JS) in his <a href="https://www.youtube.com/watch?v=RBg2_uQE4KM&amp;index=22&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">talk on React Native for Web</a>.</li>
+<li>Jamison Dance stepped away from React long enough to discuss <a href="https://www.youtube.com/watch?v=txxKx_I39a8&amp;index=30&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">Elm and what JavaScript can learn from it</a> (read: immutability, types, pure functions). Fantastic talk with great examples and fun slides.</li>
+</ul>
+</li>
+<li><p>Any post-conference list would be incomplete without mentioning the things I&rsquo;m excited to explore and implement:</p>
+
+<ul>
+<li>As I already mentioned, I want to give Draft.js a long look and consider using it in production.</li>
+<li>I was already interested in GraphQL and Relay, and want to take a few days to see if it could make sense at work.</li>
+<li>I&rsquo;m all for moving away from CSS in favor of JavaScript solutions, so I want to learn from React Native for Web and consider the OSS solutions for JS styles.</li>
+<li>My app at work, like so many others, is slow on app initialization, so I want to consider how to improve that based on ideas presented at the conference.</li>
+<li>I want to finally give React Native a try in a side project.</li>
+<li>Finally, I&rsquo;m already sold on ideas from functional programming like immutability and reducing side effects, but I want to check out Flow for gradual type checking and I want to learn Elm rather than only doing FP in JavaScript.</li>
+</ul>
+</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Hammer of JavaScript (and Other Tools for Other Nails)]]></title>
+    <link href="http://cek.io/blog/2016/02/08/javascript-hammer/"/>
+    <updated>2016-02-08T11:10:04-05:00</updated>
+    <id>http://cek.io/blog/2016/02/08/javascript-hammer</id>
+    <content type="html"><![CDATA[<p><em>The one where I get a harsh reminder to question my instincts from a real-life experience of <a href="https://xkcd.com/1319/">this XKCD comic</a>.</em></p>
+
+<p>As a mental exercise, a friend proposed the following potential interview question: given a directory with 10,000 files of text, how would you extract all the phone numbers from that directory into a single file?</p>
+
+<p>My immediate thought: this would be a basic assessment of someone&rsquo;s knowledge of:</p>
+
+<ol>
+<li>regular expressions to match patterns of numbers</li>
+<li>how to programmatically read/write files</li>
+<li>basic algorithmic complexity for iterating through files quickly.</li>
+</ol>
+
+
+<p>I even knew how I&rsquo;d implement it: use node&rsquo;s filesystem module to read the files, parse them for regex matches, and write all matches to a new file.</p>
+
+<p><img class="right" src="/images/hammer-nail.jpg" width="300"></p>
+
+<p>I was intrigued enough that I decided to prove it out. I wrote a basic phone number regex by hand (<code>\d{3}(-|\s|\.)?\d{3}(-|\s|\.)?\d{4}\</code> (for 3 digits, 3 digits, and 4 digits separated by hyphens, periods, spaces, or nothing), and looked into popular phone number regexes. I realized how unfamiliar I am with <a href="https://nodejs.org/api/fs.html">Node&rsquo;s filesystem module</a> (<code>readdir</code> and <code>readFile</code> and <code>writeFile</code>). Then I got curious about <a href="https://docs.npmjs.com/getting-started/publishing-npm-packages">publishing npm packages</a>. Before I knew it, I&rsquo;d spent a couple hours and produced a <a href="https://www.npmjs.com/package/collect-phone-numbers">somewhat polished npm project</a> for this hypothetical task.</p>
+
+<p>And it was all wrong.</p>
+
+<!--more-->
+
+
+<p>The thought process I used was logical. My work as a software engineer focuses almost entirely on the web, JavaScript, build tools, UI features, HTTP servers. I&rsquo;m comfortable with databases, front- and back-end code, version control, and countless other things. But that&rsquo;s a small subset of software! Classic hammer/nail.</p>
+
+<p>To Wikipedia:
+<blockquote><p>Software: any set of instructions that directs a computer to perform specific tasks or operations.</p><footer><strong>Wikipedia <a href="https://en.wikipedia.org/wiki/Software">https://en.wikipedia.org/wiki/Software</a> &ldquo;Software&rdquo;</strong></footer></blockquote></p>
+
+<p>Software is about problem-solving. But problems can&rsquo;t be solved well without being understood. And they won&rsquo;t be well understood if we assume we should use the same solution every time. There&rsquo;s something to be said for using the tools you know, but software also requires a humility to recognize when a given tool is the wrong one.</p>
+
+<p>In this case, I skipped the step of analyzing the problem. I didn&rsquo;t think about the specifics of the problem, the tradeoffs of time, or the alternative solutions I could choose. This was a one-time, approximate task. It was unlikely to be repeated often enough to make automating worthwhile. And yet I instinctually went with what I knew, implementing a &ldquo;good&rdquo;, &ldquo;complete&rdquo; solution that was really just a picture of overengineering.</p>
+
+<p><img class="left <a" src="href="https://imgs.xkcd.com/comics/automation.png">https://imgs.xkcd.com/comics/automation.png</a>" width="300"></p>
+
+<p>For a problem like this, why use another language or abstraction when it can be done via the command line, the text interface for the computer itself and a much more direct interface with the filesystem? Why use a language like JavaScript that&rsquo;s best suited for the web or pull in Node just for the sake of using a tool I know?</p>
+
+<p>These are questions I won&rsquo;t soon forget to ask myself when I take on a new problem. Hopefully that&rsquo;ll prevent me from falling into traps that webcomics are made of. I know for sure that, next time I&rsquo;m presented with a problem of finding text within a filesystem, I&rsquo;ll remember that tools like <code>grep</code> were made for exactly that. A simpler, less time-instensive, and more appropriate solution.</p>
+
+<p><code>egrep "\b[[:digit:]]{3}(-|\s|.)?[[:digit:]]{3}(-|\s|.)?[[:digit:]]{4}\b" ./* &gt; ./nums.txt</code></p>
+]]></content>
+  </entry>
+  
+</feed>

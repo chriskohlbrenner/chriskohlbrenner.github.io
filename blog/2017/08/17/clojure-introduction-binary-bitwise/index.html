@@ -1,0 +1,646 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Clojure Introduction to Binary and Bitwise Operators - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="I&rsquo;ve been working in Clojure and ClojureScript lately. A few months back, I came across this one weird trick to master Clojure. TL;DR: it &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2017/08/17/clojure-introduction-binary-bitwise">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Clojure Introduction to Binary and Bitwise Operators</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-08-17T18:00:00-04:00" pubdate data-updated="true">Aug 17<span>th</span>, 2017</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&rsquo;ve been working in Clojure and ClojureScript lately. A few months back, I came across <a href="http://realworldclojure.com/one-weird-trick/">this one weird trick to master Clojure</a>. <em>TL;DR</em>: it recommends reading the API docs, fully, top to bottom.</p>
+
+<blockquote><p>I’m not even joking! Go to this URL http://clojure.github.io/clojure/clojure.core-api.html and start reading from top to bottom. If you did not read through that page, you may not know about amap. If you stopped reading before you get to ‘f’ you wouldn’t know about frequencies. However, if you read all the way through, you will be rewarded with knowledge about vary-meta.</p><footer><strong>&#8220;One Weird Trick To Become a Clojure Expert&#8221;</strong> <cite><a href='http://realworldclojure.com/one-weird-trick/'>realworldclojure.com/&hellip;</a></cite></footer></blockquote>
+
+
+<p>In the process of doing this, I was struck by all the <code>bit-</code> functions &mdash; of the ~600 vars and functions in <code>clojure.core</code>, there are 12 specifically for bitwise operations.</p>
+
+<h3>Binary Fundamentals</h3>
+
+
+<p>A quick overview on binary:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; base-10 (decimal) to base-2 (binary). from right-to-left, binary columns are 1, 2, 4, 8, 16, ... (derived from 2^0, 2^1, 2^2, 2^3, 2^4, ...).</span>
+</span><span class='line'><span class="c1">;;</span>
+</span><span class='line'><span class="c1">;; base-10        base-2                              math spelled out</span>
+</span><span class='line'><span class="c1">;;    0                0            0   =  (0 * 1)</span>
+</span><span class='line'><span class="c1">;;    1                1            1   =  (1 * 1)</span>
+</span><span class='line'><span class="c1">;;    2               10            2   =  (1 * 2) + (0 * 1)</span>
+</span><span class='line'><span class="c1">;;    3               11            3   =  (1 * 2) + (1 * 1)</span>
+</span><span class='line'><span class="c1">;;    4              100            4   =  (1 * 4) + (0 * 2) + (0 * 1)</span>
+</span><span class='line'><span class="c1">;;    5              101            5   =  (1 * 4) + (0 * 2) + (1 * 1)</span>
+</span><span class='line'><span class="c1">;;    6              110            6   =  (1 * 4) + (1 * 2) + (0 * 1)</span>
+</span><span class='line'><span class="c1">;;    7              111            7   =  (1 * 4) + (1 * 2) + (1 * 1)</span>
+</span><span class='line'><span class="c1">;;    8             1000            8   =  (1 * 8) + (0 * 4) + (0 * 2) + (0 * 1)</span>
+</span><span class='line'><span class="c1">;;    9             1001            9   =  (1 * 8) + (0 * 4) + (0 * 2) + (1 * 1)</span>
+</span><span class='line'><span class="c1">;;   10             1010            10  =  (1 * 8) + (0 * 4) + (1 * 2) + (0 * 1)</span>
+</span><span class='line'><span class="c1">;;   11             1011            11  =  (1 * 8) + (0 * 4) + (1 * 2) + (1 * 1)</span>
+</span><span class='line'><span class="c1">;;   12             1100            12  =  (1 * 8) + (1 * 4) + (0 * 2) + (0 * 1)</span>
+</span><span class='line'><span class="c1">;;   13             1101            13  =  (1 * 8) + (1 * 4) + (0 * 2) + (1 * 1)</span>
+</span><span class='line'><span class="c1">;;   14             1110            14  =  (1 * 8) + (1 * 4) + (1 * 2) + (0 * 1)</span>
+</span><span class='line'><span class="c1">;;   15             1111            15  =  (1 * 8) + (1 * 4) + (1 * 2) + (1 * 1)</span>
+</span><span class='line'><span class="c1">;;   16            10000            16  = (1 * 16) + (0 * 8) + (0 * 4) + (0 * 2) + (0 * 1)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; test in a repl</span>
+</span><span class='line'><span class="c1">;; use `2r` to convert binary integer to decimal</span>
+</span><span class='line'><span class="c1">;; use `java.lang.Integer/toBinaryString` to convert decimal integer to binary</span>
+</span><span class='line'><span class="nv">$</span> <span class="nv">lein</span> <span class="nv">repl</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; compare 11 (base-2) to 3 (base-10)</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="mi">2</span><span class="nv">r11</span>
+</span><span class='line'><span class="mi">3</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">Integer/toBinaryString</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'><span class="s">&quot;11&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; compare 1101 (base-2) to 13 (base-10)</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="mi">2</span><span class="nv">r1101</span>
+</span><span class='line'><span class="mi">13</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">Integer/toBinaryString</span> <span class="mi">13</span><span class="p">)</span>
+</span><span class='line'><span class="s">&quot;1101&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; side note: 2r means binary, can&#39;t take values besides 0 or 1</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="mi">2</span><span class="nv">r2</span>
+</span><span class='line'><span class="nv">NumberFormatException</span> <span class="nv">For</span> <span class="nv">input</span> <span class="nv">string</span><span class="err">:</span> <span class="s">&quot;2&quot;</span>  <span class="nv">java.lang.NumberFormatException.forInputString</span> <span class="p">(</span><span class="nf">NumberFormatException.java</span><span class="ss">:65</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Some things to note:</p>
+
+<ul>
+<li>We can disregard leading zeros in binary, so binary <code>0010</code> and binary <code>10</code> both represent decimal <code>2</code>.</li>
+<li>Each position is one bit (&ldquo;bit&rdquo; means &ldquo;<em>b</em>inary dig<em>it</em>&rdquo;). So <code>1111</code> is a 4-bit integer (so we can represent up to 15 different values). A 32-bit integer maxes at <code>11111111111111111111111111111111</code> (so we can represent up to 4,294,967,295 values). We&rsquo;ll see that we don&rsquo;t always use every position counting up from 0 (the left-most position will be used to determine positive/negative).</li>
+<li>This blog post uses <code>2r....</code> and <code>Integer/toBinaryString</code> to convert between binary and decimal. Other functions and formatters are discussed <a href="https://stackoverflow.com/questions/21448788/printing-the-binary-value-of-a-number-in-clojure">here</a>.</li>
+</ul>
+
+
+<h3>Bitwise Operators</h3>
+
+
+<p>This brings us to the bitwise operators. There are 12 in <code>clojure.core</code> (all visible in <a href="https://github.com/clojure/clojure/blob/master/src/clj/clojure/core.clj">the source</a>):</p>
+
+<p><code>bit-and</code> &ndash; Bitwise and</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; `bit-and` does a logical AND across columns</span>
+</span><span class='line'><span class="c1">;; 1010     ; 10</span>
+</span><span class='line'><span class="c1">;; 1001     ; 9</span>
+</span><span class='line'><span class="c1">;; ----</span>
+</span><span class='line'><span class="c1">;; 1000     ; 8   ; by column: 1 AND 1   =&gt;   1</span>
+</span><span class='line'><span class="c1">;;                             0 AND 0   =&gt;   0</span>
+</span><span class='line'><span class="c1">;;                             1 AND 0   =&gt;   0</span>
+</span><span class='line'><span class="c1">;;                             0 AND 1   =&gt;   0</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-and </span><span class="mi">10</span> <span class="mi">9</span><span class="p">)</span>
+</span><span class='line'><span class="mi">8</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-and </span><span class="mi">2</span><span class="nv">r1010</span> <span class="mi">2</span><span class="nv">r1001</span><span class="p">)</span>
+</span><span class='line'><span class="mi">8</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>bit-or</code> &ndash; Bitwise or</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; `bit-or` does a logical OR across columns</span>
+</span><span class='line'><span class="c1">;; 1010     ; 10</span>
+</span><span class='line'><span class="c1">;; 1001     ; 9</span>
+</span><span class='line'><span class="c1">;; ----</span>
+</span><span class='line'><span class="c1">;; 1011     ; 11  ; by column: 1 OR 1   =&gt;   1</span>
+</span><span class='line'><span class="c1">;;                             0 OR 0   =&gt;   0</span>
+</span><span class='line'><span class="c1">;;                             1 OR 0   =&gt;   1</span>
+</span><span class='line'><span class="c1">;;                             0 OR 1   =&gt;   1</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-or </span><span class="mi">10</span> <span class="mi">9</span><span class="p">)</span>
+</span><span class='line'><span class="mi">11</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-or </span><span class="mi">2</span><span class="nv">r1010</span> <span class="mi">2</span><span class="nv">r1001</span><span class="p">)</span>
+</span><span class='line'><span class="mi">11</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>bit-xor</code> &ndash; Bitwise exclusive or</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; `bit-xor` does an exclusive OR across columns (true when the two values are different)</span>
+</span><span class='line'><span class="c1">;; 1010     ; 10</span>
+</span><span class='line'><span class="c1">;; 1001     ; 9</span>
+</span><span class='line'><span class="c1">;; ----</span>
+</span><span class='line'><span class="c1">;; 0011     ; 11  ; by column: 1 XOR 1   =&gt;   0</span>
+</span><span class='line'><span class="c1">;;                             0 XOR 0   =&gt;   0</span>
+</span><span class='line'><span class="c1">;;                             1 XOR 0   =&gt;   1</span>
+</span><span class='line'><span class="c1">;;                             0 XOR 1   =&gt;   1</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-xor </span><span class="mi">10</span> <span class="mi">9</span><span class="p">)</span>
+</span><span class='line'><span class="mi">3</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-xor </span><span class="mi">2</span><span class="nv">r1010</span> <span class="mi">2</span><span class="nv">r1001</span><span class="p">)</span>
+</span><span class='line'><span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>bit-not</code> &ndash; Bitwise complement</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; `bit-not` does a complement, negating each position so each 0 becomes 1 and each 1 becomes 0</span>
+</span><span class='line'><span class="c1">;; this reads 1010 as the 32-bit integer     00000000000000000000000000001010 (including leading 0s),</span>
+</span><span class='line'><span class="c1">;; which, when negated/complemented, becomes 11111111111111111111111111110101 (represents decimal -11).</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-not </span><span class="mi">2</span><span class="nv">r1010</span><span class="p">)</span>
+</span><span class='line'><span class="mi">-11</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>bit-and-not</code> &ndash; Bitwise and with complement</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; `bit-and-not` ANDs the first integer with the complement of the second</span>
+</span><span class='line'><span class="c1">;; (bit-and-not 2r1010 2r1001)</span>
+</span><span class='line'><span class="c1">;; (bit-and 2r1010 (bit-not 2r1001))</span>
+</span><span class='line'><span class="c1">;; (bit-and 2r1010 2r0110)    =&gt;    0010    =&gt; 2</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-and-not</span> <span class="mi">2</span><span class="nv">r1010</span> <span class="mi">2</span><span class="nv">r1001</span><span class="p">)</span>
+</span><span class='line'><span class="mi">2</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-and </span><span class="mi">2</span><span class="nv">r1010</span> <span class="p">(</span><span class="nb">bit-not </span><span class="mi">2</span><span class="nv">r1001</span><span class="p">))</span>
+</span><span class='line'><span class="mi">2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>bit-clear</code> &ndash; Clear bit at index n</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; `bit-clear` sets the bit to 0 at a given index (0-based, right to left)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-clear</span> <span class="mi">2</span><span class="nv">r1011</span> <span class="mi">0</span><span class="p">)</span>   <span class="c1">;; clears the 0th bit from right</span>
+</span><span class='line'><span class="mi">10</span>  <span class="c1">;; 2r1010</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-clear</span> <span class="mi">2</span><span class="nv">r1011</span> <span class="mi">1</span><span class="p">)</span>   <span class="c1">;; clears the 1st bit from right</span>
+</span><span class='line'><span class="mi">9</span>   <span class="c1">;; 2r1001</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-clear</span> <span class="mi">2</span><span class="nv">r1011</span> <span class="mi">2</span><span class="p">)</span>   <span class="c1">;; clears the 2nd bit from right</span>
+</span><span class='line'><span class="mi">11</span>  <span class="c1">;; 2r1011</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-clear</span> <span class="mi">2</span><span class="nv">r1011</span> <span class="mi">3</span><span class="p">)</span>   <span class="c1">;; clears the 3rd bit from right</span>
+</span><span class='line'><span class="mi">3</span>   <span class="c1">;; 2r0011</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>bit-flip</code> &ndash; Flip bit at index n</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; `bit-flip` flips the bit (changes 0 to 1 or 1 to 0)at a given index</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-flip</span> <span class="mi">2</span><span class="nv">r1010</span> <span class="mi">0</span><span class="p">)</span>   <span class="c1">;; flips the 0th bit from right</span>
+</span><span class='line'><span class="mi">11</span>  <span class="c1">;; 2r1011</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-flip</span> <span class="mi">2</span><span class="nv">r1010</span> <span class="mi">1</span><span class="p">)</span>   <span class="c1">;; flips the 1st bit from right</span>
+</span><span class='line'><span class="mi">8</span>   <span class="c1">;; 2r1000</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-flip</span> <span class="mi">2</span><span class="nv">r1010</span> <span class="mi">2</span><span class="p">)</span>   <span class="c1">;; flips the 2nd bit from right</span>
+</span><span class='line'><span class="mi">14</span>  <span class="c1">;; 2r1110</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-flip</span> <span class="mi">2</span><span class="nv">r1010</span> <span class="mi">3</span><span class="p">)</span>   <span class="c1">;; flips the 3rd bit from right</span>
+</span><span class='line'><span class="mi">2</span>   <span class="c1">;; 2r0010</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>bit-set</code> &ndash; Set bit at index n</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; `bit-set` sets the bit to 1 at a given index</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-set</span> <span class="mi">2</span><span class="nv">r1010</span> <span class="mi">2</span><span class="p">)</span>   <span class="c1">;; sets the 1st bit from right to 1</span>
+</span><span class='line'><span class="mi">14</span>  <span class="c1">;; 2r1110</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>bit-test</code> &ndash; Test bit at index n</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-test</span> <span class="mi">2</span><span class="nv">r1010</span> <span class="mi">0</span><span class="p">)</span>   <span class="c1">;; checks if the 0th bit from right is 1</span>
+</span><span class='line'><span class="nv">false</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">bit-test</span> <span class="mi">2</span><span class="nv">r1010</span> <span class="mi">1</span><span class="p">)</span>   <span class="c1">;; checks if the 1st bit from right is 1</span>
+</span><span class='line'><span class="nv">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>bit-shift-left</code> &ndash; Bitwise shift left</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; `bit-shift-left` shifts the entire integer left, filling in empty spaces as 0</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-shift-left </span><span class="mi">2</span><span class="nv">r1010</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">;; shifts the integer left 1 position (filling empty position with 0)</span>
+</span><span class='line'><span class="mi">20</span>  <span class="c1">; 2r10100</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-shift-left </span><span class="mi">2</span><span class="nv">r1011</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">;; shifts the integer left 3 positions (filling empty positions with 0)</span>
+</span><span class='line'><span class="mi">88</span> <span class="c1">; 2r1011000</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>bit-shift-right</code> &ndash; Bitwise shift right</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; `bit-shift-right` shifts the entire integer right, clearing positions &lt; 0</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-shift-right </span><span class="mi">2</span><span class="nv">r1010</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">;; shifts the integer right 1 position</span>
+</span><span class='line'><span class="mi">5</span>  <span class="c1">; 2r101</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-shift-right </span><span class="mi">2</span><span class="nv">r1011</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">;; shifts the integer right 3 positions</span>
+</span><span class='line'><span class="mi">1</span> <span class="c1">; 2r1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>unsigned-bit-shift-right</code> &ndash; Bitwise shift right, without sign-extension</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;; `unsigned-bit-shift-right` does a `bit-shift-right` (so same behavior for small integers). its</span>
+</span><span class='line'><span class="c1">;; difference is that all the other operations are for 32-bit signed integers, whereas this accepts</span>
+</span><span class='line'><span class="c1">;; unsigned (no negative values, only positive) integers</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">unsigned-bit-shift-right</span> <span class="mi">2</span><span class="nv">r1010</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'><span class="mi">5</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">bit-shift-right </span><span class="mi">2</span><span class="nv">r1010</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'><span class="mi">5</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h3>Negative Binary (Signed and Unsigned Integers)</h3>
+
+
+
+
+<h5>Sign-Magnitude Notation</h5>
+
+
+
+
+<div style="float:right; display:flex; flex-direction:column; margin-left: 30px;">
+  <img src="/images/bits/positive-signed-int.gif" />
+  <img src="/images/bits/negative-signed-int.gif" />
+  <span style="font-size:0.75em;">Source: <a href="http://www.electronics-tutorials.ws/binary/signed-binary-numbers.html">&#8220;Signed Binary Numbers&#8221;</a></span>
+</div>
+
+
+<p>Negative numbers can be represented using signed integers, where the left-most position represents whether the integer is positive or negative. In one implementation (sign-magnitude notation), the left-most bit is the sign, and the remaining bits are the value.</p>
+
+<p>This means that in an <code>n</code>-bit integer (e.g., 4-bit), the left-most bit signifies positive/negative, so the remaining <code>n-1</code> (3) bits can hold the actual value. There are 16 possible values for a 4-bit integer (<code>0000</code> to <code>1111</code>), meaning that a signed 4-bit integer can go from -7 to +7 (it is 16 possible values because we can represent both <code>-0</code> and <code>+0</code>, as binary <code>1000</code> and <code>0000</code>).</p>
+
+<h5>Two&#8217;s Complement</h5>
+
+
+<p>Two&rsquo;s Complement is a slightly more complicated scheme for signed integers (though not overly so), and the one more commonly used. A leading <code>1</code> still signifies a negative integer. The difference is that it&rsquo;s not simply sign (1st bit) and magnitude (remaining bits), because the magnitude is determined using the <em>complement</em> (hence the name).</p>
+
+<p>Up until now, all the code samples have been <em>unsigned</em> integers, which is why all the values are positive (and all the examples with a leading 1 haven&rsquo;t been negative). Assuming 8-bit signed integers, we interpret things as follows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="mi">00001010</span>    <span class="c1">;;  10</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; to get -10, complement and add 1</span>
+</span><span class='line'><span class="mi">11110101</span>    <span class="c1">;; first complement</span>
+</span><span class='line'><span class="mi">11110110</span>    <span class="c1">;; then add 1</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; so 11110110 is the signed 8-bit representation of -10</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h5>Idiosyncracies between signed and unsigned integers</h5>
+
+
+<p>I alluded to this in the previous section: all the code samples have been <em>unsigned</em> integers. We&rsquo;ve been exploring conversions between decimal and binary using Clojure&rsquo;s radix-based entry format (e.g., <code>2r1010</code>), <a href="https://clojure.org/reference/reader#_literals">which uses Java Longs</a> and Java&rsquo;s <code>Integer/toBinaryString</code>, which returns strings.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">type</span> <span class="mi">2</span><span class="nv">r1010</span><span class="p">)</span>
+</span><span class='line'><span class="nv">java.lang.Long</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">type</span> <span class="p">(</span><span class="nf">Integer/toBinaryString</span> <span class="mi">10</span><span class="p">))</span>
+</span><span class='line'><span class="nv">java.lang.String</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This means there appear to be inconsistencies when dealing with signed integers:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">Integer/toBinaryString</span> <span class="mi">-1</span><span class="p">)</span>
+</span><span class='line'><span class="s">&quot;11111111111111111111111111111111&quot;</span>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="mi">2</span><span class="nv">r11111111111111111111111111111111</span>
+</span><span class='line'><span class="mi">4294967295</span>  <span class="c1">;; might expect -1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I say there <em>appear</em> to be inconsistencies, because this is the expected result of using Long. A full discussion gets into the intricacies of language design and primitives, as exemplified by threads like <a href="https://groups.google.com/forum/#!topic/clojure/7-hARL5c1lI">this</a> and <a href="https://groups.google.com/forum/#!topic/clojure/yMhQWVyRzBE%5B1-25%5D">this</a>.</p>
+
+<p><h3>Resources</h5></p>
+
+<ul>
+<li><a href="http://upshots.org/actionscript/basics-of-binary-and-bitwise-operations">Non-Clojure overview of bitwise operations</a></li>
+<li><a href="http://www.electronics-tutorials.ws/binary/signed-binary-numbers.html">Explanation of Signed Binary Integers</a></li>
+<li><a href="https://www.cs.cornell.edu/~tomf/notes/cps104/twoscomp.html">Summary of Two&rsquo;s Complement</a></li>
+<li><a href="http://blog.mishkovskyi.net/posts/2015/Oct/29/clojure-numbers-despair">One person&rsquo;s thoughts on Clojure numbers</a> (be sure to read Alex Miller&rsquo;s comment at the end)</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-08-17T18:00:00-04:00" pubdate data-updated="true">Aug 17<span>th</span>, 2017</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/binary/'>Binary</a>, <a class='category' href='/blog/categories/clojure/'>Clojure</a>, <a class='category' href='/blog/categories/math/'>Math</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2017/08/17/clojure-introduction-binary-bitwise/" data-via="heychrisek" data-counturl="http://cek.io/blog/2017/08/17/clojure-introduction-binary-bitwise/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/10/29/ramda-sort-tiebreakers-comparators-either/" title="Previous Post: Ramda.js array sorting (with tiebreakers) using R.comparator, variadic R.either, and R.reduce">&laquo; Ramda.js array sorting (with tiebreakers) using R.comparator, variadic R.either, and R.reduce</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

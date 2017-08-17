@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Caching in Rails - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="Summary: caching temporarily stores data so future requests don&rsquo;t take as much time. There are multiple caching techniques that can be easily &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2014/05/12/caching-in-rails">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Caching in Rails</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-12T13:11:54-04:00" pubdate data-updated="true">May 12<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Summary</strong>: caching temporarily stores data so future requests don&rsquo;t take as much time. There are multiple caching techniques that can be easily implemented in Rails applications.</p>
+
+<hr />
+
+<br>
+
+
+<p>Caching/cashing in Rails. I&rsquo;m sure that&rsquo;s a pun that&rsquo;s never been made before.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> In this post, I overview the fundamental types of caching techniques, and walk through some effective ways of using them in Rails.</p>
+
+<p>The first section covers some background on caching. If you prefer to skip that, jump straight to the <a href="/blog/2014/05/12/caching-in-rails#how-to">how-to section</a>.</p>
+
+<h2>Caching Background</h2>
+
+
+
+
+<h3>Caching?</h3>
+
+
+<p>Caching defined:</p>
+
+<blockquote><p>In computing, a cache (/ˈkæʃ/ kash) is a component that transparently stores data so that future requests for that data can be served faster.</p><footer><strong>Wikipedia</strong> <cite><a href='http://en.wikipedia.org/wiki/Cache_(computing)'>&#8220;Cache (Computing)&#8221;</a></cite></footer></blockquote>
+
+
+<p>And why cache? According to <a href="http://guides.rubyonrails.org/caching_with_rails.html">the RailsGuide on the topic</a>, caching can help with &ldquo;avoiding that expensive round-trip to your database and returning what you need to return to the web clients in the shortest time possible.&rdquo; So let&rsquo;s figure out how to avoid that expensive trip.</p>
+
+<!--more-->
+
+
+
+
+<h3>Types of Caching</h3>
+
+
+<p>A few types of caching to know (going from highest to lowest level):</p>
+
+<ul>
+  <li>
+    <strong>HTTP Caching:</strong> HTTP caching occurs when the browser stores local copies of web resources for faster retrieval the next time the resource is required. It uses HTTP headers to determine if the browser can use a locally stored version of the response or if it needs to request a fresh copy from the origin server.
+  </li>
+  <li>
+    <strong>Page Caching:</strong> Save entire pages of an application without hitting the stack by returning cached prerendered pages. Good in applications without authentication and other highly dynamic aspects.
+  </li>
+  <li>
+    <strong>Action Caching:</strong> Works like Page Caching, except the incoming web request hits the Rails stack. This means that before filters (like authentication or other restrictions) can be run on it before the cache is served.
+  </li>
+  <li>
+    <strong>Fragment Caching:</strong> Allows fragments of view logic, for example partials or other bits of HTML that are independent from other parts, to be wrapped in a cache block and served out of the cache store when the next request comes in.
+  </li>
+  <li>
+    <strong>Rails.cache:</strong> All cached content except cached pages are stored in the Rails.cache.
+  </li>
+</ul>
+
+
+
+
+<h3>Specifics in Rails</h3>
+
+
+<p>Note that I said these go from highes to lowest level. More specifically, these techniques build on top of each other. HTTP and Page Caching are unique in that they do not use Rails.cache, but the rest build on top of each other (Action Caching depends on Fragment Caching, which depends on Rails.cache).</p>
+
+<p>Even more specifically, it is ActiveSupport::Cache that provides the foundation for interacting with the cache in Rails. The ActiveSupport::Cache module includes multiple classes, each a different cache store:<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></p>
+
+<ul>
+  <li>ActiveSupport::Cache::Store</li>
+  <li>ActiveSupport::Cache::MemoryStore</li>
+  <li>ActiveSupport::Cache::FileStore</li>
+  <li>ActiveSupport::Cache::MemCacheStore</li>
+  <li>ActiveSupport::Cache::EhcacheStore</li>
+  <li>ActiveSupport::Cache::NullStore.</li>
+</ul>
+
+
+<p>MemCacheStore is most popular for large production websites. Custom cache stores can be created by extending ActiveSupport::Cache::Store and implementing the appropriate methods.</p>
+
+<h2 id="how-to">How To</h2>
+
+
+
+
+<h3>How to Cache in Rails</h3>
+
+
+<p>So Rails has a lot of [active] support for caching built in, but how do we use it? I&rsquo;ll quote Ryan Bates on this one:</p>
+
+<blockquote><p>Rails’ cache store functionality is very modular. It uses the file system to store the cache by default but we can easily change this to store it elsewhere. Rails comes with several cache store options that we can choose from. The default used to be a memory store which stored the cache in local memory of that Rails process. This issue with this is that in production we often have multiple Rails instances running and each of these will have their own cache store which isn’t a good use of resources. The file store works well for smaller applications but isn’t very efficient as reading from and writing to the hard drive is relatively slow. If we use this for a cache that’s accessed frequently we’d be better off using something else.</p><p>This brings us to the memcache store which offers the best of both worlds.</p><footer><strong>RailsCasts</strong> <cite><a href='http://railscasts.com/episodes/380-memcached-dalli'>&#8220;#380 Memcached & Dalli&#8221;</a></cite></footer></blockquote>
+
+
+<p>Taking Ryan&rsquo;s advice, let&rsquo;s jump straight to ActiveSupport::Cache::MemCacheStore.</p>
+
+<h3>Memcached and Dalli</h3>
+
+
+<p>According to <a href="http://memcached.org/">its website</a>, Memcached is:</p>
+
+<ul>
+  <li>Free & open source, high-performance, distributed memory object caching system, generic in nature, but intended for use in speeding up dynamic web applications by alleviating database load.</li>
+  <li>Memcached is an in-memory key-value store for small chunks of arbitrary data (strings, objects) from results of database calls, API calls, or page rendering.</li>
+  <li>Memcached is simple yet powerful. Its simple design promotes quick deployment, ease of development, and solves many problems facing large data caches. Its API is available for most popular languages.</li>
+</ul>
+
+
+<p>Memcached works well in combination with <a href="https://github.com/mperham/dalli">Dalli</a>, &ldquo;a high performance pure Ruby client for accessing memcached servers&rdquo;.</p>
+
+<hr />
+
+<h5>Set-up</h5>
+
+
+<p>If you don&rsquo;t already have memcached installed (it&rsquo;s preinstalled on OS X), you can run <code>brew install memcached</code>, and add <code>gem &lsquo;dalli&rsquo;</code> to your Gemfile. Dalli is default in Rails 4 (but still needs to appear in the Gemfile).</p>
+
+<p>Next, set up the development config file (/config/development.rb) as follows:</p>
+
+<figure class='code'><figcaption><span> (dalli_development.rb)</span> <a href='/downloads/code/dalli_development.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">consider_all_requests_local</span>       <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">action_controller</span><span class="o">.</span><span class="n">perform_caching</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">cache_store</span> <span class="o">=</span> <span class="ss">:dalli_store</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run <code>memcached</code> from the terminal to start a memcached server. If you see <code>DalliError: No server available</code>, this is likely the problem.</p>
+
+<p>You can now open a Rails console (<code>rails c</code>) and run <code>Rails.cache</code>, which should return an instance of DalliStore (like <code>#&lt;ActiveSupport::Cache::DalliStore:0x00000105924a18 &hellip;</code>).</p>
+
+<p>At this point, to simulate the caching that one wuld implement on a web application, we can run <code>Rails.cache.write(:cache_key, &ldquo;cache value&rdquo;)</code> (should return <code>Cache write: cache_key</code> and a long integer), followed by <code>Rails.cache.read(:cache_key)</code> (should return <code>&ldquo;cache value&rdquo;</code>). Of course, :cache_key and &ldquo;cache value&rdquo; can be replaced with any symbol (as key) and value you choose.</p>
+
+<hr />
+
+<h3>Actual example</h3>
+
+
+<p>Imagine a web page that is a gallery of images. We want to save ourselves the long trip to the database everytime, and instead cache the images so that they render more quickly. How can we do this?</p>
+
+<p>A simple controller, rendering an index page with all the images. Note line 2&mdash;this will store the page in a file-based cache separate from the Memcached cache store. This is because page caching is one of the few caching techniques that down not use the cache store.</p>
+
+<figure class='code'><figcaption><span> (images_controller.rb)</span> <a href='/downloads/code/images_controller.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">ImagesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>  <span class="n">caches_page</span> <span class="ss">:index</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">index</span>
+</span><span class='line'>    <span class="vi">@images</span> <span class="o">=</span> <span class="no">Image</span><span class="o">.</span><span class="n">all</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Layering on fragment caching in addition to or instead of page caching, we can go to the view, call <code>cache</code>, and pass a block. Everything inside the block will now be cached, namely each image. Pay attention to line 3&mdash;in addition to simply calling <code>cache</code>, we can pass certain options like <code>expires_in</code>. This helps Memcached serve its purpose as a <strong>temporary</strong> data store. If the data were intended to be persisted, it should be persisted to a traditional database.</p>
+
+<figure class='code'><figcaption><span> (images_index.html.erb)</span> <a href='/downloads/code/images_index.html.erb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&lt;h1&gt;Images&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="n">cache</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span> <span class="n">expires_in</span><span class="p">:</span> <span class="mi">5</span><span class="o">.</span><span class="n">minutes</span> <span class="k">do</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;table id=&quot;images&quot;&gt;</span>
+</span><span class='line'><span class="x">    &lt;tr&gt;</span>
+</span><span class='line'><span class="x">      &lt;th&gt;Image Name&lt;/th&gt;</span>
+</span><span class='line'><span class="x">      &lt;th&gt;Image&lt;/th&gt;</span>
+</span><span class='line'><span class="x">    &lt;/tr&gt;</span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="vi">@images</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">image</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">    &lt;tr&gt;</span>
+</span><span class='line'><span class="x">      &lt;td&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x">&lt;/td&gt;</span>
+</span><span class='line'><span class="x">      &lt;td&gt;&lt;img src=&quot;</span><span class="cp">&lt;%=</span> <span class="n">image</span><span class="o">.</span><span class="n">url</span> <span class="cp">%&gt;</span><span class="x">&quot;&gt;&lt;/td&gt;</span>
+</span><span class='line'><span class="x">    &lt;/tr&gt;</span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;/table&gt;</span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And there you have it! A simple caching solution to a slow-loading page. We could continue even deeper to caching at the model level, but fragment caching at the view level suffices as a simple solution.</p>
+
+<p>Of the five types of caching I introduced at the beginning of this post, I&rsquo;ve covered three: page caching, fragment caching, and Rails.cache. For more on the other two, see the resources below.</p>
+
+<h3>Resources</h3>
+
+
+<p>Some further reading, which informed this blog post:</p>
+
+<ul>
+  <li><a href="http://railscasts.com/?tag_id=18">RailsCasts.</a> Some specifics:
+    <ul>
+      <li>#89 - <a href="http://railscasts.com/episodes/89-page-caching-revised">Page Caching</a></li>
+      <li>#90 - <a href="http://railscasts.com/episodes/90-fragment-caching-revised">Fragment Caching</a></li>
+      <li>#93 - <a href="http://railscasts.com/episodes/93-action-caching">Action Caching</a></li>
+      <li>#115 - <a href="http://railscasts.com/episodes/115-model-caching-revised">Model Caching</a></li>
+      <li>#169 - <a href="http://railscasts.com/episodes/169-dynamic-page-caching-revised">Dynamic Page Caching</a></li>
+      <li>#321 - <a href="http://railscasts.com/episodes/321-http-caching">HTTP Caching</a></li>
+      <li>#380 - <a href="http://railscasts.com/episodes/380-memcached-dalli">Memcached & Dalli</a></li>
+    </ul>
+  </li>
+  <li>RailsGuide: <a href="http://guides.rubyonrails.org/caching_with_rails.html">Caching with Rails: An overview</a></li>
+  <li>Heroku Dev Center: <a href="https://devcenter.heroku.com/articles/caching-strategies">Caching Strategies for Rails</a></li>
+  <li>Codelearn: <a href="http://www.codelearn.org/blog/rails-cache-with-examples">Rails Cache for Dummies</a></li>
+  <li>Adam Hawkins: <a href="http://hawkins.io/2011/05/advanced_caching_in_rails/">Advanced Caching in Rails</a></li>
+</ul>
+
+
+
+
+<h3>Footnotes:</h3>
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p><a href="https://www.google.com/search?btnG=1&pws=0&q=cashing+caching">It has.</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>The <a href="http://api.rubyonrails.org/classes/ActiveSupport/Cache.html">ActiveSupport::Cache documentation</a> gives a good overview of the entire module and its subclasses.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-12T13:11:54-04:00" pubdate data-updated="true">May 12<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/cache/'>Cache</a>, <a class='category' href='/blog/categories/caching/'>Caching</a>, <a class='category' href='/blog/categories/memcached/'>Memcached</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2014/05/12/caching-in-rails/" data-via="heychrisek" data-counturl="http://cek.io/blog/2014/05/12/caching-in-rails/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/05/11/the-gap/" title="Previous Post: Ira Glass on Storytelling [and Programming]">&laquo; Ira Glass on Storytelling [and Programming]</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/05/18/active-support-inflectors/" title="Next Post: Bending Strings with ActiveSupport::Inflector">Bending Strings with ActiveSupport::Inflector &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

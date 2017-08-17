@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Performance Process: Takeaways From AEA - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="The stars have aligned lately to focus my attention on performance. Consider the following: A few months ago, I was tasked with assessing and &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2015/10/09/performance">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Performance Process: Takeaways From AEA</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-10-09T13:39:03-04:00" pubdate data-updated="true">Oct 9<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The stars have aligned lately to focus my attention on performance. Consider the following:</p>
+
+<ul>
+<li>A few months ago, I was tasked with assessing and documenting the differences between our app&rsquo;s functionality/performance in Chrome vs. Firefox.</li>
+<li>This exercise resulted in a pull request that improved Firefox performance by over 2 seconds (~25%) on initial page load.</li>
+<li><a href="/blog/2015/10/08/an-event-apart/">Earlier this week</a>, two separate talks (by <a href="http://twitter.com/yeseniaa">Yesenia Perez-Cruz</a> and <a href="http://twitter.com/lara_hogan">Lara Hogan</a>) focused on designing for performance.</li>
+<li>Also this week, <a href="http://www.nateberkopec.com/2015/10/07/frontend-performance-chrome-timeline.html">Nate Berkopec&rsquo;s post on front end performance</a> made the rounds on Hacker News.</li>
+</ul>
+
+
+<p>What does this add up to? I&rsquo;ve been thinking a lot about performance, particularly front end performance of web apps. In this post, I&rsquo;ll summarize some takeaways from AEA regarding performance, particularly as they relate to integrating performance into planning and design.</p>
+
+<!--more-->
+
+
+
+
+<h3>Set up for failure</h3>
+
+
+<p>Summarizing a few points from Yesenia&rsquo;s talk, consider this project plan, one that we&rsquo;ve all presumed to follow:</p>
+
+<p><img src="/images/performance/ideal-plan.png"></p>
+
+<p>But then realize that, due to biz dev requirements, delays in research, and longer-than-expected design time, all while keeping the same sprint/client/deployment deadline, the actual project plan looks like this:</p>
+
+<p><img src="/images/performance/actual-plan.png"></p>
+
+<p>We&rsquo;ve all seen it! And it probably happens more often this way than the ideal case. What&rsquo;s the definition of insanity again?</p>
+
+<p>Now I could speculate and hypothesize about the underlying issues of failed project management, but I&rsquo;ll leave that to someone else. I want to focus on performance. A question: with that development timeline in mind, when do we think about performance? During the software development segment, right?</p>
+
+<p><img src="/images/performance/perf-timeline-reality.png"></p>
+
+<p>But why? We developers think we can implement user functionality, meet the design specs, and still have time left over to optimize at the end. But that never happens. Could we not consider performance at the beginning of the process?</p>
+
+<p><img src="/images/performance/perf-timeline-improved.png"></p>
+
+<p>We need to think about performance as a design feature. We need to think about performance early. We need to prioritize page speed and load times just as much as UX and beautiful interfaces. But how?</p>
+
+<h3>Performance Budgets</h3>
+
+
+<p><span class='caption-wrapper'><img class='caption' src='/images/performance/dilbert-budget.gif' width='' height='' title='"We only have the budget for a poor job"'><span class='caption-text'>&ldquo;We only have the budget for a poor job&rdquo;</span></span></p>
+
+<p>I&rsquo;m not sure we&rsquo;re being cheap <em>or</em> smart by thinking about performance this way. We don&rsquo;t have any budget at all! A theme throughout AEA, and not just in Yesenia&rsquo;s and Lara&rsquo;s talks, was <strong>setting a performance budget</strong>.</p>
+
+<p>Yesenia explained that a performance budget is both &ldquo;a performance goal used to guide design &amp; development&rdquo; and &ldquo;a tangible way to talk about performance.&rdquo; How well do those conversations about performance-intensive features usually go? For developers, it&rsquo;s often either &ldquo;no, we can&rsquo;t do that&rdquo; or a resigned &ldquo;ok, I guess we have to do it.&rdquo;</p>
+
+<p><span class='caption-wrapper'><img class='caption' src='/images/performance/google-designer-developer.png' width='' height='' title='One incredible trick will render 728,000 Google results obselete!'><span class='caption-text'>One incredible trick will render 728,000 Google results obselete!</span></span></p>
+
+<p>What if, instead of a win-lose scenario between designers and devs, the conversation was framed around a budget? We talk about the inherent tradeoffs between technologies, so why not consider performance tradeoffs in discussions about design?</p>
+
+<p>&ldquo;But how do I go about setting a performance budget?&rdquo;, you might ask. Yesenia and Lara made some suggestions:</p>
+
+<ul>
+<li><em>Browser-based approach</em>: &ldquo;our pages should weigh no more than 400kb, and make no more than 15 requests.&rdquo;</li>
+<li><em>User experience-based</em>: &ldquo;our pages should take no more than 10 seconds to load over a sub-3G connection.&rdquo;</li>
+<li><em>Look to your competitors</em>: aim for a 20% improvement over your competitors.</li>
+</ul>
+
+
+<p>I&rsquo;m still working on this, on how to practically establish a performance budget on the job. I don&rsquo;t have access to my competitors&#8217; product, so for now I can only set the goal as arbitrarily better performance.</p>
+
+<p>One thing I will say: everything I&rsquo;ve said in this blogpost has to be a culture change. Stealing from Lara&rsquo;s talk, it can&rsquo;t be all on one individual. You have to establish a culture of performance.</p>
+
+<blockquote class="twitter-tweet" lang="en"><p lang="en" dir="ltr">&quot;There should be no performance cops or janitors. It&#39;s not sustainable. You need a culture of performance.&quot; <a href="https://twitter.com/lara_hogan">@lara_hogan</a> <a href="https://twitter.com/hashtag/aeaaus?src=hash">#aeaaus</a></p>&mdash; Chris EK (@cek_io) <a href="https://twitter.com/cek_io/status/651406414225649666">October 6, 2015</a></blockquote>
+
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-10-09T13:39:03-04:00" pubdate data-updated="true">Oct 9<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/conferences/'>Conferences</a>, <a class='category' href='/blog/categories/front-end/'>Front End</a>, <a class='category' href='/blog/categories/performance/'>Performance</a>, <a class='category' href='/blog/categories/ui/'>UI</a>, <a class='category' href='/blog/categories/user-interface/'>User Interface</a>, <a class='category' href='/blog/categories/workflow/'>Workflow</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2015/10/09/performance/" data-via="heychrisek" data-counturl="http://cek.io/blog/2015/10/09/performance/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/10/08/an-event-apart/" title="Previous Post: An Event Apart">&laquo; An Event Apart</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/10/23/imperative-declaration/" title="Next Post: An Imperative Declaration">An Imperative Declaration &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

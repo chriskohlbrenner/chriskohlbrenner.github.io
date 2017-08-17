@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Browsers | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/browsers/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[JavaScript's Call Stack, Callback Queue, and Event Loop]]></title>
+    <link href="http://cek.io/blog/2015/12/03/event-loop/"/>
+    <updated>2015-12-03T09:01:39-05:00</updated>
+    <id>http://cek.io/blog/2015/12/03/event-loop</id>
+    <content type="html"><![CDATA[<p>In this video, Philip Roberts clears up a lot of the details surrounding JavaScript&rsquo;s call stack, callback queue, and event loop. Feel free to skip this blog post and spend a half hour watching <a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">the video</a> instead. But if you&rsquo;d rather skim my highlights, don&rsquo;t let me stop you!</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8aGhZQkoFbQ" frameborder="0" allowfullscreen></iframe>
+
+
+
+
+<!--more-->
+
+
+
+
+<h3>What is JavaScript</h3>
+
+
+<p>What is JavaScript anyway? Some words:</p>
+
+<ul>
+<li>It&rsquo;s a single-threaded, non-blocking, asynchronous, concurrent language"</li>
+<li>It has a call stack, an event loop, a callback queue, some other apis and stuff</li>
+</ul>
+
+
+<p>If you&rsquo;re like me (or Philip Roberts, it seems), these words themselves don&rsquo;t mean a ton. So let&rsquo;s parse that out.</p>
+
+<h3>JavaScript Runtimes</h3>
+
+
+<p>JavaScript runtimes (like V8) have a heap (memory allocation) and stack (execution contexts). But they don&rsquo;t have <code>setTimeout</code>, the DOM, etc. Those are web APIs in the browser.</p>
+
+<h3>JavaScript as we know it</h3>
+
+
+<p>JavaScript in the browser has:</p>
+
+<ul>
+<li>a runtime like V8 (heap/stack)</li>
+<li>Web APIs that the browser provides, like the DOM, ajax, and <code>setTimeout</code></li>
+<li>a callback queue for events with callbacks like <code>onClick</code>, <code>onLoad</code>, <code>onDone</code></li>
+<li>an event loop</li>
+</ul>
+
+
+<p><img src="/images/event-loop/javascript.png"></p>
+
+<h3>What's the call stack?</h3>
+
+
+<p>JavaScript is single-threaded, meaning it has a single call stack, meaning it can do one thing at a time. The call stack is basically a data structure which records where in the program we are. If we step into a function, we push something onto the stack. If we return from a function, we pop off the top of the stack.</p>
+
+<p>When our program throws an error, we see the call stack in the console. We see the state of the stack (which functions have been called) when that error happened.</p>
+
+<h3>Blocking</h3>
+
+
+<p>An important question that this relates to: what happens when things are slow? In other words, blocking. Blocking doesn&rsquo;t have a strict definition; really it&rsquo;s just things that are slow. <code>console.log</code> isn&rsquo;t slow, but <code>while</code> loops from 1 to 1,000,000,000, image processing, or network requests are slow. Those things that are slow and on the stack are blocking.</p>
+
+<p>Since JS is single-threaded, we make a network request and have to wait until it&rsquo;s done. This is a problem in the browser&mdash;while we wait on a request, the browser is blocked (can&rsquo;t click things, submit forms, etc.). The solution is asynchronous callbacks.</p>
+
+<h3>Concurrency, where we realize there's a lie above</h3>
+
+
+<p>It&rsquo;s a lie that JavaScript can only do one thing at a time. It&rsquo;s true: JavaScript the runtime can only do one thing at a time. It can&rsquo;t make an ajax request while doing other code. It can&rsquo;t do a <code>setTimeout</code> while doing other code. But we can do things concurrently, because the browser is more than the runtime (remember the grainy image above).</p>
+
+<p>The stack can put things into web APIs, which (when done) push callbacks onto task queue, and then&hellip;the event loop. Finally we get to the event loop. It&rsquo;s the simplest little piece in this equation, and it has one very simple job. Look at the stack and look at the task queue; if the stack is empty, it takes the first thing off of the queue and pushes it onto the stack (back in JS land, back inside V8).</p>
+
+<h3>Louping it all together</h3>
+
+
+<p>Philip built an awesome tool to visualize all of this, called <a href="http://latentflip.com/loupe">Loupe</a>. It&rsquo;s a tool that can visualize the JavaScript runtime at runtime.</p>
+
+<p>Let&rsquo;s use it to look at a simple example: logging a few things to the console, with one <code>console.log</code> happening asynchronously in a <code>setTimeout</code>.</p>
+
+<p><img src="/images/event-loop/loupe.gif"></p>
+
+<p>What&rsquo;s actually happening here? Let&rsquo;s go through it:</p>
+
+<ol>
+<li>We step into the <code>console.log('Hi');</code> function, so it&rsquo;s pushed onto the call stack.</li>
+<li><code>console.log('Hi');</code> returns, so it&rsquo;s popped off the top of the stack.</li>
+<li>We step into the <code>setTimeout</code> function, so it&rsquo;s pushed onto the call stack.</li>
+<li><code>setTimeout</code> is part of the web API, so the web API handles that and times out the 2 seconds.</li>
+<li>We continue our script, stepping into the <code>console.log('Everybody')</code> function, pushing it onto the stack.</li>
+<li><code>console.log('Everybody')</code> returns, so it&rsquo;s popped off the stack.</li>
+<li>The 2-second timeout completes, so the callback moves to the callback queue.</li>
+<li>The event loop checks if the call stack is empty. If it were <em>not</em> empty, it would wait. Because it <em>is</em> empty, the callback is pushed onto the call stack.</li>
+<li><code>console.log('Everybody')</code> returns, so it&rsquo;s popped off the call stack.</li>
+</ol>
+
+
+<p>An interesting aside: <code>setTimeout(function(...), 0)</code>. <code>setTimeout</code> with 0 isn&rsquo;t necessarily intuitive, except when considered in the context of call stack and event loop. It basically defers something until the stack is clear.</p>
+
+<h3>Considering UI render performance</h3>
+
+
+<p>To this back to something more surface level, something we deal with every day, let&rsquo;s consider rendering. The browser is constrained by what we&rsquo;re doing in JavaScript. It would like to repaint the screen every 16.6ms (or 60 frames/second). But it can&rsquo;t actually do a render if there&rsquo;s code on the stack.</p>
+
+<p>As Philip says,</p>
+
+<p><blockquote><p>When people say &ldquo;don&rsquo;t block the event loop&rdquo;, this is exactly what they&rsquo;re talking about. Don&rsquo;t put slow code on the stack because, when you do that, the browser can&rsquo;t do what it needs to do, like create a nice fluid UI.</p><footer><strong>Philip Roberts <a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">https://www.youtube.com/watch?v=8aGhZQkoFbQ</a> &ldquo;What the heck is the event loop anyway&rdquo;</strong></footer></blockquote></p>
+
+<p>So, for example, scroll handlers trigger a lot and can cause a lagging UI. Incidentally, this is the clearest explanation I&rsquo;ve heard of debouncing, which is exactly what you need to do to prevent blocking the event loop (that is, let&rsquo;s only do those slow events every X times the scroll handler triggers).</p>
+
+<h3>Closing</h3>
+
+
+<p>In summary, that&rsquo;s what the heck the event loop is. Philip&rsquo;s talk helped me understand a lot of what JavaScript is, what it isn&rsquo;t, which parts of it are runtime vs. browser, and how to use it effectively. Give the talk a watch!</p>
+]]></content>
+  </entry>
+  
+</feed>

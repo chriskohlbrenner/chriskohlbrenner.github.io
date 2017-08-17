@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Knexfile Configuration for Heroku Deployment - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="I recently deployed a simple Express server to Heroku. The project used Knex.js for SQL queries and database migrations. While deploying, I ran into &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2016/10/24/knex-configuration-heroku">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Knexfile Configuration for Heroku Deployment</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-10-24T09:29:50-04:00" pubdate data-updated="true">Oct 24<span>th</span>, 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I recently deployed a simple Express server to Heroku. The project used <a href="http://knexjs.org/">Knex.js</a> for SQL queries and database migrations.</p>
+
+<p>While deploying, I ran into some issues with my knexfile. That is, I was able to create the database using the Heroku CLI, but running the migrations and configuring the database connection took a bit of finessing.</p>
+
+<p>Long story short, two parts:</p>
+
+<h3>1. Database URL (Connection)</h3>
+
+
+<p>Find your database url. Using Heroku CLI, running <code>heroku config</code> (or <code>heroku config --app [app name]</code>) will return something like the following:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cek app $ heroku config
+</span><span class='line'>=== app Config Vars
+</span><span class='line'>DATABASE_URL: postgres://asdghjlkjh:sadv09787-vnbmvliHJV@ec7-23-123-986-12.compute-1.amazonaws.com:5432/asfhlkjh1234</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Copy and paste the DATABASE_URL as your Knexfile&rsquo;s <code>connection</code> value.</p>
+
+<h3>2. SSL</h3>
+
+
+<p>Heroku requires SSL for PostgreSQL connections. There are two options (and potentially a third in the future):</p>
+
+<ul>
+<li><strong>(Confirmed)</strong> Add an <code>ssl: true</code> key/value pair to the Knexfile</li>
+<li><strong>(Confirmed)</strong> Set an environment variable using Heroku CLI: <code>heroku config:set PGSSLMODE=require</code></li>
+<li><strong>(Unsupported, but may be implemented in future versions of Knex)</strong> Add a <code>'?ssl=true'</code> query parameter to your database URL (knexfile&rsquo;s <code>connection</code>).</li>
+</ul>
+
+
+<p>With those two things in mind, a Knexfile like the following will work just fine:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module.exports = {
+</span><span class='line'>    client: 'pg',
+</span><span class='line'>    debug: true,
+</span><span class='line'>    connection: DB_URL,
+</span><span class='line'>    migrations: {
+</span><span class='line'>        tableName: 'migrations'
+</span><span class='line'>    },
+</span><span class='line'>    ssl: true
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h3>Further resources:</h3>
+
+
+<ul>
+<li><a href="https://github.com/tgriesser/knex/issues/239#issuecomment-42278076">Related Github issue on Knex project</a></li>
+<li><a href="https://github.com/HalahRaadSalih/deploy-to-heroku-with-db">Heroku/Knex walkthrough</a></li>
+<li><a href="http://jakehp.github.io/2015/07/10/Knex-Postgres-Heroku/">Similar issue</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-10-24T09:29:50-04:00" pubdate data-updated="true">Oct 24<span>th</span>, 2016</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/database/'>Database</a>, <a class='category' href='/blog/categories/deployments/'>Deployments</a>, <a class='category' href='/blog/categories/http/'>HTTP</a>, <a class='category' href='/blog/categories/heroku/'>Heroku</a>, <a class='category' href='/blog/categories/knex/'>Knex</a>, <a class='category' href='/blog/categories/knexfile/'>Knexfile</a>, <a class='category' href='/blog/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/blog/categories/sql/'>SQL</a>, <a class='category' href='/blog/categories/ssl/'>SSL</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2016/10/24/knex-configuration-heroku/" data-via="heychrisek" data-counturl="http://cek.io/blog/2016/10/24/knex-configuration-heroku/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/07/06/d3-and-react-faux-dom/" title="Previous Post: D3 and react faux DOM">&laquo; D3 and react faux DOM</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2016/10/29/ramda-sort-tiebreakers-comparators-either/" title="Next Post: Ramda.js array sorting (with tiebreakers) using R.comparator, variadic R.either, and R.reduce">Ramda.js array sorting (with tiebreakers) using R.comparator, variadic R.either, and R.reduce &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

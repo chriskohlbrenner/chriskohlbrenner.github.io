@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: History | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/history/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Old and New Years]]></title>
+    <link href="http://cek.io/blog/2015/01/03/new-year/"/>
+    <updated>2015-01-03T12:14:20-05:00</updated>
+    <id>http://cek.io/blog/2015/01/03/new-year</id>
+    <content type="html"><![CDATA[<p>Happy new year! A resolution of mine for 2015 is to write more&mdash;not just code, which is itself an admirable goal, but human-readable English. This was motivated by (1) the advice in <a href="http://www.shubhro.com/2014/12/27/software-engineers-should-write/">this article</a> I read recently, which is <a href="http://bit.ly/1K9MAZk">not new advice</a>, (2) the hope that, for all the benefits of specialization, there&rsquo;s value in maintaining competence in both programming and verbal language, and (3) the fact that I like writing! So you can expect more consistent posts than the last six months have yielded.</p>
+
+<p>My commitment to blog is also part of a larger goal: to further establish myself as a software engineer, which means (among other things like improving my technical skills) better understanding the industry. Recognizing my ignorance about computer science and its history, I put <a href="http://www.nytimes.com/2014/10/09/arts/walter-isaacsons-the-innovators-studies-computer-wizards.html">Walter Isaacson&rsquo;s &ldquo;The Innovators&rdquo;</a> on my Christmas wishlist.</p>
+
+<p>I&rsquo;m only two chapters in, but I&rsquo;m already struck by two major things: (1) the main thesis arguing that innovation is more attributable to collaboration than to singular genius and (2) the convergence of technological advances in the year 1937, all of which accelerated towards the modern computer.</p>
+
+<!--more-->
+
+
+<p>Isaacson writes:</p>
+
+<p><blockquote><p>New approaches, technologies, and theories began to emerge in 1937&hellip; It would become an annus mirabiliis of the computer age, and the result would be the triumph of four properties, somewhat interrelated, that would define modern computing.</p><footer><strong>Walter Isaacson</strong> <cite>The Innovators (38)</cite></footer></blockquote></p>
+
+<p>He defines those four computing properties as digital, binary, electronic, and general purpose, and he summarizes the following key individuals and their contributions in (and around) 1937:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th> Person(s)                                         </th>
+<th> Contribution         </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td> Alan Turing (Cambridge/Princeton)                 </td>
+<td> Published paper of mathematical theory (addressing Hilbert&rsquo;s <em>Entscheidungsproblem</em>), with the byproduct of the conceptual &ldquo;Logical Computing Machine&rdquo;, which became known as the Turing Machine (&ldquo;It is possible to invent a single machine which can be used to compute any computable sequence&rdquo;).</td>
+</tr>
+<tr>
+<td></td>
+<td> Claude Shannon and George Stibitz (Bell Labs)     </td>
+<td> Shannon figured out that electrical circuits could execute Boolean logical operations using an arrangement of on-off switches. Stibitz built the Complex Number Calculator which, based on Shannon&rsquo;s insight, showed the potential of circuit relays to do binary math, process information, and handle logical procedures.</td>
+</tr>
+<tr>
+<td></td>
+<td> Howard Aiken (Harvard)                            </td>
+<td> Began plans on the Mark I which, when completed in 1944 under IBM and the Navy, was fully automatic&mdash;it could run for days without human intervention&mdash;as well as digital (though non-binary and partially mechanical).</td>
+</tr>
+<tr>
+<td></td>
+<td> Konrad Zuse (Berlin)                              </td>
+<td> Finished a calculator prototype, the Z1, that was binary and could read instructions from a punched tape (though mechanical). This ultimately gave way to the Z3, which was the first fully working all-purpose, programmable digital computer.</td>
+</tr>
+<tr>
+<td></td>
+<td> John Vincent Atanasoff (Ames, Iowa)               </td>
+<td> Conceived the first partly electronic digital computer, which solved linear equations. It used mechanically rotating cylinders to replenish electrical charges in condensers and thus maintain memory. Atanasoff was also (disputedly) the inspiration for John Mauchly&rsquo;s work.</td>
+</tr>
+<tr>
+<td></td>
+<td> John Mauchly and J. Presper Eckert (UPenn, 1940s) </td>
+<td> With funding from the US War Department, built ENIAC (the Electronic Numerical Integrator and Computer). ENIAC was digital computer using the decimal (not binary) system, which could handle conditional branching and subroutines.</td>
+</tr>
+</tbody>
+</table>
+
+
+<br>
+
+
+<p>Incredible how much took place&mdash;or was at least initiated&mdash;over the course of a single year, and telling that the contributions that persisted were ones of collaboration, whether as partnerships of key individuals (e.g., Turing, Max Newman, and Alonzo Church) or in settings with collaborative resources (e.g., Bell Labs and major universities). Without diminishing their significance, those lone innovators were ultimately unable to mark history in the same way (e.g., Atanasoff, whose prototype was forgotten and dismantled, or Zuse, whose work with a single college friend was interrupted and lost when he was pulled into engineering airplanes for the German military).</p>
+
+<p>As we head into this new year, I can only hope 2015 will be half as innovative as 1937, and that I can apply those lessons of collaboration to my blog and my continued growth as a developer.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Intro to JavaScript (According to Douglas Crockford)]]></title>
+    <link href="http://cek.io/blog/2014/07/21/intro-to-javascript-crockford/"/>
+    <updated>2014-07-21T12:21:55-04:00</updated>
+    <id>http://cek.io/blog/2014/07/21/intro-to-javascript-crockford</id>
+    <content type="html"><![CDATA[<p><strong>Summary</strong>: I&rsquo;m working my way through a few <a href="https://github.com/bolshchikov/js-must-watch">must-watch videos about JavaScript</a>. If you know JavaScript, pretend to know JavaScript, or hope to learn JavaScript, check out those videos. Or read this and the <a href="http://cek.io/blog/2014/07/21/javascripts-historical-context-crockford">previous post</a> (and save yourself three hours of video-watching), in which I pull some of my favorite quotes from what <a href="https://en.wikipedia.org/wiki/Douglas_Crockford">Douglas Crockford</a> has to say about JavaScript.</p>
+
+<p><strong>Notes</strong>: The quotes below represent some of the key statements (as I judge them) in order of their appearance in Crockford&rsquo;s <a href="http://youtu.be/RO1Wnu-xKoY">second talk</a> on JavaScript. Read together, they outline the main trajectory of Crokford&rsquo;s presentation, but they are not intended to replace the entirety of the talk.</p>
+
+<h3>Crockford on JavaScript's key features</h3>
+
+
+<p><u><h5>JavaScript: The Bad Parts</h5></u>
+&ldquo;Since I discovered that the language had good parts, that sort of implies that it must have had bad parts. Why would anybody design a language with bad parts? How would that come about? In my review of all the bad parts in the language, it mostly comes from <strong>three causes</strong>. The first is <strong>legacy</strong>. In copying the Java syntax, JavaScript also copied some bad things about Java, so many of the worst features in JavaScript are actually things it inherited from Java, which it inherited from C, which it inherited from FORTRAN. So there’s a long line of sin-age which affects us today.</p>
+
+<p>&ldquo;There were some <strong>good intentions</strong> in the language that didn’t quite work out. Things were added, like semi-colon insertion and implied global variables, with the intention of making the language easier to use for beginners. In fact, it worked, because it turns out that if you have absolutely no idea what you’re doing in the language you can still generally make things work. Unfortunately, those things work against professional programmers trying to do large, sophisticated programs, so there are some trade-offs there that didn’t work out well for us.</p>
+
+<p>&ldquo;But the biggest influence, by far, was <strong>haste</strong>. The language was designed, implemented, and shipped in way too little time. Most languages take years to develop – for example, Smalltalk was eight years from Alan Kay’s first prototype to Smalltalk 80, when it was first made available to the public. That’s a good timeframe for a programming language, because you want to go through it and test it, make sure that it works, and refine it in order to make sure that it’s meeting its goals. JavaScript was prepared in about as many days.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=12m22s">Link</a>)</p>
+
+<!--more-->
+
+
+<p><u><h5>JavaScript: The Good Parts</h5></u>
+&ldquo;The good news is that, for the most part, the bad parts can be avoided. And if you avoid the bad parts, and if you work just with what’s left over, <a href="http://www.amazon.com/JavaScript-Good-Parts-Douglas-Crockford/dp/0596517742">the good parts</a>, there’s actually a brilliant language there. The features that were selected and the way that they were put together is astonishingly good. It’s a language of amazing expressive power. JavaScript is a language that most people don’t bother to learn before they use. You can’t do that with any other language, and you shouldn’t want to, and you shouldn’t do that with this language either. Programming is a serious business, and you should have good knowledge about what you’re doing, but most people feel that they ought to be able to program in this language without any knowledge at all, and it still works. It’s because the language has enormous expressive power, and that’s not by accident. <strong>There’s actually some brilliant design in there</strong>.</p>
+
+<p>&ldquo;The problem with the bad parts isn’t that they’re useless, it’s that they’re dangerous. I see a lot of wannabe ninjas out there who are going through the bad parts and going ‘oh, I found a new use for with, or another thing you can do with eval,’ or some other edge case. Stop doing that. Stop doing that!&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=14m44s">Link</a>)</p>
+
+<p><u><h5>Object-Oriented JavaScript</h5></u>
+&ldquo;<strong>This language is all about objects; it’s an object oriented language</strong>. I’ll try to demonstrate to you that it is more object oriented than Java. For a long time, a lot of the opinion about this language was that it’s not object oriented, it’s object based, it’s deficient. It turns out it’s actually a superior language.</p>
+
+<p>&ldquo;<strong>In this language, an object is a dynamic collection of properties. This is quite different than in most of the other object oriented languages in which an object is an instance of a class, where a class has some state and behavior. Objects in this system are much more dynamic</strong>. So it’s a collection of properties, and each property has a keystring which is unique within that object. If you add two properties with the same name, the second one will replace the first one.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=16m1s">Link</a>)</p>
+
+<p><u><h5>JavaScript accessor property (getter/setter)</h5></u>
+&ldquo;Here’s an example of using an <strong>accessor property</strong>. The difference between an accessor property and a data property is that an accessor property uses get and/or set. Here I’m defining a property for my object called inch. When I try to get inch, my_object, ’Inch’, I will receive the result of dividing this.mm by 25.4. If I try to set it, I won’t actually set this property, instead I will set millimeter to whatever value I pass times 25.4. So the result of this is that I can have an object with two properties in it that are linked in an interesting constraint way. I can set either the millimeters or the inch and it will appear to fix the other one, so I can keep those two things in sync. There are a lot of really interesting patterns that can be done with these. There are even more evil patterns that can be done with this.</p>
+
+<p>&ldquo;For example, one of the assumptions that you’ve always had in the language was that you can go to an object and retrieve a property and there’s no transfer of control, you’re just getting some data. Now you’re giving control over to a function which you hope will give it back, but it might not. But it can also mutate the object while it’s getting the thing, so something that used to be a read-only event is now potentially a mutating event which could mutate this object or who-knows-what in the thing. So there are all sorts of really abusive patterns that can be made out of these getters and setters, and I recommend to all the ninjas: don’t get stupid with stuff, because it’s going to be really, really easy to get stupid with this stuff. I’m telling you, you can get stupid with this stuff, and you don’t need to do it. So be smart with this. Use it sparingly.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=21m22s">Link</a>)</p>
+
+<p><strong>Example:</strong>
+``` javascript Accessor property
+myObject = {};</p>
+
+<p>Object.defineProperty(myObject, &lsquo;inch&rsquo;, {
+  get: function () {</p>
+
+<pre><code>return this.mm / 25.4;
+</code></pre>
+
+<p>  },
+  set: function (value) {</p>
+
+<pre><code>this.mm = value * 25.4;
+</code></pre>
+
+<p>  },
+  enumerable: true
+});</p>
+
+<p>myObject.inch = 10;
+myObject;
+  //  returns { inch: [Getter/Setter], mm: 254 }</p>
+
+<p>```</p>
+
+<p><u><h5>Classes vs. Prototypes (prototypes!)</h5></u>
+&ldquo;The most controversial feature of the language is the way it does inheritance, which is radically different than virtually all other modern languages. <strong>Most languages use classes – I call them ‘classical languages’ – JavaScript does not. JavaScript is class free. It uses prototypes.</strong> For people who are classically trained who look at the language, they go: well, this is deficient. You don’t have classes, how can you get anything done? How can you have any confidence that the structure of your program’s going to work? And they never get past that.</p>
+
+<p>&ldquo;But it turns out classes as we currently understand them were first formulated in 1967, in Simula. The prototypal school was developed about 20 years later, at Xerox Parc, by people who had intimate knowledge of Smalltalk, which was the first modern semi-popular object oriented programming language. <strong>The changes that they made were not made in ignorance; it was very well informed, changing, simplifying, and advancing the programming model. And what they did was they created, in my view, a vast improvement over the model that had come before</strong>.</p>
+
+<p>&ldquo;It’s possible that one demonstration of the greater power of the new thing is that, first off, <strong>code is smaller</strong>. If you’re writing to the prototypal model and you’re doing it correctly, your programs are a lot smaller. For one thing, you take out a lot of the silly redundancy, like &lsquo;I’m creating a variable of this type named That Type, initialized with new That Type.&rsquo; You’re saying everything three times, and you tend not to do that in a prototypal language. But more than that, <strong>you can simulate the classical language in the prototypal language</strong>. You can’t do the other. Java is not powerful enough that you can write in a JavaScript style in Java; it’s just not good enough. JavaScript is, so you can do it the other way around, because<strong> it’s the more powerful of the models</strong>.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=24m8s">Link</a>)</p>
+
+<p><u><h5>Object.create (don&rsquo;t use <code>new</code>)</h5></u>
+&ldquo;I don’t use new anymore. I don’t need it. I’m thinking prototypally now, and when I’m thinking prototypally I can do everything I want to do with object.create. So I see this now as just a vestige; I don’t need it anymore. There’s also a hazard with new, that if you design a constructor that’s supposed to be used with new and either you, or one of your users, forgets to put the new prefix on it, instead of initializing a new object the instructor’s going to be clobbering the global object, damaging global variables and not doing useful work at all, and there’s no compile time warning or runtime warning of that. That’s a feature I don’t need to use.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=31m26s">Link</a>)</p>
+
+<p><u><h5>Functions and objects</h5></u>
+&ldquo;<strong>The best feature in the language, the good parts, the very best parts, are functions</strong>. We’ll talk about them <a href="https://www.youtube.com/watch?v=ya4UHuXNygM">next time</a>. So that’s all the objects. All the values in this language are objects, with two exceptions: null, and undefined.&rdquo; (<a href="">Link</a>)</p>
+
+<p><u><h5>JavaScript and C</h5></u>
+&ldquo;Syntactically, <strong>JavaScript is clearly a member of the C family of programming languages</strong>. It’s got the curly braces and all of that stuff. It differs from C mainly in its type system, which allows functions to be values.&rdquo; (<a href="">Link</a>)</p>
+
+<h3>Resources</h3>
+
+
+<p><a href="http://youtu.be/RO1Wnu-xKoY">Crockford on JavaScript &ndash; Chapter 2: And Then There Was JavaScript [Video]</a><br>
+<a href="http://abraham.cs.uml.edu/~heines/91.461/resources/CrockfordOnJavaScript/crockonjs-2-transcript.pdf">Crockford on JavaScript &ndash; Chapter 2: And Then There Was JavaScript [Full transcript]</a><br></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JavaScript's Historical Context (According to Douglas Crockford)]]></title>
+    <link href="http://cek.io/blog/2014/07/21/javascripts-historical-context-crockford/"/>
+    <updated>2014-07-21T10:01:39-04:00</updated>
+    <id>http://cek.io/blog/2014/07/21/javascripts-historical-context-crockford</id>
+    <content type="html"><![CDATA[<p><strong>Summary</strong>: I&rsquo;m working my way through a few <a href="https://github.com/bolshchikov/js-must-watch">must-watch videos about JavaScript</a>. If you know JavaScript, pretend to know JavaScript, or hope to learn JavaScript, check out those videos. Or read this and the <a href="http://cek.io/blog/2014/07/21/intro-to-javascript-crockford">following post</a> (and save yourself three hours of video-watching), in which I pull some of my favorite quotes from what <a href="https://en.wikipedia.org/wiki/Douglas_Crockford">Douglas Crockford</a> has to say about JavaScript.</p>
+
+<p><strong>Notes</strong>: The quotes below represent some of the key statements (as I judge them) in order of their appearance in Crockford&rsquo;s <a href="http://youtu.be/JxAXlJEmNMg">first</a> and <a href="http://youtu.be/RO1Wnu-xKoY">second</a> talks on JavaScript. Read together, they outline the main trajectory of Crokford&rsquo;s presentation, but they are not intended to replace the entirety of the talk. The first 50 minutes of the first talk, which cover the history of programming before 1970, are excluded from this post, not because they&rsquo;re unimportant (they are!), but because it was difficult to pull single quotes that represented the content. All emphases mine.</p>
+
+<h3>Crockford on JavaScript's historical context, distilled into key quotes</h3>
+
+
+<p><u><h5>Innovation since the &lsquo;70s</h5></u>
+&ldquo;The other thing we&rsquo;ve seen is an end to CPU innovation. <strong>We used to see a lot of really radical new designs happening all the time, but we don&rsquo;t see that happening anymore</strong>. Basically we&rsquo;ve got three architectures that we use for most of our stuff: virtually all the computers are on Intel, most of the game platforms are on Power PCs, most of the mobile devices are on ARM, and that&rsquo;s it. Nobody&rsquo;s making new stuff, nothing radical, it&rsquo;s just refinements of stuff that&rsquo;s been happening for several decades.</p>
+
+<p>&ldquo;We&rsquo;re doing even worse in operating systems. It used to be that every model of every machine had its own operating system, and that came with a lot of obvious inefficiency, so we&rsquo;ve pushed that down and now we have just two: we&rsquo;ve got Unix which was developed in the &lsquo;70s, and we&rsquo;ve got Windows that was developed in the '80s. Of the two, Unix is obviously the better one, but there&rsquo;s no innovation happening in operating systems. Basically we&rsquo;ve been rewriting the same systems for 40 years. That&rsquo;s just not where we do innovation. <strong>Where we do innovation is in programming languages, and that&rsquo;s been going on for quite a long time.</strong>&rdquo;  (<a href="http://youtu.be/JxAXlJEmNMg?t=56m50s">link</a>)</p>
+
+<!--more-->
+
+
+<p><u><h5>Leaps</h5></u>
+&ldquo;Software development comes in leaps, and our leaps are much farther apart than the hardware experiences. Moore&rsquo;s Law lets the hardware leap every two years; we leap more like every twenty years. Again, <strong>basically we need a generation to retire before we can get the good new ideas going</strong>, so despite the fact that we&rsquo;re always talking about innovation and how we love innovation and we&rsquo;re always innovating, <strong>we tend to be extremely conservative in the way we adopt new technology</strong>.&rdquo; (<a href="http://youtu.be/JxAXlJEmNMg?t=1h21m5s">Link</a>)</p>
+
+<p><u><h5>The beginning of JavaScript</h5></u>
+&ldquo;Basically, [<a href="https://en.wikipedia.org/wiki/Brendan_Eich#CEO_appointment_and_resignation">Brendan Eich</a>] took these components: he took the <strong>syntax of Java</strong>, he took <strong>the function model of Scheme</strong>&mdash;which was brilliant, one of the best ideas in the history of programming languages&mdash;and he took <strong>the prototype objects from Self</strong>. He put them together in a really interesting way, really fast; he completed the whole thing in a couple of weeks. It&rsquo;s a shame that he wasn&rsquo;t given the freedom that Xerox had to spend a decade to get this right. Instead of ten years it was more like ten days, and that was it. I challenge any language designer to come up with a brand new design from scratch in ten days and then release it to the world and call it done and see what happens with that.</p>
+
+<p>&ldquo;One of the consequences of it was that there are parts of it that are just awful. If they&rsquo;d had more time they probably would have recognized that and fixed it, but they didn&rsquo;t. Netscape was not a company that had time to get it right, which is why there&rsquo;s no longer a Netscape.</p>
+
+<p>&ldquo;But despite that, <strong>there is absolutely deep profound brilliance in this language, and this language is succeeding in places where many other languages have failed because of that brilliance; it&rsquo;s not accidental that JavaScript has become the most popular programming language in the world</strong>.&rdquo; (<a href="http://youtu.be/JxAXlJEmNMg?t=1h37m34s">Link</a>)</p>
+
+<p><u><h5>A great time to be a programmer</h5></u>
+&ldquo;One thing that&rsquo;s different now than in the &lsquo;50s and '60s is there are lot of computers out there, and there are a lot of people writing programs now. It&rsquo;s possible to get a <strong>community of people</strong> even if you have a minor language, enough to do useful things, to do a lot of group work. You&rsquo;ve got a group large enough to justify writing books, which was something we didn&rsquo;t have back in the '50s and '60s. So I think <strong>this is a great time to be a programmer</strong>. We have lots of choices, and we need to be smart about making those choices and be open to accepting the new ideas, because there are a lot of new ideas out there that we shouldn&rsquo;t be rejecting just because they&rsquo;re unfamiliar and we don&rsquo;t see the need for them. There are actually a lot of good ideas in all of these languages, not least of which is JavaScript&hellip;&rdquo; (<a href="http://youtu.be/JxAXlJEmNMg?t=1h40m44s">Link</a>)</p>
+
+<p><u><h5>Mythology of innovation</h5></u>
+&ldquo;Now, if you were here last time you’ll remember I went through the history of everything that ever happened, starting with The Big Bang, going through The Dawn of Man, and then finally there was JavaScript. The reason I did that was because understanding the context in which this stuff happens is really important to understanding what we have now. Without that understanding you’re consumed by <strong>mythology which has no truth in it</strong>, that the history of innovation has been one thing after another where the new, good thing always displaces the old stuff. That’s not how it works, generally. <strong>Generally the most important new innovations are received with contempt and horror and are accepted very slowly, if ever</strong>. That’s an important bit of knowledge to have, in the case of JavaScript.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=18s">Link</a>)</p>
+
+<p><u><h5>JavaScript has good parts</h5></u>
+&ldquo;Having that background [understanding history and innovation] allowed me to make the first important discovery of the 21st century, which was that <strong>JavaScript has good parts</strong>. This was an <strong>unexpected discovery</strong>, and when I tried to share it with the rest of the community there was a huge amount of skepticism; a lot of people refused to believe it was possible that JavaScript had any redeeming value whatsoever. In fact, it has very, very good parts. But I’m getting a little ahead of the story, so let’s back up a little bit.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=1m44s">Link</a>)</p>
+
+<p><u><h5>Why it&rsquo;s called JavaScript (Netscape-Sun history)</h5></u>
+&ldquo;It was very clear at the time that there was a lot of excitement about Java and the Netscape browser, and Sun and Netscape decided they needed to work together against Microsoft because if they didn’t join forces Microsoft would play them off against each other and they’d both lose. The biggest point of contention in that arrangement was what to do with LiveScript. Sun’s position was: "Well, we’ll put Java into the Netscape browser, we’ll kill LiveScript, and that’ll be that.&rdquo; And Netscape said no, that they really believed in the HyperCard-like functionality, and they wanted a simpler programming model in order to capture a much larger group of programmers.</p>
+
+<p>&ldquo;So there was an impasse, and the relationship almost broke up, when I think Marc Andreessen&mdash;and I have been able to document this, but <strong>people have told me&mdash;Marc Andreessen, maybe as a joke, suggested: &lsquo;let’s change the name to JavaScript.&rsquo; And it worked</strong>! Except that Sun claimed ownership of the trademark. Even though they had nothing to do with the language and they tried to kill the language, they said ‘we own the trademark, but we’ll give you a license to use the trademark’. Netscape said &lsquo;great, an exclusive license, only we can call it JavaScript, that’s fine&rsquo;.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=7m4s">Link</a>)</p>
+
+<p><u><h5>The destruction of Microsoft</h5></u>
+&ldquo;At Microsoft they’d been watching this with some alarm, particularly when folks at Netscape were saying that Netscape Navigator was going destroy Microsoft. Microsoft said ‘oh, we don’t want to be destroyed’. It turned out Netscape Navigator didn’t destroy Microsoft. In fact, <strong>the software that is going to destroy Microsoft is Windows Mobile</strong>.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=8m28s">Link</a>)</p>
+
+<p><u><h5>JavaScript naming confusion</h5></u>
+&ldquo;What should we call the language? There’s a lot of confusion. Some people still think that JavaScript, JScript, and ECMAScript are three different languages, and that’s not the case. It’s three silly names for one silly language. JavaScript isn’t actually an open name, which is surprising in that this is the language of the world’s biggest open system. It’s a trademark now of Oracle, and we don’t know what they’re going to do with that. We probably should call it ECMAScript, except it’s such an awful thing to call it.&rdquo;</p>
+
+<h3>Resources</h3>
+
+
+<p><a href="http://youtu.be/JxAXlJEmNMg">Crockford on JavaScript &ndash; Volume 1: The Early Years [Video]</a><br>
+<a href="https://teaching.cs.uml.edu/~heines/91.461/resources/CrockfordOnJavaScript/crockonjs-1-transcript.pdf">Crockford on JavaScript &ndash; Volume 1: The Early Years [Full transcript]</a><br>
+<a href="http://youtu.be/RO1Wnu-xKoY">Crockford on JavaScript &ndash; Chapter 2: And Then There Was JavaScript [Video]</a><br>
+<a href="http://abraham.cs.uml.edu/~heines/91.461/resources/CrockfordOnJavaScript/crockonjs-2-transcript.pdf">Crockford on JavaScript &ndash; Chapter 2: And Then There Was JavaScript [Full transcript]</a><br></p>
+]]></content>
+  </entry>
+  
+</feed>

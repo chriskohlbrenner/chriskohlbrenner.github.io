@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ember | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/ember/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Rethinking UI Patterns: D3 and React]]></title>
+    <link href="http://cek.io/blog/2015/06/23/react-d3/"/>
+    <updated>2015-06-23T08:17:36-04:00</updated>
+    <id>http://cek.io/blog/2015/06/23/react-d3</id>
+    <content type="html"><![CDATA[<p><strong>Author&rsquo;s note:</strong> I&rsquo;ve followed up on this post with <a href="/blog/2016/07/06/d3-and-react-faux-dom/">another one</a>. I&rsquo;m no longer a fan of building up SVG elements in React components the way I propose in this post. You should read the other post to see what I recommend.</p>
+
+<hr>
+
+
+<p>Imagine the entirety of your organization&rsquo;s chatroom communications. Imagine making sense of those communications in a single interactive visualization, one that factors in date and time, chatroom name, individual participants' names, and message content.</p>
+
+<p>I recently implemented just such a feature. While something like this of course requires back end analytics, aggregations of data, and &ldquo;data science&rdquo; that can handle such &ldquo;big data,&rdquo; it also relates to user interface (UI), the subject of this blog post.</p>
+
+<!--more-->
+
+
+
+
+<h3>UI background</h3>
+
+
+<p>Until recently, this app&rsquo;s client-side UI was built entirely in <a href="http://emberjs.com/">Ember.js</a>, a framework intended for &ldquo;ambitious&rdquo; applications (and thus a good fit!). Over time, however, the UI team came to realize some of Ember&rsquo;s limitations, some of those conventions and patterns inherent to the framework that&mdash;rather than making developers' lives easier, as is any framework&rsquo;s aim&mdash;posed challenges to the organization and maintenance of our codebase.</p>
+
+<p>Enter <a href="https://facebook.github.io/react/">React.js</a>, a UI library that solely addresses issues in the view layer. Over the last 5-6 months, we have been porting Ember code over to React, started using React for all greenfield components, and made React the standard for our UI. This blog post won&rsquo;t cover the litany of (fiercely debated) pros and cons of Ember vs. React, but suffice it to say that React has made us on the product development team unanimously happier.</p>
+
+<h3>D3</h3>
+
+
+<p>All of that is just background to the feature I initially described, because a data visualization isn&rsquo;t implemented solely in Ember or React. Or is it?</p>
+
+<h4>The old way</h4>
+
+
+<p>The short answer is no. To effectively create data visualizations, we have leveraged <a href="http://d3js.org/">D3.js</a>, a JavaScript library for manipulating documents. D3 functions similarly to jQuery in that it emphasizes selectors and listeners; for example, to initialize a D3 svg, we might write <code>d3.select('body').append('svg') #...</code> and, from there, append rectangles and lines, bind click and hover actions, etc. Not so different from a basic jQuery application (<code>$('button').on('click', function()...)</code>).</p>
+
+<p>That said, what D3 ultimately produces is a series of DOM elements, specifically SVG elements. Some basic D3 code might look like:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>d3-viz.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">body</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;).</span><span class="nx">append</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">svg</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s1">&#39;rect&#39;</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">data</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">])</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;rect&#39;</span><span class="p">)</span>
+</span><span class='line'>                    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">){</span> <span class="k">return</span> <span class="nx">d</span> <span class="o">*</span> <span class="mi">10</span> <span class="p">})</span>
+</span><span class='line'>                    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</span><span class='line'>                    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+</span><span class='line'>                    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">i</span> <span class="o">*</span> <span class="mi">50</span> <span class="p">});</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>That code then maps to SVG elements in the DOM, looking something like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>d3-svg.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;svg</span> <span class="na">width=</span><span class="s">&quot;500&quot;</span> <span class="na">height=</span><span class="s">&quot;500&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span>            <span class="ni">&amp;lt;</span>rect width=&quot;100&quot; height=&quot;20&quot; fill=&quot;blue&quot; y=&quot;0&quot;<span class="ni">&amp;gt;&amp;lt;</span>/rect<span class="ni">&amp;gt;</span>
+</span><span class='line'>            <span class="ni">&amp;lt;</span>rect width=&quot;200&quot; height=&quot;20&quot; fill=&quot;blue&quot; y=&quot;50&quot;<span class="ni">&amp;gt;&amp;lt;</span>/rect<span class="ni">&amp;gt;</span>
+</span><span class='line'>            <span class="ni">&amp;lt;</span>rect width=&quot;300&quot; height=&quot;20&quot; fill=&quot;blue&quot; y=&quot;100&quot;<span class="ni">&amp;gt;&amp;lt;</span>/rect<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;&lt;/svg&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>There are multiple ways to wire D3 up to a given web framework, but it&rsquo;s ultimately a script that runs to build the component in the DOM. Our old pattern was loosely the following:</p>
+
+<ul>
+<li>fetch model in the route</li>
+<li>set up component properties in the controller</li>
+<li>render the component in the template:</li>
+<li>in Ember&rsquo;s <code>didInsertElement</code> hook in the component, run the D3 script that selects body and appends SVG</li>
+</ul>
+
+
+<h4>Made new</h4>
+
+
+<p>Until recently, we had been able to maintain and reuse our Ember D3 components, but this chat timelines visualization required a brand new D3 component, one we decided to write in React.</p>
+
+<p>My initial instinct, as with simpler React components, was to render the component with properties and run the D3 script in React&rsquo;s <code>render</code> or <code>componentDidMount</code> hook. What became clear, however, was that we didn&rsquo;t need to run the D3 script at all. In place of <code>d3.select(...).append(...)</code> we could simply build up svg elements in the <code>render</code> hook.</p>
+
+<p>This approach, while going against my initial instinct of using D3&rsquo;s pattern, aligns well with React&rsquo;s strengths of one-way data flow and components that are easier to reason about than traditional data binding. It&rsquo;s a declarative approach that expresses what it does, as opposed to an imperative approach that expresses how it&rsquo;s done. And it has benefits of composibility and extensibility&mdash;rather than selecting and appending as additional design specs come in, we can componentize everything&mdash;bars, axes, labels, plots&mdash;to reuse later or modify with greater control.</p>
+
+<p>And that earlier question about data visualizations being written entirely in a framework? Considered this way, we can construct the SVG elements directly in React, something like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>d3-viz-react.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">D3BarGraph</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span>    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="nx">svg</span> <span class="nx">width</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">width</span><span class="p">}</span> <span class="nx">height</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">height</span><span class="p">}</span><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span>
+</span><span class='line'>                    <span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="nx">rect</span> <span class="nx">width</span><span class="o">=</span><span class="s2">&quot;100&quot;</span> <span class="nx">height</span><span class="o">=</span><span class="s2">&quot;20&quot;</span> <span class="nx">fill</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span> <span class="nx">y</span><span class="o">=</span><span class="s2">&quot;0&quot;</span><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="err">/rect&amp;gt;</span>
+</span><span class='line'>                    <span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="nx">rect</span> <span class="nx">width</span><span class="o">=</span><span class="s2">&quot;200&quot;</span> <span class="nx">height</span><span class="o">=</span><span class="s2">&quot;20&quot;</span> <span class="nx">fill</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span> <span class="nx">y</span><span class="o">=</span><span class="s2">&quot;50&quot;</span><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="err">/rect&amp;gt;</span>
+</span><span class='line'>                    <span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="nx">rect</span> <span class="nx">width</span><span class="o">=</span><span class="s2">&quot;300&quot;</span> <span class="nx">height</span><span class="o">=</span><span class="s2">&quot;20&quot;</span> <span class="nx">fill</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span> <span class="nx">y</span><span class="o">=</span><span class="s2">&quot;100&quot;</span><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="err">/rect&amp;gt;</span>
+</span><span class='line'>            <span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="err">/svg&amp;gt;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">});</span>
+</span><span class='line'><span class="nx">React</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">D3BarGraph</span> <span class="nx">width</span><span class="o">=</span><span class="mi">500</span> <span class="nx">height</span><span class="o">=</span><span class="mi">500</span> <span class="nx">data</span><span class="o">=</span><span class="p">{[</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">]}</span> <span class="o">/&gt;</span><span class="p">,</span> <span class="nx">mountNode</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>You can pretty quickly see how the inner rectangles could be pulled out as components of their own, as could axes, labels, etc. We&rsquo;ve found this pattern to be much easier to reason about when building visualizations in our UI. So here&rsquo;s to rethinking UI patterns and, as a result, writing code that&rsquo;s easier to reason through.</p>
+
+<h3>Further Resources</h3>
+
+
+<ul>
+<li><a href="http://10consulting.com/2014/02/19/d3-plus-reactjs-for-charting/">D3 and React &ndash; the future of charting components?</a></li>
+<li><a href="https://fraserxu.me/2015/06/03/react-data-visualization/">React &amp; Data Visualization</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

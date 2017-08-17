@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Inspiration | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/inspiration/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ira Glass on Storytelling [and Programming]]]></title>
+    <link href="http://cek.io/blog/2014/05/11/the-gap/"/>
+    <updated>2014-05-11T13:54:09-04:00</updated>
+    <id>http://cek.io/blog/2014/05/11/the-gap</id>
+    <content type="html"><![CDATA[<p><a href="http://vimeo.com/85040589">&ldquo;For everyone in doubt, especially for myself&hellip;&rdquo;</a>.</p>
+
+<p><blockquote><p><strong>Nobody tells people who are beginners</strong>&mdash;and I really wish somebody had told this to me&mdash;is that all of us who do creative work, like, you know, we get into it, and we get into it because <strong>we have good taste</strong>.</p></p><p><p>But it&rsquo;s like there&rsquo;s a gap. That <strong>for the first couple years that you&rsquo;re making stuff, what you&rsquo;re making isn&rsquo;t so good</strong>. Ok, it&rsquo;s not that great. It&rsquo;s trying to be good, <strong>it has ambition to be good, but it&rsquo;s not quite that good</strong>. But your taste, the thing that got you into the game, your taste is still killer. And your taste is good enough that you can tell, that what you&rsquo;re making is kind of a disappintment to you&mdash;you know what I mean? A lot of people never get past that phase. A lot of people at that point, they quit.</p></p><p><p>And the thing I would just, like, say to you, with all of my heart, is that <strong>most everybody I know</strong>, who does interesting, creative work&mdash;<strong>they went through a phase of years where they had really good taste, they could tell what they were making wasn&rsquo;t as good as they wanted it to be</strong>. They knew it fell short. It didn&rsquo;t have this special thing that we wanted it to have. And, the thing I would say to you is: <strong>everybody goes through that</strong>.</p></p><p><p>And for you to go through it, if you&rsquo;re going through it right now, if you&rsquo;re just getting out of that phase, you gotta know&mdash;<strong>it&rsquo;s totally normal</strong>. And the most important possible thing you could do is do a lot of work. Do a huge <strong>volume of work</strong>. Put yourself on a deadline, so that every week or every month, you know you&rsquo;re gonna finish one story.</p></blockquote></p>
+
+<p>(or learn one technology, or complete one app&hellip;)</p>
+
+<p><blockquote><p>Because it&rsquo;s only by actually going through a volume of work that you&rsquo;re actually going to catch up and close that gap, and the work you&rsquo;re making will be <strong>as good as your ambitions</strong>.</p></p><p><p>It takes a while, it&rsquo;s gonna take you a while, <strong>it&rsquo;s normal to take a while, and you just have to fight your way through that</strong>. Okay?</p><footer><strong>Ira Glass <a href="http://vimeo.com/85040589">http://vimeo.com/85040589</a> &ldquo;The Gap&rdquo;</strong></footer></blockquote></p>
+
+<p>Take two minutes and <a href="http://vimeo.com/85040589">watch it</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Maintenance | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/maintenance/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Pruning Code]]></title>
+    <link href="http://cek.io/blog/2015/11/21/code-pruning/"/>
+    <updated>2015-11-21T12:23:14-05:00</updated>
+    <id>http://cek.io/blog/2015/11/21/code-pruning</id>
+    <content type="html"><![CDATA[<p>It was Friday afternoon, the end of the day, at the end of a long week of urgent bugfixes to prepare a release. Our next features hadn&rsquo;t been fully designed and approved, all the high-priority bugs had been identified and fixed, and I was left with a few hours to choose what to work on.</p>
+
+<p>These moments are some of my favorites, opportunities to focus on the important/non-urgent tasks like performance improvements, refactors, new technologies, and code cleanup. So I spent the last few hours of the day on that last item: pruning old code from the codebase.</p>
+
+<p>We all know that pruning is about <a href="http://dictionary.reference.com/browse/pruning">removing the superfluous</a>, which is by definition a good thing (&ldquo;superfluous&rdquo; being &ldquo;unnecessary&rdquo;, after all), but the benefits of pruning also include:</p>
+
+<ul>
+<li>improving or maintaining health</li>
+<li>reducing risk</li>
+<li>increasing yield or quality</li>
+</ul>
+
+
+<p><em>Source</em>: <a href="https://en.wikipedia.org/wiki/Pruning">&ldquo;Pruning&rdquo;, Wikipedia</a></p>
+
+<p>Ok, ok, we&rsquo;re not talking about plant health, risk of falling branches, or yield of flowers and fruits. But it&rsquo;s a pretty straightforward metaphor for code.</p>
+
+<!--more-->
+
+
+<p>The pull request I ended up submitting did three things (removed, removed, removed, like pruning):</p>
+
+<ul>
+<li>It removed the <code>/** @jsx React.DOM */</code> pragma, which has been unnecessary since React 0.12 (we&rsquo;re currently running 0.13).</li>
+<li>It removed <code>Immutable</code> as a global variable (we&rsquo;re using Immutable JS on most&mdash;but not all&mdash;pages, and we want to explicitly require libraries for each file/component, plus&hellip;<a href="http://c2.com/cgi/wiki?GlobalVariablesAreBad">yeah</a>).</li>
+<li>It removed a couple helper functions from a utility file the depends on lodash.js, which largely overlaps with our Ramda.js library.</li>
+</ul>
+
+
+<p>These are simple things. Remove unnecessary lines of code. Clarify what a given file is doing by making modules more explicit. Reduce the number of dependencies and the weight of the codebase.</p>
+
+<p>These are clearly beneficial things. Deleting the unnecessary reduces mental overhead. Explicit requires ease our ability to reason about a piece of code. Removing an external library improves performance.</p>
+
+<p>Simple, beneficial, and yet when do these things get accomplished? As I referenced above, rarely. It was only after feature development, testing, and bugfixing that I even considered it. To some degree that&rsquo;s on me: it&rsquo;s a technical discipline like performance or code quality that needs to be considered at each step along the way. But it&rsquo;s also on the development process and management: if it&rsquo;s not prioritized and time isn&rsquo;t allotted, it won&rsquo;t happen! That simple.</p>
+
+<p>Anyway, that&rsquo;s my argument for code pruning. Regardless of whether anyone else finds it valid, it&rsquo;s a personal goal of mine to spend a couple hours a week on exactly that. Removing dependencies, deleting dead code, refactoring. And who knows, perhaps with a little more disciplined code pruning along the way, code quality will improve and our team will have fewer weeks of urgent bugfixes.</p>
+]]></content>
+  </entry>
+  
+</feed>

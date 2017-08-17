@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Terminally Bashing the Kernel - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="&#8220;Live in the command line.&#8221; One of earliest instructions in week one was to &ldquo;live in the command line.&rdquo; Avi described that &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2014/02/12/terminally-bashing-the-kernel">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Terminally Bashing the Kernel</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-12T11:34:52-05:00" pubdate data-updated="true">Feb 12<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><blockquote>&#8220;Live in the command line.&#8221;</blockquote>
+
+
+<p>One of earliest instructions in week one was to &ldquo;live in the command line.&rdquo; Avi described that computers should be more than the media consumption devices they are to most users. That everything we need to do on a computer can be done exclusively from the shell. That, as programmers, we need to make the command line our home.</p>
+
+<p>But what <i>is</i> the command line? I&rsquo;ve used Terminal long enough to be comfortable using it, but what is it? Is Terminal the same as the command line and the shell and bash? What am I really doing when I use these tools? What are the kernel and command line and Bash, and how should I even use all those words?</p>
+
+<!--more-->
+
+
+<p>Rest assured, I can&rsquo;t and won&rsquo;t answer all of those questions in their completion. I&rsquo;m keeping a narrow scope, as Avi instructed, looking to understand a few specifics rather than write a book on computing.</p>
+
+<h2>A few definitions</h2>
+
+
+<p>In a couple minutes, these terms and definitions will fit into a more cohesive framework.
+<li><strong>Terminal (Terminal.app)</strong>: the terminal emulator on Mac OSX, a GUI for the command line interface.</li>
+<li><strong>Command line interface (CLI)</strong>: a means of interacting with a computer program where the user issues successive lines of text commands.</li>
+<li><strong>Shell (or command-line interpreter)</strong>: the user interface for access to an operating system&rsquo;s kernel services, the first of which was Bell Labs&#8217; Multics, followed by Unix, etc.</li>
+<li><strong>Bash</strong>: the Bourne-again shell, a Unix shell replacing the Bourne shell (sh), default on Linux and Mac OSX.</li>
+<li><strong>Kernel</strong>: a computer program that manages input/output requests from software and translates them into data processing instructions for the central processing unit and other electronic components of a computer.</li></p>
+
+<h2>The framework</h2>
+
+
+<p>With those definitions in mind, the framework in the image below may be helpful.</p>
+
+<p><img src="/images/command-line-whiteboard.jpg"></p>
+
+<p>Just kidding&mdash;look at this one instead.</p>
+
+<p><img src="/images/terminal-kernel.png"></p>
+
+<p>The left side of image includes the hardware (which includes the CPU, memory, devices, etc.) and the software applications (which includes all the applications we know and love) bridged by the kernel. As was defined earlier, the kernel manages the hardware and enables programs to use it. It is a fundamental part of a modern computer&rsquo;s operating system. It&rsquo;s hugely important. And it is where the terminal and command line come in.</p>
+
+<h2>Making it clearer</h2>
+
+
+<p>Go back and reread the definitions; you&rsquo;ll notice an order to the terms. They appear from highest to lowest level, from the graphical user interface of the Terminal application to the kernel, a core piece of the machine&rsquo;s infrastructure.</p>
+
+<p>When we type a command into the Terminal (at the highest level), that command is interpreted by the shell (aka, the command line interpreter, which is very slightly removed from the command line interface) and then passed to the kernel</p>
+
+<p>That&rsquo;s all I need to know for now; I&rsquo;ll leave it to people much smarter than me to explain the kernel. Suffice it to say: that interaction between the Terminal, CLI, and kernel is what enables us, as programmers, to type simple lines of text that are also very powerful commands.</p>
+
+<h2>Bringing it home</h2>
+
+
+<p>My main takeaway is this: I now know what I mean when I say I&rsquo;m using the command line, or Terminal, or the shell, or Bash, etc. We were pointed to this Chinese proverb recently:</p>
+
+<blockquote>“The beginning of wisdom is to call things by their right names”</blockquote>
+
+
+<p>Perhaps by recognizing these subtle differences I can attain programming wisdom.</p>
+
+<p>One final idea: <i>metaphors</i>. So much of our computer is made up of metaphors: windows, the screen, double-clicks&mdash;all metaphors for something else the computer is doing. When Avi introduced us to Alan Kay recently, he introduced the idea that by inventing the GUI Kay introduced a metaphor&mdash;a tool that makes the user&rsquo;s life easier&mdash;for a given process. If nothing else, think of the terminal as exactly that: a (high-level and vastly simplified) metaphor for the kernel&rsquo;s management of the underlying processes running on the machine.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-12T11:34:52-05:00" pubdate data-updated="true">Feb 12<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/hardware/'>Hardware</a>, <a class='category' href='/blog/categories/kernel/'>Kernel</a>, <a class='category' href='/blog/categories/low-level/'>Low-Level</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2014/02/12/terminally-bashing-the-kernel/" data-via="heychrisek" data-counturl="http://cek.io/blog/2014/02/12/terminally-bashing-the-kernel/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/04/then-and-now/" title="Previous Post: Then and Now">&laquo; Then and Now</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/02/28/on-blog-scheduling/" title="Next Post: On Blog Scheduling">On Blog Scheduling &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

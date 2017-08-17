@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Generating Rails in Broad Strokes - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="In the last couple days we&rsquo;ve moved from Sinatra to Rails as our Ruby framework. There are actually several Ruby frameworks, but we&rsquo;ve &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2014/03/13/generating-rails-in-broad-strokes">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Generating Rails in Broad Strokes</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-13T07:51:07-04:00" pubdate data-updated="true">Mar 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In the last couple days we&rsquo;ve moved from Sinatra to Rails as our Ruby framework. There are actually <a href="https://en.wikipedia.org/wiki/Comparison_of_web_application_frameworks#Ruby">several Ruby frameworks</a>, but we&rsquo;ve focused on Sinatra (as our small introductory framework) and now Rails.</p>
+
+<p>According to <a href="http://guides.rubyonrails.org/getting_started.html#what-is-rails-questionmark">the intro to the Ruby on Rails Guides</a>:
+<quote>Rails is a web application development framework written in the Ruby language. It is designed to make programming web applications easier by making assumptions about what every developer needs to get started. It allows you to write less code while accomplishing more than many other languages and frameworks. Experienced Rails developers also report that it makes web application development more fun.</quote></p>
+
+<p>&ldquo;Easier&rdquo;, &ldquo;assumptions&rdquo;, &ldquo;less code&rdquo;, &ldquo;more fun&rdquo;. How does Rails accomplish this? It mostly comes down to valuing convention over congifuration, equipping the programmer with a conventional setup rather than requiring him to configure it every time. One way Rails enables this is through generators.</p>
+
+<!--more-->
+
+
+
+
+<h2><code>rails generate</code></h2>
+
+
+<p><img src="/images/rails_generator.png"></p>
+
+<p>Using <code>rails generate</code> (or the aliased <code>rails g</code> command) gives developers access to a number of generators, which <a href="http://guides.rubyonrails.org/command_line.html#rails-generate">&ldquo;will save you a large amount of time by writing boilerplate code, code that is necessary for the app to work.&rdquo;</a> The list of Rails generators are depicted below (and can be accessed by simply running <code>rails g</code>), specifically in the &ldquo;Rails&rdquo; section of the options.</p>
+
+<p><img class="right" src="/images/migration.png" width="313" height="52">
+My main focus (for now) is on the following five generators, since they&rsquo;re the ones I&rsquo;ve already used in building basic MVC apps: controller, migration, model, resource, and scaffold. <img class="right" src="/images/scaffold.png" width="313" height="291">I want to sort out exactly what happens when each generator command is run. Quite simply, there&rsquo;s a big diference between running <code>rails g migration [migration name]</code> and <code>rails g scaffold [resource name]</code>, as you can tell by the images to the right. There&rsquo;s obviously a big difference there, between the broad strokes of <code>rails g scaffold</code> and the surgical addition of a single migration file with <code>rails g migration</code>. That difference boils down to a high-level generator vs. a low-level one.</p>
+
+<br>
+
+
+
+
+<h2>Why does this matter though?</h2>
+
+
+<p>As Avi told us, &ldquo;we always want to generate the least amount of code possible.&rdquo; He encouraged us to &ldquo;use the lowest level generator you can to get all your functionality&rdquo; because, the programmer should dictate the direction of the application, not be driven by the Rails framework.</p>
+
+<table width="400">
+  <tr>
+    <td><strong><code>rails g</code>  command</strong></td>
+    <td><strong>Number of files created</strong></td>
+  </tr>
+  <tr>
+    <td>Migration</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>Model</td>
+    <td>4</td>
+  </tr>
+  <tr>
+    <td>Controller</td>
+    <td>7</td>
+  </tr>
+  <tr>
+    <td>Resource</td>
+    <td>12</td>
+  </tr>
+  <tr>
+    <td>Scaffold</td>
+    <td>19</td>
+  </tr>
+</table>
+
+
+<br>
+
+
+<p>It&rsquo;s easy enough to play with the different Rails generators to see what they do, but&mdash;in the interest of minimizing the number of files and lines of code we create&mdash;this table lays out some really basic data.</p>
+
+<h2>A couple final comments</h2>
+
+
+<p>Each generator basically stubs out a given thing. For example, <code>rails g controller</code> stubs out a new controller and its view. Some of the other generators:</p>
+
+<ul>
+  <li><code>assets</code> stubs out placeholders for new assets (like JavaScript and CSS) in the app/assets directory.</li>
+  <li><code>generator</code> stubs out a new generator, which can <a href="http://guides.rubyonrails.org/generators.html">speed up workflow</a> by creating, for example, an initializer generator.</li>
+  <li><code>scaffold</code> scaffolds an entire resource, from model and migration to controller and views, along with a full test suite.</li>
+  <li><code>task</code> stubs out a new Rake task.</li>
+</ul>
+
+
+<p>All that aside, it&rsquo;s always really easy to figure it out&mdash;<code>rails g [generator]</code> will list the usage, options, description, and example of a given generator.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-13T07:51:07-04:00" pubdate data-updated="true">Mar 13<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2014/03/13/generating-rails-in-broad-strokes/" data-via="heychrisek" data-counturl="http://cek.io/blog/2014/03/13/generating-rails-in-broad-strokes/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/03/04/sinatra-what/" title="Previous Post: Sinatra What?">&laquo; Sinatra What?</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/03/19/im-a-rails-contributor/" title="Next Post: I'm a Rails Contributor!">I'm a Rails Contributor! &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

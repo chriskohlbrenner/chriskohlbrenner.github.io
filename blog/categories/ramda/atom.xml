@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ramda | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/ramda/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ramda.js Array Sorting (With Tiebreakers) Using R.comparator, Variadic R.either, and R.reduce]]></title>
+    <link href="http://cek.io/blog/2016/10/29/ramda-sort-tiebreakers-comparators-either/"/>
+    <updated>2016-10-29T12:50:14-04:00</updated>
+    <id>http://cek.io/blog/2016/10/29/ramda-sort-tiebreakers-comparators-either</id>
+    <content type="html"><![CDATA[<p>A recent exercise in data processing with <a href="http://ramdajs.com/">Ramda.js</a>: I wanted to sort an array of objects by their key/value pairs. More specifically, I wanted to sort an array that looked like this:</p>
+
+<p>``` javascript
+[</p>
+
+<pre><code>{
+    "code": "AUT",
+    "gold": 9,
+    "silver": 5,
+    "bronze": 7
+},
+{
+    "code": "USA",
+    "gold": 9,
+    "silver": 7,
+    "bronze": 10
+},
+{
+    "code": "EGY",
+    "gold": 2,
+    "silver": 3,
+    "bronze": 12
+}
+</code></pre>
+
+<p>]
+```</p>
+
+<p>A basic implementation is easy enough:</p>
+
+<p><code>javascript R.sortBy defaults to ascending order
+R.sortBy(R.prop('silver'), array);  // [{"code": "EGY", "silver": 3}, {"code": "AUT", "silver": 5}, {"code": "USA", "silver": 7}]
+</code></p>
+
+<p><code>R.sortBy</code> sorts according to a given function, in this case <code>R.prop</code> (where <code>'silver'</code> could be substituted for any other property).</p>
+
+<p>To ensure the order (ascending vs. descending), we can introduce <code>R.comparator</code>:</p>
+
+<p>``` javascript R.comparator enforces descending order, but &ldquo;AUT&rdquo; and &ldquo;USA&rdquo; tie
+const goldComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;gold&rsquo;, a), R.prop(&lsquo;gold&rsquo;, b)));
+R.sort(goldComparator, array);    //  [{&ldquo;code&rdquo;: &ldquo;AUT&rdquo;, &ldquo;gold&rdquo;: 9}, {&ldquo;code&rdquo;: &ldquo;USA&rdquo;, &ldquo;gold&rdquo;: 9}, {&ldquo;code&rdquo;: &ldquo;EGY&rdquo;, &ldquo;silver&rdquo;: 3}]</p>
+
+<p>```</p>
+
+<p>How can we handle tiebreakers? That is, as in the example abolve, what if two elements in the array have identical <code>gold</code> values and we attempt to sort by <code>gold</code> &mdash; which should be sorted first? We can ensure a deterministic result with predictable tiebreaks using comparators and <code>R.either</code>.</p>
+
+<p>``` javascript R.comparator enforces descending order and second R.comparator passed to R.either breaks ties
+const goldComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;gold&rsquo;, a), R.prop(&lsquo;gold&rsquo;, b)));
+const silverComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;silver&rsquo;, a), R.prop(&lsquo;silver&rsquo;, b)));</p>
+
+<p>R.sort(R.either(goldComparator, silverComparator), array);    // [{&ldquo;code&rdquo;: &ldquo;USA&rdquo;, &ldquo;gold&rdquo;: 9, &ldquo;silver&rdquo;: 7}, {&ldquo;code&rdquo;: &ldquo;AUT&rdquo;, &ldquo;gold&rdquo;: 9, &ldquo;silver&rdquo;: 5}, {&ldquo;code&rdquo;: &ldquo;EGY&rdquo;, &ldquo;gold&rdquo;: 2, &ldquo;silver&rdquo;: 3}]
+```</p>
+
+<p>Finally, what if we need more than one tiebreaker? How do we handle objects that have identical <code>gold</code> AND <code>silver</code> values? <code>R.either</code> expects two arguments, so the solution is to create a variadic implementation of <code>R.either</code>, one that will accept an unknown number of arguments, so we can pass tiebreaker comparators for all possible situations:</p>
+
+<p>``` javascript Addresses all edge cases: sort by gold; if gold ties sort by silver; if silver ties sort by bronze; if bronze ties sort by country code
+const variadicEither = (head, &hellip;tail) => R.reduce(R.either, head, tail);</p>
+
+<p>const goldComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;gold&rsquo;, a), R.prop(&lsquo;gold&rsquo;, b)));
+const silverComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;silver&rsquo;, a), R.prop(&lsquo;silver&rsquo;, b)));
+const bronzeComparator = R.comparator((a, b) => R.gt(R.prop(&lsquo;bronze&rsquo;, a), R.prop(&lsquo;bronze&rsquo;, b)));
+const codeComparator = R.comparator((a, b) => R.lt(R.prop(&lsquo;code&rsquo;, a), R.prop(&lsquo;code&rsquo;, b)));    // sorts alphabetically by country code</p>
+
+<p>R.sort(variadicEither([goldComparator, silverComparator, bronzeComparator, codeComparator]), array);
+```</p>
+
+<p>The crux of this solution is <code>variadicEither</code>, a <a href="https://en.wikipedia.org/wiki/Variadic_function">variadic</a> re-implementation of <code>R.either</code> that can accept a variable number of arguments. It uses <code>head</code> (first argument) and <code>...tail</code> (all remaining arguments) to reduce over all arguments and return a function that addresses all tiebreak possibilities. R.sort expects a comparator function, which <code>R.either</code> and <code>variadicEither</code> both return.</p>
+
+<p>Of course this solution still has a bit of boilerplate (repetition of <code>R.comparator(...)</code>). For a reusable <code>sortByProps</code> implementation that takes an array of props and a list, see <a href="https://github.com/ramda/ramda/wiki/Cookbook#sort-a-list-by-array-of-props-if-first-prop-equivalent-sort-by-second-etc">this Ramda.js recipe</a> that I recently added.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ramda's Once]]></title>
+    <link href="http://cek.io/blog/2015/07/14/once/"/>
+    <updated>2015-07-14T11:29:18-04:00</updated>
+    <id>http://cek.io/blog/2015/07/14/once</id>
+    <content type="html"><![CDATA[<p>Someone recently described to me that, in an interview, he was asked to implement a function that would only run once, even if invoked multiple times. This immediately made me think of <a href="http://ramdajs.com/">Ramda</a>&mdash;my go-to JavaScript library (think <a href="http://underscorejs.org/">Underscore</a> or <a href="https://lodash.com/">lodash</a>, but with a little more functional programming flavor)&mdash;and its <a href="http://ramdajs.com/docs/#once"><code>once</code> function</a>:</p>
+
+<p><img src="/images/ramda-once.png"></p>
+
+<!--more-->
+
+
+<p>Great, <code>once</code> &ldquo;accepts a function fn and returns a function that guards invocation of fn such that fn can only ever be called once, no matter how many times the returned function is invoked.&rdquo; Getting back to the original question (i.e., in an interview), this would be one kind of answer. It would show knowledge of the JavaScript ecosystem, some of its libraries (and <a href="http://fr.umio.us/why-ramda/">why to use them</a>), and how to apply it to a specific problem.</p>
+
+<p>That said, let&rsquo;s go deeper&mdash;how would we implement <code>once</code> from scratch? Since Ramda&rsquo;s implementation worked so well for us, let&rsquo;s look no further than Ramda. <a href="https://github.com/ramda/ramda/blob/master/src/once.js">Looking at the source</a>, it&rsquo;s relatively straightforward to see what&rsquo;s going on:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (once.js)</span> <a href='/downloads/code/ramda/once.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">_curry1</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./internal/_curry1&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">_curry1</span><span class="p">(</span><span class="kd">function</span> <span class="nx">once</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">called</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">called</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="nx">called</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">result</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Let&rsquo;s ignore <code>_curry1</code> for now (though we&rsquo;ll get to it), and rewrite as follows:</p>
+
+<p><img src="/images/ramda-once-2.png"></p>
+
+<p>And there we have it! So what&rsquo;s actually happening here? The first several lines are simple: we declare the variables <code>called</code> (initialized to <code>false</code>) and <code>result</code>, return <code>result</code> if <code>called</code> is true, otherwise set <code>called</code> to true and then assign <code>result = fn.apply(this, arguments);</code>.</p>
+
+<p>What is that line doing? It&rsquo;s using <code>apply()</code>, which <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply">&ldquo;calls a function with a given this value and arguments provided as an array&rdquo;</a>. It&rsquo;s a way of dealing with scope, making sure we pass the right value of <code>this</code> to <code>fn</code>. In our example above (<code>console.log...</code>), this isn&rsquo;t an issue, so we could plausibly replace the line in question with <code>result = fn(arguments);</code>.</p>
+
+<p>It is an issue, however, when scope and <code>this</code> matter. For example, using Ramda&rsquo;s example of wrapping an <code>addOne</code> function (<code>var addOneOnce = R.once(function(x){ return x + 1; });</code>) using <code>once</code>, we can see that not using <code>apply()</code> (left) breaks the adding behavior, but it works when using <code>apply()</code> (right).</p>
+
+<p><img src="/images/ramda-apply-no-apply.png"></p>
+
+<p>This occurs (on the left) because without passing the correct value for <code>this</code>, <code>x</code> in the <code>addOne</code> function becomes <code>"[object Arguments]"</code>, which, when 1 is added, becomes <code>"[object Arguments]1"</code>. On the other hand (on the right), given the correct value for <code>this</code>, <code>x</code> becomes 10 (or whatever argument we pass) and the result is correct.</p>
+
+<p>And that about concludes this post, with one open question remaining: currying? Ramda&rsquo;s implementation of <code>once</code> uses <code>curry1</code>, in keeping with its API (functions first, data last) and functional style. Currying is just a way of turning a function that expects n parameters into one that, when supplied less than n parameters, returns a new function awaiting the remaining parameters. It&rsquo;s a handy way that Ramda enables us to build functions, pass those functions around as first-class objects, and call when ready. Back to our <code>once</code> examples, currying is what&rsquo;s happening when we call <code>once(addOne)</code> and see <code>function anonymous()</code>. <code>once(addOne)</code> expects one more parameter, so we call <code>once(addOne)(10)</code> and get 11.</p>
+
+<h3>Resources</h3>
+
+
+<p><a href="http://fr.umio.us/why-ramda/">Why Ramda?</a><br>
+<a href="http://fr.umio.us/favoring-curry/">Favoring Curry</a><br></p>
+]]></content>
+  </entry>
+  
+</feed>

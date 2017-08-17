@@ -1,0 +1,5 @@
+/* and this still works, without even needing to `@import "../theme/colors";` */
+.my-special-component {
+  background-color: var(--white);
+  color: var(--red);
+}

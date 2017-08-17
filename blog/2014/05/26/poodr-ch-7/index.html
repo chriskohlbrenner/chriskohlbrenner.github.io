@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Roles, Modules, and Mix-Ins in Ruby (POODR: Chapter 7) - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="I am working my way through programming-related reading, currently with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2014/05/26/poodr-ch-7">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Roles, Modules, and Mix-Ins in Ruby (POODR: Chapter 7)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-26T11:52:50-04:00" pubdate data-updated="true">May 26<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>I am working my way through programming-related reading, currently with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
+
+<p><strong>Summary</strong>: When multiple objects play a common role, modules allow objects to share behavior. Ruby does not support multiple inheritance directly, but does so through mixins, or classes mixed with modules. The <a href="/blog/2014/05/26/poodr-ch-7#code">Memorial Day example below</a> illustrates modules and mixins.</p>
+
+<hr />
+
+<br>
+
+
+<p>Remember the strategy of sharing behavior through classical inheritance, which I discussed in <a href="/blog/2014/05/06/poodr-ch-6/">this post</a>? It turns out there&rsquo;s a problem: inheritance cannot combine two existing subclasses. For that, we need to understand roles and modules.</p>
+
+<h5>Quick test</h5>
+
+
+<p>How many types of methods can an object respond to in Ruby? That is, in how many different ways can methods be implemented?</p>
+
+<h5>Answer (read on)</h5>
+
+
+<!--more-->
+
+
+<p>Four. An object can respond to the following messages:</p>
+
+<ol>
+<li>Those it implements.</li>
+<li>Those implemented in all objects above it in the hierarchy.</li>
+<li>Those implemented in any module that has been added to it.</li>
+<li>Those implemented in all modules added to any object above it in the hierarchy.</li>
+</ol>
+
+
+<p>Modules add two of the four kinds of messages that objects can respond to in Ruby. Kind of a big deal. They enable objects to share roles.</p>
+
+<h3>Roles</h3>
+
+
+<blockquote><p>Some problems require <strong>sharing behavior among otherwise unrelated objects</strong>. This common behavior is orthogonal to class; it’s <strong>a role an object plays</strong>. [&#8230;] When formerly unrelated objects begin to play a common role, they enter into a relationship with the objects for whom they play the role. These relationships are not as visible as those created by the subclass/superclass requirements of classical inheritance but they exist nonetheless.</p></blockquote>
+
+
+<p>Furthermore, Metz writes:</p>
+
+<blockquote><p>When a role needs shared behavior you’re faced with <strong>the problem of organizing the shared code</strong>. [&#8230;] Many object-oriented languages provide a way to define a named group of methods that are independent of class and can be mixed in to any object. <strong>In Ruby, these mix-ins are called modules</strong>. Methods can be defined in a module and then the module can be added to any object. Modules thus provide a perfect way to <strong>allow objects of different classes to play a common role using a single set of code.</strong>&#8221;</p><footer><strong>Sandi Metz</strong> <cite><a href='http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330'>Practical Object-Oriented Design in Ruby (142-143)</a></cite></footer></blockquote>
+
+
+
+
+<h3>Inheritable Code</h3>
+
+
+<p>The whole point of modules is to enable us to write good code. But Metz warns:</p>
+
+<blockquote><p>&#8230;you are equipped to write some truly frightening code. Imagine the possibilities. You can write modules that include other modules. You can write modules that override the methods defined in other modules. You can create deeply nested class inheritance hierarchies and then include these various modules at different levels of the hierarchy. You can write code that is impossible to understand, debug, or extend.</p><footer><strong>Sandi Metz</strong> <cite><a href='http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330'>Practical Object-Oriented Design in Ruby (158)</a></cite></footer></blockquote>
+
+
+<p>She follows this warning, however, by saying &ldquo;this very same power is what allows you to create simple structures of related objects
+that elegantly fulfill the needs of your application, your task is not to avoid these
+techniques but to learn to use them for the right reasons, in the right places, in the
+correct way.&rdquo; The first step in this direction, Metz argues, is to write properly inheritable code.</p>
+
+<p>A few practical object-oriented design tips for writing and maintaining inheritance hierarchies and modules:</p>
+
+<ul>
+  <li>
+      <strong>&#8220;Recognize the Antipatterns&#8221;</strong>: if using variables like <code>type</code> or <code>category</code>, look to classical inheritance. If checking the class of receiving objects to determine which message to send, duck typing.
+  </li>
+  <li>
+      <strong>&#8220;Insist on the Abstraction&#8221;</strong>: all code in an abstract superclass should apply to every class that inherits it.
+  </li>
+  <li>
+      <strong>&#8220;Honor the Contract&#8221;</strong>: subclasses agree to a contract, promising to be substitutable for their superclasses. Maintain that substitutability.
+  </li>
+  <li>
+      <strong>&#8220;Use the Template Method Pattern&#8221;</strong>: separate the abstract from the concrete.
+  </li>
+  <li>
+      <strong>&#8220;Preemptively Decouple Classes&#8221;</strong>: avoid writing code that requires its inheritors to send super; instead use hook messages.
+  </li>
+  <li>
+      <strong>&#8220;Create Shallow Hierarchies&#8221;</strong>: The shallower and narrower, the better.
+      <img class="center" src="/images/poodr/shallow-hierarchies.png">
+  </li>
+</ul>
+
+
+
+
+<h3 id="code">Code Example</h3>
+
+
+<p>Being Memorial Day and all, a simple example of modules and mix-ins, in which the <code>MemorialDay</code> class mixes in both the <code>May</code> and <code>Holiday</code> modules.</p>
+
+<p>This code allows an instance of <code>MemorialDay</code> to call (1) methods that have been implemented in the <code>MemorialDay</code> class itself, (2) methods implemented in all objects above it in the hierarchy (in this case, <code>Object</code>), and (3) methods implemented in any module that has been added, namely <code>May</code> and <code>Holiday</code>.</p>
+
+<p><strong>Note</strong>: there is a difference between <code>include</code> and <code>extend</code> when mixing in modules&mdash;<code>include</code> is for instance methods, <code>extend</code> for class methods.</p>
+
+<figure class='code'><figcaption><span> (may.rb)</span> <a href='/downloads/code/modules-mixins-poodr/may.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">module</span> <span class="nn">May</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">mondays</span>
+</span><span class='line'>    <span class="c1"># Array of all Mondays in May</span>
+</span><span class='line'>        <span class="o">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">26</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">month_of_year</span>
+</span><span class='line'>        <span class="mi">5</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span> (holiday.rb)</span> <a href='/downloads/code/modules-mixins-poodr/holiday.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">module</span> <span class="nn">Holiday</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">cause</span>
+</span><span class='line'>        <span class="k">case</span> <span class="nb">name</span>
+</span><span class='line'>        <span class="k">when</span> <span class="s2">&quot;Memorial Day&quot;</span>
+</span><span class='line'>            <span class="s2">&quot;remembering the men and women who died while serving in the country&#39;s armed forces&quot;</span>
+</span><span class='line'>        <span class="k">when</span> <span class="s2">&quot;Thanksgiving&quot;</span>
+</span><span class='line'>            <span class="s2">&quot;giving thanks for the blessing of the harvest and of the preceding year&quot;</span>
+</span><span class='line'>        <span class="c1"># ...</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span> (memorial_day.rb)</span> <a href='/downloads/code/modules-mixins-poodr/memorial_day.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">MemorialDay</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">May</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">Holiday</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">name</span>
+</span><span class='line'>        <span class="s2">&quot;Memorial Day&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Memorial Day always occurs on the last Monday in May</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">day_of</span>
+</span><span class='line'>      <span class="n">mondays</span><span class="o">.</span><span class="n">last</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">date</span>
+</span><span class='line'>        <span class="no">Date</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">month_of_year</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">day_of</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img class="center" src="/images/poodr/memorial_day_irb.png"></p>
+
+<p>Happy Memorial Day!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-26T11:52:50-04:00" pubdate data-updated="true">May 26<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/books/'>Books</a>, <a class='category' href='/blog/categories/inheritance/'>Inheritance</a>, <a class='category' href='/blog/categories/modules/'>Modules</a>, <a class='category' href='/blog/categories/poodr/'>POODR</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2014/05/26/poodr-ch-7/" data-via="heychrisek" data-counturl="http://cek.io/blog/2014/05/26/poodr-ch-7/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/05/21/dirty-checking/" title="Previous Post: Dirty Checking of Callbacks in Rails">&laquo; Dirty Checking of Callbacks in Rails</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/05/27/poodr-ch-8/" title="Next Post: 'Cheerful, Detached, and Merciless': Composition and Code Arrangement in Ruby (POODR: Chapter 8)">'Cheerful, Detached, and Merciless': Composition and Code Arrangement in Ruby (POODR: Chapter 8) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

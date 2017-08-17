@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Dirty_Checking | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/dirty-checking/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Dirty Checking of Callbacks in Rails]]></title>
+    <link href="http://cek.io/blog/2014/05/21/dirty-checking/"/>
+    <updated>2014-05-21T14:30:19-04:00</updated>
+    <id>http://cek.io/blog/2014/05/21/dirty-checking</id>
+    <content type="html"><![CDATA[<p><strong>Summary</strong>: Dirty checking is a way of tracking changes by checking a variable&rsquo;s value against what that variable&rsquo;s value was. The Ruby on Rails <code>ActiveModel::Dirty</code> module enables dirty checking. This is useful for running ActiveRecord callbacks only when an attribute of an active model has changed.</p>
+
+<hr />
+
+<br>
+
+
+<p>I first heard the phrase &ldquo;dirty checking&rdquo; only recently, as I began exploring front end frameworks. Dirty checking is inherent to frameworks like Angular JS, in which a listener asynchronously checks its value against its previous value (thus knowing if something has changed and needs to be re-rendered).</p>
+
+<p>Little did I know that dirty checking is possible (and valuable) in Ruby as well.</p>
+
+<!--more-->
+
+
+
+
+<h3>Background</h3>
+
+
+<p>(To skip the background context and jump straight to the technical explanation, click <a href="http://cek.io/blog/2014/05/21/dirty-checking#code">here</a>).<br>
+In a recent pairing session, I was asked to implement a feature for a Q&amp;A polling application. Imagine the application depicted below:</p>
+
+<p><img class="center" src="/images/dirty_checking/q_and_a_img.png"></p>
+
+<p>Now imagine yourself on the flip side, not as a user answering a poll, but as an admin at the portal implementing a poll, creating new questions, and populating prospective choices. This was the context for my challenge.</p>
+
+<p>The challenge broke down into two parts:
+<img class="right" src="/images/dirty_checking/rand-spec-answer.png"></p>
+
+<ol>
+  <li>
+    <strong>Front end</strong>: Add a couple options, in addition to populating the required choices with text.
+    <ul>
+      <li>A 'randomize' checkbox, which would mix up the order in which choices displayed.</li>
+      <li>A 'special choices' option, which could either be 'Other' or 'None of the Above'.</li>
+    </ul>
+  </li>
+  <li><strong>Back end</strong>: Reflect any changes by persisting to the database.</li>
+</ol>
+
+
+<p>The front end feature was straightforward enough: add a checkbox option for randomization, and a radio button. Something as simple as the above right.</p>
+
+<h3 id="code">Code Example</h3>
+
+
+<p>Imagine the class below. In creating an answer as an administrator, we create an answer object with multiple choices (take my word for it that there was a lot more going on than this):
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (answer_choices.rb)</span> <a href='/downloads/code/dirty_checking/answer_choices.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Answer</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:choices</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">Mongoid</span><span class="p">:</span><span class="ss">:Document</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>We need to add an attribute for <code>:special_answer</code>&mdash;easy enough. But how do we ensure that our new <code>special_answer</code> becomes an element in the array of our answer object&rsquo;s <code>choices</code>? A simple append method. And how do we ensure things are saved as necessary? A simple callback: <code>before_save :add_special_answer</code>.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (answer_choices_2.rb)</span> <a href='/downloads/code/dirty_checking/answer_choices_2.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Answer</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:choices</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:special_answer</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">Mongoid</span><span class="p">:</span><span class="ss">:Document</span>
+</span><span class='line'>  <span class="n">embeds_many</span> <span class="ss">:special_answers</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">before_save</span> <span class="ss">:add_special_answer_to_choices</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">add_special_answer_to_choices</span>
+</span><span class='line'>    <span class="n">choices</span> <span class="o">&lt;&lt;</span> <span class="n">special_answer</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>One problem:each time we change the special answer, we&rsquo;ll get an additional answer.
+<img class="center" src="/images/dirty_checking/answer_irb.png"></p>
+
+<p>There should only ever be one special answer, so we need the new special answer to replace the previous one rather than continuing to add additional ones. And that&rsquo;s a job that dirty checking can handle.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (answer_choices_3.rb)</span> <a href='/downloads/code/dirty_checking/answer_choices_3.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Answer</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:choices</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:special_answer</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">ActiveModel</span><span class="p">:</span><span class="ss">:Dirty</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">Mongoid</span><span class="p">:</span><span class="ss">:Document</span>
+</span><span class='line'>  <span class="n">embeds_many</span> <span class="ss">:special_answers</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">before_save</span> <span class="ss">:add_special_answer_to_choices</span><span class="p">,</span> <span class="k">if</span><span class="p">:</span> <span class="n">special_answer_changed?</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">add_special_answer_to_choices</span>
+</span><span class='line'>    <span class="n">choices</span> <span class="o">&lt;&lt;</span> <span class="n">special_answer</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The difference here? That simple <code>if: special_answer_changed?</code> following the callback, as well as <code>  include ActiveModel::Dirty</code>. The <a href="http://api.rubyonrails.org/classes/ActiveModel/Dirty.html">ActiveModel::Dirty module</a> gives us a few key methods, most notable <code>changed?</code>. As the code above illustrates, we can make the callback conditional by dirty checking whether the <code>special_answer</code> attribute has changed.</p>
+
+<h3>ActiveModel::Dirty</h3>
+
+
+<p>You can view the module&rsquo;s documentation in its entirety <a href="http://api.rubyonrails.org/classes/ActiveModel/Dirty.html">here</a>. By its own definition, it &ldquo;Provides a way to track changes in your object in the same way as Active Record does.&rdquo; This way of tracking changes is helpful to us in this case&mdash;performing a callback only if the attribute has changed&mdash;and likely has applications in many other situations.</p>
+
+<h5>Resources</h5>
+
+
+<ul>
+  <li><a href="http://api.rubyonrails.org/classes/ActiveModel/Dirty.html">ActiveModel::Dirty documentation</a></li>
+  <li><a href="http://craftingruby.com/posts/2014/01/13/callbacks-and-dirty-objects-in-rails.html">This blog post</a> explains dirty checking of Rails callbacks similarly.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

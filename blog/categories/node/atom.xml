@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Node | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/node/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[JavaScript Frameworks: On Node.js, Express, AngularJS, and SockJS]]></title>
+    <link href="http://cek.io/blog/2014/05/28/chat-express-node/"/>
+    <updated>2014-05-28T12:55:45-04:00</updated>
+    <id>http://cek.io/blog/2014/05/28/chat-express-node</id>
+    <content type="html"><![CDATA[<p>Having confidence in one web development framework, Ruby on Rails, I&rsquo;ve recently set out to better understand some other established frameworks, particularly JavaScript frameworks. It was difficult to know where to focus my efforts<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>, and I eventually decided to learn by doing. I ended up with <a href="http://node-express-chat.herokuapp.com/">ExpressChat</a>, a simple real-time chat application built using Node.js, Express, AngularJS, and SockJS.</p>
+
+<p><img class="center" src="/images/node-chat-express/chat-express-screenshot.png"></p>
+
+<!--more-->
+
+
+
+
+<h3>The Technologies</h3>
+
+
+<h4>Node.js</h4>
+
+
+<p><u>From the documentation</u>: &ldquo;<a href="http://nodejs.org/">Node.js</a> a platform built on Chrome&rsquo;s JavaScript runtime for easily building fast, scalable network applications. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.&rdquo;</p>
+
+<p><u>Translated</u>: Two key features:<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></p>
+
+<ul>
+<li>&ldquo;Event-driven&rdquo;: in contrast to a &lsquo;thread-based&rsquo; model, the web server accepts the request, spins it off to be handled, and then goes on to service the next web request. This is faster than the traditional thread-based model of web apps, which holds a connection open until it has performed the request and/or whatever other transaction was sent.</li>
+<li>&ldquo;Non-blocking&rdquo;: see &ldquo;event-driven. Because the web server is always accepting requests instead of waiting for read or write operations, it is a non-blocking I/O (input/output). That&rsquo;s faster.<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup></li>
+</ul>
+
+
+<h4>Express</h4>
+
+
+<p><u>From the documentation</u>: &ldquo;<a href="http://expressjs.com/">Express</a> is a minimal and flexible node.js web application framework, providing a robust set of features for building single and multi-page, and hybrid web applications.&rdquo;</p>
+
+<p><u>Translated</u>: Express is a Sinatra-inspired (a comparison to a Ruby framework helps make sense of it) web development framework for node.js. It makes building web apps with Node faster and easier.</p>
+
+<h4>AngularJS</h4>
+
+
+<p><u>From the documentation</u>: &ldquo;<a href="http://angularjs.org/">AngularJS</a> is a structural framework for dynamic web apps. It lets you use HTML as your template language and lets you extend HTML&rsquo;s syntax to express your application&rsquo;s components clearly and succinctly. Angular&rsquo;s data binding and dependency injection eliminate much of the code you currently have to write. And it all happens within the browser, making it an ideal partner with any server technology.&rdquo;</p>
+
+<p><u>Translated</u>: Extend HTML&rsquo;s syntax (Angular is a front end framework) with data binding (it easily and quickly connects the front end interface to the back end database and logic)<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup> and dependency injection (it makes it easy to pass dependency components to other components).</p>
+
+<h4>SockJS</h4>
+
+
+<p><u>From the documentation</u>: &ldquo;<a href="http://sockjs.org">SockJS</a> is a browser JavaScript library that provides a WebSocket-like object. SockJS gives you a coherent, cross-browser, Javascript API which creates a low latency, full duplex, cross-domain communication channel between the browser and the web server.&rdquo;</p>
+
+<p>[WebSockets: &ldquo;WebSockets represent a standard for bi-directional realtime communication between servers and clients&rdquo;<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>]</p>
+
+<p><u>Translated</u>: WebSockets mean servers/clients can communicate really quickly. As in, in real time. SockJS enables WebSockets or, if that fails, uses other protocols and abstractions to simulate WebSockets. It is one of many WebSocket implementations.<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup></p>
+
+<h3>ExpressChat</h3>
+
+
+<p>Inspired by others who have built simple proof-of-concept apps with the above technologies,<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup> I set out to do the same.</p>
+
+<p>It&rsquo;s easy enough to get started. Once you have <a href="http://nodejs.org/download/">Node downloaded</a>, you can install a lot modules with the <code>npm</code> command. <code>npm install -g express-generator</code>, for example, installs the Express generator, after which <code>express app-name</code> will generate an Express app. A key file that will be generated is <code>package.json</code>. Mine looks like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (package.json)</span> <a href='/downloads/code/node-express-chat/package.json'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Simple-Chat&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;private&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;node app.js&quot;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;express&quot;</span><span class="p">:</span> <span class="s2">&quot;3.4.8&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;sockjs&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;ejs&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+Straightforward enough. It describes some attributes of the application, as well as its dependencies. I added SockJS as a dependency; EJS is embedded JavaScript, the templating language I used. After adding dependencies, <code>npm install</code> is all that&rsquo;s needed to install those dependencies (basically Ruby&rsquo;s Bundler for Node).</p>
+
+<p>Beyond that, most of the code is in app.js. There&rsquo;s a lot more going on to connect SockJS and the front end rendering with Angular (full code on <a href="http://github.com/chriskohlbrenner/express-chat">Github</a>), but getting a basic app up and running is very simple. In fact, the 9 lines of code below (which can be refactored to as little as 4 or less)<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup> are all you need for a Node app (this example does not use Express).</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (node_app.js)</span> <a href='/downloads/code/node-express-chat/node_app.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">handleRequest</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span> <span class="s1">&#39;content-type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">});</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s1">&#39;Hello World!&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">,</span> <span class="nx">handleRequest</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This only scratches the surface of how Node works, and I hardly touched on how the other technologies showed up in my code, but it&rsquo;s proof of how powerful Node and Angular can be. I&rsquo;m looking forward to putting more time into these and other JavaScript frameworks.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>A couple resources I found helpful as I read up on JavaScript frameworks: <a href="http://blog.stevensanderson.com/2012/08/01/rich-javascript-applications-the-seven-frameworks-throne-of-js-2012/">&ldquo;Rich JavaScript Applications – the Seven Frameworks&rdquo; and <a href="http://readwrite.com/2014/02/06/angular-backbone-ember-best-javascript-framework-for-you#awesm=~oFANeijJRQC7c3">Angular, Ember, And Backbone: Which JavaScript Framework Is Right For You?</a>. Beyond that, I&rsquo;ve found that reading (at least skimming) each framework&rsquo;s documentation has been helpful.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p><a href="http://toptal.com/nodejs/why-the-hell-would-i-use-node-js">This post</a> was also helpful in explaining &ldquo;why the hell&rdquo; you might use Node.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p><a href="http://code.danyork.com/2011/01/25/node-js-doctors-offices-and-fast-food-restaurants-understanding-event-driven-programming/">Helpful analogies</a> about event-driven programming.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>AngularJS explains one-way and two-way data binding <a href="https://docs.angularjs.org/guide/databinding">here</a>.<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p><a href="http://pusher.com/websockets">WebSockets explained</a>.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<li id="fn:6">
+<p><a href="http://medium.com/node-js-javascript/b63bfca0539">Here are a few others</a>.<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
+<li id="fn:7">
+<p>A couple good ones: <a href="http://codesquire.com/post/NodeSockAngularChat">Chat Application with Express, SockJS and Angular</a>, <a href="http://gilesthomas.com/2013/02/a-super-simple-chat-app-with-angularjs-sockjs-and-node-js/">A super-simple chat app with AngularJS, SockJS and node.js</a>.<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
+<li id="fn:8">
+<p>As introduced <a href="http://nodetuts.com/01-node_intro.html">here</a>.<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

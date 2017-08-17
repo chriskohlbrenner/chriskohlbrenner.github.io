@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: CRUD | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/crud/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Translating Verbs: CRUD, SQL, and HTTP]]></title>
+    <link href="http://cek.io/blog/2014/06/20/crud-sql-http-translation/"/>
+    <updated>2014-06-20T17:12:40-04:00</updated>
+    <id>http://cek.io/blog/2014/06/20/crud-sql-http-translation</id>
+    <content type="html"><![CDATA[<p>Recently I was asked two interview questions about basic CRUD functions, specifically (1) how they correspond to HTTP verbs and (2) how to perform those actions on the database side with SQL statements.</p>
+
+<p>I was able to list the HTTP verbs relatively quickly. I&rsquo;ve built enough simple CRUD applications in Rails to know <a href="http://guides.rubyonrails.org/routing.html#crud-verbs-and-actions">the CRUD operations as they relate to creating, reading, updating, or deleting database records</a>.</p>
+
+<p>On the other hand, it took me a second to recall the SQL statements. Crud. I remember hearing at Flatiron that a shortcoming of many junior developer candidates is SQL, that they don&rsquo;t know to retrieve a record with <code>SELECT expression FROM table WHERE conditions;</code>.</p>
+
+<p>I remember thinking &ldquo;I know my SQL&mdash;I&rsquo;ll never run into such a problem.&rdquo; Well, I almost did! It&rsquo;s amazing how easy it is to forget even the most basic syntax when you don&rsquo;t use it. So I&rsquo;ll be sure to commit the following table to memory:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th> CRUD            </th>
+<th> SQL         </th>
+<th> HTTP         </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td> Create          </td>
+<td> INSERT      </td>
+<td> Put/Post</td>
+</tr>
+<tr>
+<td></td>
+<td> Read (Retrieve) </td>
+<td> SELECT      </td>
+<td> Get</td>
+</tr>
+<tr>
+<td></td>
+<td> Update (Modify) </td>
+<td> UPDATE      </td>
+<td> Put/Patch</td>
+</tr>
+<tr>
+<td></td>
+<td> Delete (Destroy)</td>
+<td> DELETE      </td>
+<td> Delete</td>
+</tr>
+</tbody>
+</table>
+
+]]></content>
+  </entry>
+  
+</feed>

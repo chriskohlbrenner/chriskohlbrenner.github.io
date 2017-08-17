@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Inflector | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/inflector/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Bending Strings With ActiveSupport::Inflector]]></title>
+    <link href="http://cek.io/blog/2014/05/18/active-support-inflectors/"/>
+    <updated>2014-05-18T15:32:15-04:00</updated>
+    <id>http://cek.io/blog/2014/05/18/active-support-inflectors</id>
+    <content type="html"><![CDATA[<p>Ever run into issues with strings? Problems like converting CamelCase to snake_case, pluralizing words, or making integers into ordinals? Inflectors give us an easy solution.</p>
+
+<p><a href="http://dictionary.reference.com/browse/inflection"><img class="center" src="/images/inflection_definition.png"></a></p>
+
+<p>An &lsquo;inflector&rsquo; is anything that applies &lsquo;inflection&rsquo;, from Latin for &lsquo;bending&rsquo;, meaning that it can bend strings. Conveniently, Rails provides a number of inflectors in the ActiveSupport::Inflector module. The entire ActiveSupport component to Rails is handy; <a href="http://guides.rubyonrails.org/active_support_core_extensions.html">this RailsGuide</a> is worth a read. That said, this post is a quick primer on the inflector methods in Rails.</p>
+
+<!--more-->
+
+
+
+
+<h3>Set-up</h3>
+
+
+<p>Because ActiveSupport is a Ruby on Rails component, the ActiveSupport::Inflector will be available by default in Rails applications.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+
+<p>To use it outside a Rails app (in irb, for example), run: <code>require &lsquo;active_support/inflector&rsquo;</code>. It&rsquo;s that simple.</p>
+
+<h3>Examples</h3>
+
+
+
+
+<h5>Pluralize and Singularize</h5>
+
+
+<p>These two methods, inverses of each other, adjust the pluralization of nouns.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (pluralize_singularize.rb)</span> <a href='/downloads/code/inflectors/pluralize_singularize.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="s2">&quot;blog&quot;</span><span class="o">.</span><span class="n">pluralize</span>      <span class="c1">#=&gt; &quot;blogs&quot;</span>
+</span><span class='line'><span class="s2">&quot;ruby&quot;</span><span class="o">.</span><span class="n">pluralize</span>      <span class="c1">#=&gt; &quot;rubies&quot;</span>
+</span><span class='line'><span class="s2">&quot;sheep&quot;</span><span class="o">.</span><span class="n">pluralize</span>     <span class="c1">#=&gt; &quot;sheep&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&quot;blog&quot;</span><span class="o">.</span><span class="n">pluralize</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>   <span class="c1">#=&gt; &quot;blogs&quot;</span>
+</span><span class='line'><span class="s2">&quot;blog&quot;</span><span class="o">.</span><span class="n">pluralize</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="c1">#=&gt; &quot;blog&quot;</span>
+</span><span class='line'><span class="s2">&quot;ruby&quot;</span><span class="o">.</span><span class="n">pluralize</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>   <span class="c1">#=&gt; &quot;rubies&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&quot;blogs&quot;</span><span class="o">.</span><span class="n">singularize</span>   <span class="c1">#=&gt; &quot;blogs&quot;</span>
+</span><span class='line'><span class="s2">&quot;rubies&quot;</span><span class="o">.</span><span class="n">singularize</span>  <span class="c1">#=&gt; &quot;ruby&quot;</span>
+</span><span class='line'><span class="s2">&quot;sheep&quot;</span><span class="o">.</span><span class="n">singularize</span>   <span class="c1">#=&gt; &quot;sheep&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>Note</strong>: <code>pluralize</code> can be passed an integer as an optional argument, which pluralizes the string unless the argument is 1.</p>
+
+<h5>Camelize and Underscore</h5>
+
+
+<p>Another set of two inverses, <code>camelize</code> and <code>underscore</code> assist in formatting strings (names of methods vs. classes, for example).</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (camelize_underscore.rb)</span> <a href='/downloads/code/inflectors/camelize_underscore.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="s2">&quot;chris_kohlbrenner_blog&quot;</span><span class="o">.</span><span class="n">camelize</span>    <span class="c1">#=&gt; &quot;ChrisKohlbrennerBlog&quot;</span>
+</span><span class='line'><span class="s2">&quot;blog&quot;</span><span class="o">.</span><span class="n">camelize</span>                      <span class="c1">#=&gt; &quot;Blog&quot;</span>
+</span><span class='line'><span class="s2">&quot;a_new_blog_post&quot;</span><span class="o">.</span><span class="n">camelize</span>           <span class="c1">#=&gt; &quot;aNewBlogPost&quot; </span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&quot;ChrisKohlbrennerBlog&quot;</span><span class="o">.</span><span class="n">underscore</span>    <span class="c1">#=&gt; &quot;chris_kohlbrenner_blog&quot;</span>
+</span><span class='line'><span class="s2">&quot;Blog&quot;</span><span class="o">.</span><span class="n">underscore</span>                    <span class="c1">#=&gt; &quot;blog&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>Note</strong>: <code>camelize</code> can be passed the optional argument <code>:lower</code> to make the first letter lowercase.</p>
+
+<h5>Assorted others</h5>
+
+
+<p>There are a lot of other helpful inflector methods, all of which are detailed in Rails documentation. A quick definition of the others:<ul>
+<li><code>titleize</code>: capitalizes each word of the receiver string.</li>
+<li><code>dasherize</code>: replaces underscores with dashes.</li>
+<li><code>demodulize</code>: given a qualified constant name (<code>&ldquo;ActiveSupport::Inflector&rdquo;</code>), it returns the constant name, the rightmost part (<code>&ldquo;Inflector&rdquo;</code>).</li>
+<li><code>deconstantize</code>: like <code>demodulize</code>, but <strong>removes</strong> the righmost part (i.e., <code>&ldquo;ActiveSupport::Inflector&rdquo;</code> to <code>&ldquo;ActiveSupport&rdquo;</code>.</li>
+<li><code>constantize</code>: resolves the constant reference, or raises <code>NameError</code> if no such constant has been initialized.</li>
+<li><code>parameterize</code>: normalizes the receiver for use in urls.</li>
+<li><code>tableize</code>: <code>underscore</code> followed by </code>pluralize</code>, for use in naming tables.</li>
+<li><code>classify</code>: inverse of <code>tableize</code>, returns singularized and camelized.</li>
+<li><code>humanize</code>: replaces underscores with spaces, removes &ldquo;_id&rdquo; suffixes, and capitalizes first word.</li>
+<li><code>foreign_key</code>: gives a foreign key column name from a class name.</li>
+</ul></p>
+
+<p>Hopefully this was helpful, if for no other reason than a quick reference or refresher on inflectors and/or to point you towards the ActiveSupport <a href="http://guides.rubyonrails.org/active_support_core_extensions.html">guide</a> and <a href="https://github.com/rails/rails/blob/26698fb91d88dca0f860adcb80528d8d3f0f6285/activesupport/lib/active_support/inflector/methods.rb#L111">key inflector methods</a>.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p><a href="http://guides.rubyonrails.org/active_support_core_extensions.html#active-support-within-a-ruby-on-rails-application">The exception</a> to this default is when <code>config.active_support.bare</code> is set to true in a Rails application.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: SQL | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/sql/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Knexfile Configuration for Heroku Deployment]]></title>
+    <link href="http://cek.io/blog/2016/10/24/knex-configuration-heroku/"/>
+    <updated>2016-10-24T09:29:50-04:00</updated>
+    <id>http://cek.io/blog/2016/10/24/knex-configuration-heroku</id>
+    <content type="html"><![CDATA[<p>I recently deployed a simple Express server to Heroku. The project used <a href="http://knexjs.org/">Knex.js</a> for SQL queries and database migrations.</p>
+
+<p>While deploying, I ran into some issues with my knexfile. That is, I was able to create the database using the Heroku CLI, but running the migrations and configuring the database connection took a bit of finessing.</p>
+
+<p>Long story short, two parts:</p>
+
+<h3>1. Database URL (Connection)</h3>
+
+
+<p>Find your database url. Using Heroku CLI, running <code>heroku config</code> (or <code>heroku config --app [app name]</code>) will return something like the following:</p>
+
+<p><code>
+cek app $ heroku config
+=== app Config Vars
+DATABASE_URL: postgres://asdghjlkjh:sadv09787-vnbmvliHJV@ec7-23-123-986-12.compute-1.amazonaws.com:5432/asfhlkjh1234
+</code></p>
+
+<p>Copy and paste the DATABASE_URL as your Knexfile&rsquo;s <code>connection</code> value.</p>
+
+<h3>2. SSL</h3>
+
+
+<p>Heroku requires SSL for PostgreSQL connections. There are two options (and potentially a third in the future):</p>
+
+<ul>
+<li><strong>(Confirmed)</strong> Add an <code>ssl: true</code> key/value pair to the Knexfile</li>
+<li><strong>(Confirmed)</strong> Set an environment variable using Heroku CLI: <code>heroku config:set PGSSLMODE=require</code></li>
+<li><strong>(Unsupported, but may be implemented in future versions of Knex)</strong> Add a <code>'?ssl=true'</code> query parameter to your database URL (knexfile&rsquo;s <code>connection</code>).</li>
+</ul>
+
+
+<p>With those two things in mind, a Knexfile like the following will work just fine:</p>
+
+<p>```
+module.exports = {</p>
+
+<pre><code>client: 'pg',
+debug: true,
+connection: DB_URL,
+migrations: {
+    tableName: 'migrations'
+},
+ssl: true
+</code></pre>
+
+<p>}
+```</p>
+
+<h3>Further resources:</h3>
+
+
+<ul>
+<li><a href="https://github.com/tgriesser/knex/issues/239#issuecomment-42278076">Related Github issue on Knex project</a></li>
+<li><a href="https://github.com/HalahRaadSalih/deploy-to-heroku-with-db">Heroku/Knex walkthrough</a></li>
+<li><a href="http://jakehp.github.io/2015/07/10/Knex-Postgres-Heroku/">Similar issue</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Translating Verbs: CRUD, SQL, and HTTP]]></title>
+    <link href="http://cek.io/blog/2014/06/20/crud-sql-http-translation/"/>
+    <updated>2014-06-20T17:12:40-04:00</updated>
+    <id>http://cek.io/blog/2014/06/20/crud-sql-http-translation</id>
+    <content type="html"><![CDATA[<p>Recently I was asked two interview questions about basic CRUD functions, specifically (1) how they correspond to HTTP verbs and (2) how to perform those actions on the database side with SQL statements.</p>
+
+<p>I was able to list the HTTP verbs relatively quickly. I&rsquo;ve built enough simple CRUD applications in Rails to know <a href="http://guides.rubyonrails.org/routing.html#crud-verbs-and-actions">the CRUD operations as they relate to creating, reading, updating, or deleting database records</a>.</p>
+
+<p>On the other hand, it took me a second to recall the SQL statements. Crud. I remember hearing at Flatiron that a shortcoming of many junior developer candidates is SQL, that they don&rsquo;t know to retrieve a record with <code>SELECT expression FROM table WHERE conditions;</code>.</p>
+
+<p>I remember thinking &ldquo;I know my SQL&mdash;I&rsquo;ll never run into such a problem.&rdquo; Well, I almost did! It&rsquo;s amazing how easy it is to forget even the most basic syntax when you don&rsquo;t use it. So I&rsquo;ll be sure to commit the following table to memory:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th> CRUD            </th>
+<th> SQL         </th>
+<th> HTTP         </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td> Create          </td>
+<td> INSERT      </td>
+<td> Put/Post</td>
+</tr>
+<tr>
+<td></td>
+<td> Read (Retrieve) </td>
+<td> SELECT      </td>
+<td> Get</td>
+</tr>
+<tr>
+<td></td>
+<td> Update (Modify) </td>
+<td> UPDATE      </td>
+<td> Put/Patch</td>
+</tr>
+<tr>
+<td></td>
+<td> Delete (Destroy)</td>
+<td> DELETE      </td>
+<td> Delete</td>
+</tr>
+</tbody>
+</table>
+
+]]></content>
+  </entry>
+  
+</feed>

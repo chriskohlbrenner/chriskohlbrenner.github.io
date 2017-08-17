@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Conferences | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/conferences/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[React Conf Reactions]]></title>
+    <link href="http://cek.io/blog/2016/02/27/react-conf/"/>
+    <updated>2016-02-27T16:43:32-05:00</updated>
+    <id>http://cek.io/blog/2016/02/27/react-conf</id>
+    <content type="html"><![CDATA[<p>The React.js Conf was a blast. All the talks were recorded and can be watched <a href="https://www.youtube.com/playlist?list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">here</a>. My full bullet point notes are <a href="/downloads/react_conf_notes.txt">here</a>, but what follows are some more readable reactions to the conference.</p>
+
+<p>First of all, a special thanks to the organizers and speakers. This was a very well run conference with some high-class talks. From breakfast Monday through to the closing reception on Tuesday, with the single exception of <a href="https://twitter.com/kentcdodds/status/702201425133064192">jackhammer noises during some of the talks</a> (what are you gonna do about construction next door?), everything was very well done.</p>
+
+<p>Moving on, I learned a ton, got to know some awesome members of this community, and met some incredible people who&rsquo;ve influenced my career (by giving talks, authoring open-source, or otherwise helping me write better code). Here&rsquo;s a couple of my main takeaways, in no particular order.</p>
+
+<!--more-->
+
+
+<ol>
+<li><p>I came into the conference with React.js and Redux experience, but little to no knowledge of GraphQL, Relay, or React Native. I was not disappointed then, that the majority (maybe two-thirds?) of the talks addressed exactly those things. For a long time, React Native has been on my list of new tech to explore, as someone who&rsquo;s never written anything for mobile. GraphQL and Relay, meanwhile, could be directly applicable to my everyday work. And I&rsquo;m of course always pleased to learn new things about what I already &ldquo;know&rdquo;, like aspects of React performance that I haven&rsquo;t thought about.</p></li>
+<li><p>If the majority of the talks addressed React.js, React Native, GraphQL, and Relay, the remainder focused on areas of tech that I rarely if ever consider. Talks covered subjects like <a href="https://www.youtube.com/watch?v=ty2bFeOdGeI&amp;index=7&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">virtual reality</a>, <a href="https://www.youtube.com/watch?v=GnIrNYtmRDg&amp;index=8&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">hardware</a>, and <a href="https://www.youtube.com/watch?v=Xnqy_zkBAew&amp;index=18&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">graphics</a>. I may never focus the majority of my time on any of these, but it&rsquo;s eye-opening and motivating to see people pushing the limits of what can be done.</p></li>
+<li><p>A few of my favorite talks:</p>
+
+<ul>
+<li>Andy Matuschak, who worked on the gesture system for iOS, <a href="https://www.youtube.com/watch?v=uBYPqb83C7k&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY&amp;index=9">presented some of the problems (and potential solutions) facing mobile gestures</a>. I don&rsquo;t even do mobile, but his talk was engaging, entertaining, and informative.</li>
+<li><a href="https://www.youtube.com/watch?v=feUYwoLhE_4&amp;index=3&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">Isaac Salier-Hellendag announced Draft.js</a>, a new open-source framework for building rich text editors. I&rsquo;ve worked on exactly this problem, implementing a textarea that allows for Facebook-style (using <code>@</code>) mentions, so I totally resonated with his walkthrough of the problem and implementation, and I&rsquo;m excited to give Draft.js a try.</li>
+<li>Jared Forsyth addressed exactly the situation I&rsquo;m in, providing <a href="https://www.youtube.com/watch?v=-jwQ3sGoiXg&amp;index=34&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">an overview of React, Redux, and Relay</a> (with discussions of ClojureScript and Om/next mixed in) and how to determine which to use and when.</li>
+<li>Nicolas Gallagher, who&rsquo;s SUIT CSS project I&rsquo;ve used, pushed things a step farther and proposed taking styles a step farther (moving CSS entirely into JS) in his <a href="https://www.youtube.com/watch?v=RBg2_uQE4KM&amp;index=22&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">talk on React Native for Web</a>.</li>
+<li>Jamison Dance stepped away from React long enough to discuss <a href="https://www.youtube.com/watch?v=txxKx_I39a8&amp;index=30&amp;list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">Elm and what JavaScript can learn from it</a> (read: immutability, types, pure functions). Fantastic talk with great examples and fun slides.</li>
+</ul>
+</li>
+<li><p>Any post-conference list would be incomplete without mentioning the things I&rsquo;m excited to explore and implement:</p>
+
+<ul>
+<li>As I already mentioned, I want to give Draft.js a long look and consider using it in production.</li>
+<li>I was already interested in GraphQL and Relay, and want to take a few days to see if it could make sense at work.</li>
+<li>I&rsquo;m all for moving away from CSS in favor of JavaScript solutions, so I want to learn from React Native for Web and consider the OSS solutions for JS styles.</li>
+<li>My app at work, like so many others, is slow on app initialization, so I want to consider how to improve that based on ideas presented at the conference.</li>
+<li>I want to finally give React Native a try in a side project.</li>
+<li>Finally, I&rsquo;m already sold on ideas from functional programming like immutability and reducing side effects, but I want to check out Flow for gradual type checking and I want to learn Elm rather than only doing FP in JavaScript.</li>
+</ul>
+</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Performance Process: Takeaways From AEA]]></title>
+    <link href="http://cek.io/blog/2015/10/09/performance/"/>
+    <updated>2015-10-09T13:39:03-04:00</updated>
+    <id>http://cek.io/blog/2015/10/09/performance</id>
+    <content type="html"><![CDATA[<p>The stars have aligned lately to focus my attention on performance. Consider the following:</p>
+
+<ul>
+<li>A few months ago, I was tasked with assessing and documenting the differences between our app&rsquo;s functionality/performance in Chrome vs. Firefox.</li>
+<li>This exercise resulted in a pull request that improved Firefox performance by over 2 seconds (~25%) on initial page load.</li>
+<li><a href="/blog/2015/10/08/an-event-apart/">Earlier this week</a>, two separate talks (by <a href="http://twitter.com/yeseniaa">Yesenia Perez-Cruz</a> and <a href="http://twitter.com/lara_hogan">Lara Hogan</a>) focused on designing for performance.</li>
+<li>Also this week, <a href="http://www.nateberkopec.com/2015/10/07/frontend-performance-chrome-timeline.html">Nate Berkopec&rsquo;s post on front end performance</a> made the rounds on Hacker News.</li>
+</ul>
+
+
+<p>What does this add up to? I&rsquo;ve been thinking a lot about performance, particularly front end performance of web apps. In this post, I&rsquo;ll summarize some takeaways from AEA regarding performance, particularly as they relate to integrating performance into planning and design.</p>
+
+<!--more-->
+
+
+
+
+<h3>Set up for failure</h3>
+
+
+<p>Summarizing a few points from Yesenia&rsquo;s talk, consider this project plan, one that we&rsquo;ve all presumed to follow:</p>
+
+<p><img src="/images/performance/ideal-plan.png"></p>
+
+<p>But then realize that, due to biz dev requirements, delays in research, and longer-than-expected design time, all while keeping the same sprint/client/deployment deadline, the actual project plan looks like this:</p>
+
+<p><img src="/images/performance/actual-plan.png"></p>
+
+<p>We&rsquo;ve all seen it! And it probably happens more often this way than the ideal case. What&rsquo;s the definition of insanity again?</p>
+
+<p>Now I could speculate and hypothesize about the underlying issues of failed project management, but I&rsquo;ll leave that to someone else. I want to focus on performance. A question: with that development timeline in mind, when do we think about performance? During the software development segment, right?</p>
+
+<p><img src="/images/performance/perf-timeline-reality.png"></p>
+
+<p>But why? We developers think we can implement user functionality, meet the design specs, and still have time left over to optimize at the end. But that never happens. Could we not consider performance at the beginning of the process?</p>
+
+<p><img src="/images/performance/perf-timeline-improved.png"></p>
+
+<p>We need to think about performance as a design feature. We need to think about performance early. We need to prioritize page speed and load times just as much as UX and beautiful interfaces. But how?</p>
+
+<h3>Performance Budgets</h3>
+
+
+<p><span class='caption-wrapper'><img class='caption' src='/images/performance/dilbert-budget.gif' width='' height='' title='&ldquo;We only have the budget for a poor job&rdquo;'><span class='caption-text'>&ldquo;We only have the budget for a poor job&rdquo;</span></span></p>
+
+<p>I&rsquo;m not sure we&rsquo;re being cheap <em>or</em> smart by thinking about performance this way. We don&rsquo;t have any budget at all! A theme throughout AEA, and not just in Yesenia&rsquo;s and Lara&rsquo;s talks, was <strong>setting a performance budget</strong>.</p>
+
+<p>Yesenia explained that a performance budget is both &ldquo;a performance goal used to guide design &amp; development&rdquo; and &ldquo;a tangible way to talk about performance.&rdquo; How well do those conversations about performance-intensive features usually go? For developers, it&rsquo;s often either &ldquo;no, we can&rsquo;t do that&rdquo; or a resigned &ldquo;ok, I guess we have to do it.&rdquo;</p>
+
+<p><span class='caption-wrapper'><img class='caption' src='/images/performance/google-designer-developer.png' width='' height='' title='One incredible trick will render 728,000 Google results obselete!'><span class='caption-text'>One incredible trick will render 728,000 Google results obselete!</span></span></p>
+
+<p>What if, instead of a win-lose scenario between designers and devs, the conversation was framed around a budget? We talk about the inherent tradeoffs between technologies, so why not consider performance tradeoffs in discussions about design?</p>
+
+<p>&ldquo;But how do I go about setting a performance budget?&rdquo;, you might ask. Yesenia and Lara made some suggestions:</p>
+
+<ul>
+<li><em>Browser-based approach</em>: &ldquo;our pages should weigh no more than 400kb, and make no more than 15 requests.&rdquo;</li>
+<li><em>User experience-based</em>: &ldquo;our pages should take no more than 10 seconds to load over a sub-3G connection.&rdquo;</li>
+<li><em>Look to your competitors</em>: aim for a 20% improvement over your competitors.</li>
+</ul>
+
+
+<p>I&rsquo;m still working on this, on how to practically establish a performance budget on the job. I don&rsquo;t have access to my competitors' product, so for now I can only set the goal as arbitrarily better performance.</p>
+
+<p>One thing I will say: everything I&rsquo;ve said in this blogpost has to be a culture change. Stealing from Lara&rsquo;s talk, it can&rsquo;t be all on one individual. You have to establish a culture of performance.</p>
+
+<blockquote class="twitter-tweet" lang="en"><p lang="en" dir="ltr">&quot;There should be no performance cops or janitors. It&#39;s not sustainable. You need a culture of performance.&quot; <a href="https://twitter.com/lara_hogan">@lara_hogan</a> <a href="https://twitter.com/hashtag/aeaaus?src=hash">#aeaaus</a></p>&mdash; Chris EK (@cek_io) <a href="https://twitter.com/cek_io/status/651406414225649666">October 6, 2015</a></blockquote>
+
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[An Event Apart]]></title>
+    <link href="http://cek.io/blog/2015/10/08/an-event-apart/"/>
+    <updated>2015-10-08T17:09:32-04:00</updated>
+    <id>http://cek.io/blog/2015/10/08/an-event-apart</id>
+    <content type="html"><![CDATA[<p>This week, I had the good fortune of attending <a href="http://aneventapart.com/event/austin-2015">An Event Apart in Austin, TX</a>. Coordinated by the same great people behind <a href="http://alistapart.com/">A List Apart</a>, An Event Apart (AEA) is two days of fantastic talks about the web&mdash;content, design, development&mdash;and a full-day workshop (A Day Apart). Many of the concepts we now take for granted as web best practices, like mobile first and responsive design, have been introduced and elaborated at AEA events.</p>
+
+<p>Before I continue, some thanks are in order. AEA made three scholarships available to Flatiron School alumni. Now, in retrospect, I realize the value of attending is well worth the $1,000+ price tag, but the reality is: I wouldn&rsquo;t have been able to justify that cost on my own. So some major thank yous for making this happen, first to AEA for offering those scholarships, and then to Flatiron School for enabling that hookup. <strong>Thank you!</strong></p>
+
+<p>Moving on, I want to share some of my notes and highlights from the three days. For a quick summary of the conference in the form of 140-character highlights, <a href="https://twitter.com/hashtag/aeaaus">#aeaaus</a> is a great place to start. A summary of my takeaways from the conference (as well as my full notes) are below.</p>
+
+<!--more-->
+
+
+<p>My full unfiltered/unedited notes can be viewed <a href="/downloads/aea_notes.txt">here</a>, and videos of all talks will be posted online at some point, so you should sign up <a href="http://aneventapart.com/subscribe">here</a>. For now, these are my highlights/summaries of each talk, some of which may turn into full posts.</p>
+
+<ul>
+<li><strong>Jeffrey Zeldman</strong> opened the conference by telling his personal narrative, from starving artist to professional creative to disillusioned advertiser to web practitioner. <br><em>Takeaways</em>: Talk about the problems you&rsquo;re solving, not the aesthetics; attitude trumps work; blog!</li>
+<li><strong>Yesenia Perez-Cruz</strong> discussed design from the perspective of performance. <br><em>Takeaways</em>: performance isn&rsquo;t a last-minute add-on, it&rsquo;s part of the UX; consider performance at the beginning.</li>
+<li><strong>Jen Simmons</strong> presented modern layouts and recent/upcoming additions to CSS. <br><em>Takeaways</em>: we see the same layout with sidebar everywhere; use CSS shapes/flexbox; layout should serve content.</li>
+<li><strong>Cameron Moll</strong> walked us through interfaces and the ways we interact with them. <br><em>Takeaways</em>: the best interface is the one within reach; forget about mobile/desktop and instead build a unified interface.</li>
+<li><strong>Karen McGrane</strong> summarized issues around content and how it should be separated from form. <br><em>Takeaways</em>: separating form from content makes web design much easier than an interconnected blob of a website.</li>
+<li><strong>Ethan Marcotte</strong> argued that laziness is good, that less is more when it comes to responsive design. <br><em>Takeaways</em>: use flexible layout systems rather than device-specific designs.</li>
+<li><strong>Lara Callender Hogan</strong> built on Yesenia&rsquo;s talk about performance <br><em>Takeaways</em>: we optimize for design/layout but not page speed; need happy medium of aesthetics and speed; tips for image optimization; need a culture of performance; set a performance budget.</li>
+<li><strong>Eric Meyer</strong> presented an incredibly vulnerable talk about personal tragedy and how his experience as someone in crisis informs his understanding of web design<br><em>Takeaways</em>: design with crisis-driven personas in mind; empathy; don&rsquo;t consider just the ideal user.</li>
+<li><strong>Jason Grigsby</strong> got into the nitty gritty of responsive images.<br><em>Takeaways</em>: responsive images matter for resolution switching and art direction; look-ahead preparser.</li>
+<li><strong>Brad Frost</strong> framed web design from the perspective of atoms &ndash;> molecules &ndash;> organisms.<br><em>Takeaways</em>: design systems of components not pages.</li>
+<li><strong>Matt Haughey</strong> brought a customer service perspective to web design.<br><em>Takeaways</em>: everyone at Slack does customer service; need to have empathy for the user.</li>
+<li><strong>Jeremy Keith</strong> took us through the history of the web and argued for using basic, supported technologies that don&rsquo;t break.<br><em>Takeaways</em>: identify core functionality and implement using simplest technology, then enhance.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

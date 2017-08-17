@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: AMQP | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/amqp/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Advanced Message Queuing Protocol (AMQP) Using RabbitMQ in Ruby]]></title>
+    <link href="http://cek.io/blog/2014/04/30/amqp-rabbitmq-ruby/"/>
+    <updated>2014-04-30T17:08:10-04:00</updated>
+    <id>http://cek.io/blog/2014/04/30/amqp-rabbitmq-ruby</id>
+    <content type="html"><![CDATA[<p><strong>Summary</strong>: message queueing with RabbitMQ helps software applications connect and scale, by enabling messaging patterns like data delivery, push notifications, publish/subscribe, and text messages. It can be easily implemented in Ruby.</p>
+
+<h1>Background</h1>
+
+
+<p>If you&rsquo;re already familiar with message queueing, or if you&rsquo;re someone who doesn&rsquo;t like reading the instructions, jump to the <a href="http://cek.io/blog/2014/04/30/amqp-rabbitmq-ruby#code">code section below.</a></p>
+
+<!--more-->
+
+
+
+
+<h3>Definition of terms</h3>
+
+
+<p>I recently came across some brand new terms. So, to begin, some definitions via Wikipedia (they may still be confusing; I try to clear them up below):<ul>
+<li><a href="http://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol"><strong>Advanced Message Queuing Protocol (AMQP)</strong></a>: an open standard application layer protocol for <u>message-oriented middleware</u>. The defining features of AMQP are message orientation, queuing, routing (including point-to-point and publish-and-subscribe), reliability and security.</li>
+<li><a href="http://en.wikipedia.org/wiki/Message-oriented_middleware"><strong>Message-oriented middleware</strong></a>: Message-oriented middleware (MOM) is software or hardware infrastructure supporting sending and receiving messages between <u>distributed systems</u>.</li>
+<li><a href="http://en.wikipedia.org/wiki/Distributed_computing"><strong>Distributed system</strong></a>: A distributed system is a software system in which components communicate and coordinate their actions by <u>passing messages</u>.</li>
+</ul></p>
+
+<p>The underlined terms demonstrate that you can&rsquo;t understand AMQP without understanding MOM, which depends on an understanding of distributed systems, which takes you back to passing messages. Kinda circular. Perhaps some further reading will help:</p>
+
+<p><blockquote><p>Modern web-scale applications like Google, Twitter, Netflix, LinkedIn, etc. are implemented as distributed systems as opposed to single monolithic codebases. This means that they are composed of tens or hundreds of services that communicate asynchronously with each other, ultimately delivering a response to the end-user.</p><footer><strong>Alex Benik <a href="http://gigaom.com/2012/06/03/like-modern-web-apps-start-ups-are-distributed-systems/">http://gigaom.com/2012/06/03/like-modern-web-apps-start-ups-are-distributed-systems/</a>  &ldquo;Like modern web apps</strong> <cite>Start-ups Are Distributed Systems&rdquo;</cite></footer></blockquote></p>
+
+<p>This means that, for most web development purposes, &ldquo;distributed systems&rdquo; can be replaced with &ldquo;web apps&rdquo; in our definition of message-oriented middleware. Furthermore:</p>
+
+<p><blockquote><p>One common simplification I see engineers make is equating message queueing with background processing. [&hellip;] All message processing is done in the background but background processing does not have to be done via message queues.</p><footer><strong>Mike Perham <a href="http://www.mikeperham.com/2011/05/04/background-processing-vs-message-queueing/">http://www.mikeperham.com/2011/05/04/background-processing-vs-message-queueing/</a> &ldquo;Background Processing vs Message Queueing&rdquo;</strong></footer></blockquote></p>
+
+<p>This is actually really helpful. Message queing (of which AMQP is one protocol) is a subset of background processes. [<strong>Side note</strong>: This quote comes from the <a href="https://github.com/mperham/sidekiq">creator of Sidekiq</a>, a popular handler of background processes for Ruby. He knows a thing or two about this stuff.] With that in mind, we can understand AMQP as a background process specifically for message queueing.</p>
+
+<h3>Use cases</h3>
+
+
+<p>So what is AMQP actually used for? RabbitMQ describes that:</p>
+
+<p><blockquote><p>Messaging enables software applications to connect and scale. Applications can connect to each other, as components of a larger application, or to user devices and data. Messaging is asynchronous, decoupling applications by separating sending and receiving data.</p><footer><strong>RabbitMQ <a href="https://www.rabbitmq.com/features.html">https://www.rabbitmq.com/features.html</a> &ldquo;RabbitMQ Features&rdquo;</strong></footer></blockquote></p>
+
+<p>For example, <a href="http://en.wikipedia.org/wiki/MercadoLibre.com">MercadoLibre.com</a>, the biggest e-commerce site in Latin America, uses AMQP to send messages for new listings, seller updates, bids placed, and more:</p>
+
+<p><blockquote><p>&hellip;every time there is a new listing on the platform, a seller updates an item, a bid is placed, or whatever event that could affect the representation of the data, a message is sent through RabbitMQ so each consumer is aware of the news and reacts properly to the event.&ldquo;</p><footer><strong>Stacey Schneider <a href="https://blogs.vmware.com/vfabric/2013/01/messaging-architecture-using-rabbitmq-at-the-worlds-8th-largest-retailer.html">https://blogs.vmware.com/vfabric/2013/01/messaging-architecture-using-rabbitmq-at-the-worlds-8th-largest-retailer.html</a> &ldquo;Messaging Architecture: Using RabbitMQ at the World’s 8th Largest Retailer&rdquo;</strong></footer></blockquote></p>
+
+<h1 id="code">Code Examples</h1>
+
+
+<p>I followed <a href="http://rubybunny.info/articles/getting_started.html">this guide</a>, using the Bunny gem, to get started with RabbitMQ.</p>
+
+<h3>The basics</h3>
+
+
+<p>Start by installing RabbitMQ with Homebrew:<br>
+<code>brew install rabbitmq</code></p>
+
+<p>Then start the server:<br>
+<code>rabbitmq-server</code></p>
+
+<h3>A simple example</h3>
+
+
+<p>The code snippet below demonstrates a simple example. One application (in line 25) publishes a message that ends up in a queue (declared in line 14) for the second application (lines 20-22) to listen to.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (bunny_hello_world.rb)</span> <a href='/downloads/code/bunny_hello_world.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># load Bunny if you have installed it with RubyGems</span>
+</span><span class='line'><span class="nb">require</span> <span class="s2">&quot;bunny&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># connect to RabbitMQ running on localhost, with the default port (5672), username (&quot;guest&quot;), password (&quot;guest&quot;)</span>
+</span><span class='line'><span class="c1"># and virtual host (&quot;/&quot;)</span>
+</span><span class='line'><span class="n">conn</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">conn</span><span class="o">.</span><span class="n">start</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># open a new channel</span>
+</span><span class='line'><span class="n">channel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">create_channel</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># declare a queue on the channel that we have just opened (&#39;:auto_delete =&gt; true&#39; means that the queue will be </span>
+</span><span class='line'><span class="c1"># deleted when there are no more processes consuming messages from it)</span>
+</span><span class='line'><span class="n">queue</span>  <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="s2">&quot;queue_name&quot;</span><span class="p">,</span> <span class="ss">:auto_delete</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># instantiate an exchange</span>
+</span><span class='line'><span class="n">exchange</span>  <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">default_exchange</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># define a handler for incoming messages</span>
+</span><span class='line'><span class="n">queue</span><span class="o">.</span><span class="n">subscribe</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">payload</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Received message: </span><span class="si">#{</span><span class="n">payload</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># publish our message</span>
+</span><span class='line'><span class="n">exchange</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s2">&quot;Hello world!&quot;</span><span class="p">,</span> <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="n">queue</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># close connection</span>
+</span><span class='line'><span class="n">conn</span><span class="o">.</span><span class="n">close</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The comments in the snippet explain what&rsquo;s happening at each step. We connect to RabbitMQ and open a new channel, then declare a queue and instantiate an exchange, so that when <code>x.publish</code>es that message and routes it to <code>q</code> (the queue), that payload goes through.</p>
+
+<p><img class="right" src="/images/hello_world_bunny.png" width="300">
+And the contrived example works, when I run the code:</p>
+
+<p>The image below may help make sense of the routing. Or maybe a more complicated example will.
+<img src="/images/bunny_hello_world_routing.png"></p>
+
+<h3>A more complicated example</h3>
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (bunny_weather.rb)</span> <a href='/downloads/code/bunny_weather.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s2">&quot;bunny&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">connection</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">start</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">channel</span>  <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">create_channel</span>
+</span><span class='line'><span class="c1"># topic exchange name can be any string</span>
+</span><span class='line'><span class="n">exchange</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">topic</span><span class="p">(</span><span class="s2">&quot;weathr&quot;</span><span class="p">,</span> <span class="ss">:auto_delete</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Subscribers.</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:exclusive</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;americas.north.#&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">subscribe</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">payload</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;An update for North America: </span><span class="si">#{</span><span class="n">payload</span><span class="si">}</span><span class="s2">, routing key is </span><span class="si">#{</span><span class="n">delivery_info</span><span class="o">.</span><span class="n">routing_key</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="s2">&quot;americas.south&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;americas.south.#&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">subscribe</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">payload</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;An update for South America: </span><span class="si">#{</span><span class="n">payload</span><span class="si">}</span><span class="s2">, routing key is </span><span class="si">#{</span><span class="n">delivery_info</span><span class="o">.</span><span class="n">routing_key</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="s2">&quot;us.california&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;americas.north.us.ca.*&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">subscribe</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">payload</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;An update for US/California: </span><span class="si">#{</span><span class="n">payload</span><span class="si">}</span><span class="s2">, routing key is </span><span class="si">#{</span><span class="n">delivery_info</span><span class="o">.</span><span class="n">routing_key</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="s2">&quot;us.tx.austin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;#.tx.austin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">subscribe</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">payload</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;An update for Austin, TX: </span><span class="si">#{</span><span class="n">payload</span><span class="si">}</span><span class="s2">, routing key is </span><span class="si">#{</span><span class="n">delivery_info</span><span class="o">.</span><span class="n">routing_key</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="s2">&quot;it.rome&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;europe.italy.rome&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">subscribe</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">payload</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;An update for Rome, Italy: </span><span class="si">#{</span><span class="n">payload</span><span class="si">}</span><span class="s2">, routing key is </span><span class="si">#{</span><span class="n">delivery_info</span><span class="o">.</span><span class="n">routing_key</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="s2">&quot;asia.hk&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span> <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;asia.southeast.hk.#&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">subscribe</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">payload</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;An update for Hong Kong: </span><span class="si">#{</span><span class="n">payload</span><span class="si">}</span><span class="s2">, routing key is </span><span class="si">#{</span><span class="n">delivery_info</span><span class="o">.</span><span class="n">routing_key</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">exchange</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s2">&quot;San Diego update&quot;</span><span class="p">,</span> <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;americas.north.us.ca.sandiego&quot;</span><span class="p">)</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">publish</span><span class="p">(</span><span class="s2">&quot;Berkeley update&quot;</span><span class="p">,</span>         <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;americas.north.us.ca.berkeley&quot;</span><span class="p">)</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">publish</span><span class="p">(</span><span class="s2">&quot;San Francisco update&quot;</span><span class="p">,</span>    <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;americas.north.us.ca.sanfrancisco&quot;</span><span class="p">)</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">publish</span><span class="p">(</span><span class="s2">&quot;New York update&quot;</span><span class="p">,</span>         <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;americas.north.us.ny.newyork&quot;</span><span class="p">)</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">publish</span><span class="p">(</span><span class="s2">&quot;São Paolo update&quot;</span><span class="p">,</span>        <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;americas.south.brazil.saopaolo&quot;</span><span class="p">)</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">publish</span><span class="p">(</span><span class="s2">&quot;Hong Kong update&quot;</span><span class="p">,</span>        <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;asia.southeast.hk.hongkong&quot;</span><span class="p">)</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">publish</span><span class="p">(</span><span class="s2">&quot;Kyoto update&quot;</span><span class="p">,</span>            <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;asia.southeast.japan.kyoto&quot;</span><span class="p">)</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">publish</span><span class="p">(</span><span class="s2">&quot;Shanghai update&quot;</span><span class="p">,</span>         <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;asia.southeast.prc.shanghai&quot;</span><span class="p">)</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">publish</span><span class="p">(</span><span class="s2">&quot;Rome update&quot;</span><span class="p">,</span>             <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;europe.italy.roma&quot;</span><span class="p">)</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">publish</span><span class="p">(</span><span class="s2">&quot;Paris update&quot;</span><span class="p">,</span>            <span class="ss">:routing_key</span> <span class="o">=&gt;</span> <span class="s2">&quot;europe.france.paris&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">close</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+It again works when I run the code:
+<img class="center" src="/images/weather_bunny.png"></p>
+
+<p>Notice that there were as many deliveries as there were subscribers (9), and that the order was determined by the order of published updates.</p>
+
+<p><img src="/images/weathr_example_routing.png"></p>
+
+<h3>The end</h3>
+
+
+<p><a href="http://rubybunny.info/articles/getting_started.html#wrapping_up">From what I&rsquo;m told</a>, &ldquo;this is only the tip of the iceberg&rdquo; and there are many more features including:</p>
+
+<p><ul>
+<li>Reliable delivery of messages</li>
+<li>Message confirmations (a way to tell broker that a message was or was not processed successfully)</li>
+<li>Message redelivery when consumer applications fail or crash</li>
+<li>Load balancing of messages between multiple consumers</li>
+<li>Message metadata attributes</li>
+<li>High availability features</li></p>
+]]></content>
+  </entry>
+  
+</feed>

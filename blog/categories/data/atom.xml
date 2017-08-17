@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Data | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/data/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[An Introduction to Redis]]></title>
+    <link href="http://cek.io/blog/2014/05/06/redis/"/>
+    <updated>2014-05-06T21:54:09-04:00</updated>
+    <id>http://cek.io/blog/2014/05/06/redis</id>
+    <content type="html"><![CDATA[<p>Redis, which got its name as a <strong>re</strong>mote <strong>di</strong>ctionary <strong>s</strong>erver, is a key-value data store that can be useful for temporary caching or as a NoSQL (&lsquo;not only SQL&rsquo;) data store.</p>
+
+<p>I recommend getting started with <a href="http://labs.alcacoop.it/doku.php?id=articles:redis_land">this post about Redis</a>. It&rsquo;s a little old, but covers some key use cases for Redis. In this post, I will provide an overview to get started with Redis.</p>
+
+<p><img class="right" src="/images/redis-server.png" width="300"></p>
+
+<h3>Installation</h3>
+
+
+<p>Install Redis using Homebrew by running <code>brew install redis</code> from the command line. Alternatively, complete download instructions can be found <a href="">here</a>.</p>
+
+<p>Once installed, starting a Redis server is as simple as running <code>redis-server</code>. You&rsquo;ll know you have it working if you see some ASCII art like what&rsquo;s depicted on the right.</p>
+
+<!--more-->
+
+
+
+
+<h3>Code example</h3>
+
+
+<p>You can view a full code example in <a href="https://github.com/chriskohlbrenner/learn-redis">this Github repo</a>. It&rsquo;s not really necessary to focus on the controller logic in sinatra_app.rb (it&rsquo;s there to provide a user interface). This example can be viewed in the browser by running <code>ruby redis_models.rb</code>, starting a Redis server (<code>redis-server</code>), and visiting <a href="http://localhost:4567/">port 4567</a>.</p>
+
+<p>That said, we can look at the code without serving the example app. The snippet below gives a sense of some basics of Redis, which I&rsquo;ll walk through line-by-line.</p>
+
+<p>We start with the <code>RedisClient</code> class. This class enables us to create a new instance of the Redis client, connected to localhost:6379, which is the default for Redis servers. (Notice when you run <code>redis-server</code> from the console that we read &ldquo;of the Redis client, connected to <strong>localhost:6379</strong>&rdquo;). Instantiating a Redis client is necessary to work with the Redis server, thus we need the class on lines 6-11.</p>
+
+<p>Side note: what&rsquo;s happening in line 7 with <code>include Singleton</code> isn&rsquo;t terribly important at this point. Suffice it to say that the Singleton class is needed when it is necessary to have only one instance of the class. In this case, we need one and only one instance of Redis. The <code>super</code> keyword uses the <code>Redis</code> superclass' <code>initialize</code> method, which is written into the Redis gem.</p>
+
+<p>So how is Redis being used? Notice some of the main keywords that are unique to Redis: <code>lpush</code>, <code>sadd</code>, and&mdash;two of the most fundamental ones&mdash;<code>set</code> and <code>get</code>, which we&rsquo;ll see in more detail. I give an overview of the others at the end of this post.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (redis_book.rb)</span> <a href='/downloads/code/redis_book.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;redis&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;singleton&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">BOOK_STRING_ATTRS</span> <span class="o">=</span> <span class="sx">%w(title isbn description price pages)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">RedisClient</span> <span class="o">&lt;</span> <span class="no">Redis</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Singleton</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="k">super</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Book</span>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:id</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:isbn</span><span class="p">,</span> <span class="ss">:description</span><span class="p">,</span> <span class="ss">:price</span><span class="p">,</span> <span class="ss">:pages</span><span class="p">,</span> <span class="ss">:authors</span><span class="p">,</span> <span class="ss">:topics</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
+</span><span class='line'>    <span class="vi">@hub</span> <span class="o">=</span> <span class="no">RedisClient</span><span class="o">.</span><span class="n">instance</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">hub</span> <span class="o">=</span> <span class="no">RedisClient</span><span class="o">.</span><span class="n">instance</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="n">hub</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;book:</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">:title&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:id</span> <span class="o">=&gt;</span> <span class="nb">id</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kp">nil</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">book</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">get_all</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">save</span>
+</span><span class='line'>    <span class="vi">@hub</span><span class="o">.</span><span class="n">lpush</span><span class="p">(</span><span class="s1">&#39;topic:list&#39;</span><span class="p">,</span> <span class="vi">@id</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@hub</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;topic:</span><span class="si">#{</span><span class="vi">@id</span><span class="si">}</span><span class="s2">:name&quot;</span><span class="p">,</span> <span class="vi">@name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@hub</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;topic:</span><span class="si">#{</span><span class="vi">@id</span><span class="si">}</span><span class="s2">:description&quot;</span><span class="p">,</span> <span class="vi">@description</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@books</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">book</span><span class="o">|</span>
+</span><span class='line'>      <span class="vi">@hub</span><span class="o">.</span><span class="n">sadd</span><span class="p">(</span><span class="s2">&quot;topic:</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">:books&quot;</span><span class="p">,</span> <span class="n">book</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">remove</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">get_books_range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Interacting in IRB</h3>
+
+
+<p>Before we get too bogged down in the code, let&rsquo;s try this from the command line. Everything I&rsquo;ve covered up to this point can be done in IRB.</p>
+
+<ol>
+  <li>In IRB:<br>
+    <code>require redis</code><br>
+    <code>redis = Redis.new(:host => 'localhost', :port => 6379)</code>
+  </li>
+  <li>In a separate terminal window:<br>
+    <code>redis-server</code>
+  </li>
+  <li>Below we see some of Redis' magic in setting (Redis <code>SET</code>, aliased by the gem as <code>set</code>) and getting (Redis <code>GET</code>, aliased as <code>get</code>) key-value pairs. We first set a new key-value pair (key of "hello", value of "world"), then get it by getting that value (with key "hello"). Back in IRB:<br>
+    <code>redis.set("hello", "world")</code><br>
+    <code>redis.get("hello") #=> "world"</code><br>
+  </li>
+  <li>But what other data types can Redis use? Here we see a hash:<br>
+    <code>redis.set(:and_a_hash?, {a:1,b:2,c:3})</code><br>
+    <code>redis.get(:and_a_hash?) #=> "{a:1,b:2,c:3}"</code><br>
+    Note: this returns a string, but can be evaluated: <code>eval("{a:1,b:2,c:3}")    #=> {a:1,b:2,c:3}</code>.
+  </li>
+  <li>
+    Lists, sets, other data types? (http://redis.io/topics/data-types)
+  </li> 
+</ol>
+
+
+
+
+<h3>Redis data types and commands</h3>
+
+
+<p>There are a number key Redis commands. Below, I define each (Redis.io has more information about <a href="http://redis.io/topics/data-types">data types</a> and <a href="http://redis.io/commands">commands</a>). Ruby syntax is each Redis command downcase.</p>
+
+<table>
+<strong>Strings</strong>: Strings are the most basic kind of Redis value. Redis Strings are binary safe, this means that a Redis string can contain any kind of data, for instance a JPEG image or a serialized Ruby object.
+  <tr>
+    <th><u>Redis Command</u></th>
+    <th>&nbsp&nbsp&nbsp&nbsp</th>
+    <th><u>Command Definition</u></th>
+  </tr>
+  <tr>
+    <td>SET</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Set the string value of a key</td>
+  </tr>
+  <tr>
+    <td>GET</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Get the value of a key</td>
+  </tr>
+  <tr>
+    <td>INCR</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Increment the integer value of a key by one</td>
+  </tr>
+  <tr>
+    <td>DECR</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Decrement the integer value of a key by one</td>
+  </tr>
+  <tr>
+    <td>INCRBY</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Increment the integer value of a key by the given amount</td>
+  </tr>
+  <tr>
+    <td>APPEND</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Append a value to a key</td>
+  </tr>
+  <tr>
+    <td>GETRANGE</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Get a substring of the string stored at a key</td>
+  </tr>
+  <tr>
+    <td>SETRANGE</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Overwrite part of a string at key starting at the specified offset</td>
+  </tr>
+  <tr>
+    <td>GETBIT</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Returns the bit value at offset in the string value stored at key</td>
+  </tr>
+  <tr>
+    <td>SETBIT</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Sets or clears the bit at offset in the string value stored at key</td>
+  </tr>
+</table>
+
+
+<table>
+<br>
+<strong>Lists</strong>: Redis Lists are simply lists of strings, sorted by insertion order. It is possible to add elements to a Redis List pushing new elements on the head (on the left) or on the tail (on the right) of the list.
+  <tr>
+    <th><u>Redis</u></th>
+    <th>&nbsp&nbsp&nbsp&nbsp</th>
+    <th><u>Command</u></th>
+  </tr>
+  <tr>
+    <td>LPUSH</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Prepend one or multiple values to a list</td>
+  </tr>
+  <tr>
+    <td>RPUSH</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Append one or multiple values to a list</td>
+  </tr>
+</table>
+
+
+<table>
+<br>
+<strong>Sets ("S"...)</strong>: Redis Sets are an unordered collection of Strings. It is possible to add, remove, and test for existence of members in O(1) (constant time regardless of the number of elements contained inside the Set).
+  <tr>
+    <th><u>Redis</u></th>
+    <th>&nbsp&nbsp&nbsp&nbsp</th>
+    <th><u>Command</u></th>
+  </tr>
+  <tr>
+    <td>SADD</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Add one or more members to a set</td>
+  </tr>
+  <tr>
+    <td>SINTER</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Intersect multiple sets</td>
+  </tr>
+  <tr>
+    <td>SPOP</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Remove and return a random member from a set</td>
+  </tr>
+  <tr>
+    <td>SRANDMEMBER</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Get one or multiple random members from a set</td>
+  </tr>
+</table>
+
+
+<br>
+
+
+<table>
+<strong>Sorted Sets ("Z"...)</strong>: Redis Sorted Sets are, similarly to Redis Sets, non repeating collections of Strings. The difference is that every member of a Sorted Set is associated with score, that is used in order to take the sorted set ordered, from the smallest to the greatest score. While members are unique, scores may be repeated.
+  <tr>
+    <tr>
+    <th><u>Redis</u></th>
+    <th>&nbsp&nbsp&nbsp&nbsp</th>
+    <th><u>Command</u></th>
+  </tr>
+    <td>ZADD</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Add one or more members to a sorted set, or update its score if it already exists</td>
+  </tr>
+  <tr>
+    <td>ZRANGE</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Return a range of members in a sorted set, by index</td>
+  </tr>
+  <tr>
+    <td>ZRANK</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Determine the index of a member in a sorted set</td>
+  </tr>
+  <tr>
+    <td>ZRANGEBYSCORE</td>
+    <td>&nbsp&nbsp&nbsp&nbsp</td>
+    <td>Return a range of members in a sorted set, by score</td>
+  </tr>
+</table>
+
+
+<br>
+
+
+<h3>Wrapping up</h3>
+
+
+<p>That&rsquo;s a quick intro to Redis. You can try Redis using Redis' own  <a href="http://try.redis.io/">&ldquo;Try Redis&rdquo; command line tutorial</a>, but I prefer setting it up in an application or IRB environment myself.</p>
+]]></content>
+  </entry>
+  
+</feed>

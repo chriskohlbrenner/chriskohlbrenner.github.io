@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Simplecov | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/simplecov/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Pursuit of (Programming) Happiness: Testing]]></title>
+    <link href="http://cek.io/blog/2014/04/22/pursuit-of-happyness/"/>
+    <updated>2014-04-22T15:29:33-04:00</updated>
+    <id>http://cek.io/blog/2014/04/22/pursuit-of-happyness</id>
+    <content type="html"><![CDATA[<p>I recently remarked that I&rsquo;m beginning to enjoy writing tests, but&mdash;in the same breath&mdash;acknowledged that &ldquo;enjoy&rdquo; is not quite accurate. It&rsquo;s more like I&rsquo;ve moved from avoidance of testing to a neutrality about it, a mindset that sees its value and knows it&rsquo;s attainable. That transition is an ongoing pursuit: of testing, of test-driven development, and of &ldquo;enjoyment&rdquo; of those things. An ongoing pursuit of happiness.</p>
+
+<p>There&rsquo;s a ton of variety to testing. There are different frameworks (an old but helpful <a href="http://www.ultrasaurus.com/2009/08/ruby-unit-test-frameworks/">breakdown of a few frameworks here</a> and <a href="http://en.wikipedia.org/wiki/Unit_testing_frameworks_for_Ruby#Unit-testing_frameworks">Wikipedia&rsquo;s overview here</a>):</p>
+
+<ul>
+  <li><a href="https://github.com/rspec/rspec">Rspec</a>,</li>
+  <li><a href="http://ruby-doc.org/stdlib-1.9.3/libdoc/minitest/spec/rdoc/MiniTest/Spec.html,">Minitest</a> </li>
+  <li><a href="http://www.ruby-doc.org/stdlib-2.1.1/libdoc/test/unit/rdoc/Test/Unit.html">Test::Unit</a>,</li>
+  <li><a href="https://github.com/thoughtbot/shoulda">Shoulda</a>,</li>
+</ul>
+
+
+<p>There are different types of tests:</p>
+
+<ul>
+  <li>Unit and integration tests</li>
+  <li>Model, view, and controller specs</li>
+  <li>Feature and request specs</li>
+</ul>
+
+
+<p>There are even differences of opinions about best practices (though, for RSpec, <a href="http://betterspecs.org/">here are some practices</a> that seem to be considered &ldquo;better&rdquo;). Acknowledging all of that diversity in test-driven development, my experience has been primarily contrained to RSpec, so this blog post will be too.</p>
+
+<!--more-->
+
+
+
+
+<h2>An example: testing Tender</h2>
+
+
+<p><img class="right" src="/images/typeahead.png" width="400">
+One application I&rsquo;ve built recently is Tender (<a href="http://github.com/AlexPatriquin/BitcoinMessenger">code on Github</a> and <a href="http://tendermessenger.com">live deployed app</a>). The key components to Tender boil down to the interface you see at right: (1) a User model and (2) the functionality of sending messages and bitcoin.</p>
+
+<p>For that reason I decided on two key test areas:</p>
+
+<ol>
+  <li>A <a href="https://github.com/AlexPatriquin/BitcoinMessenger/blob/master/spec/models/user_spec.rb">User model spec</a>.</li>
+  <li>A <a href="https://github.com/AlexPatriquin/BitcoinMessenger/blob/master/spec/features/form_feature_spec.rb">feature spec</a> ensuring the form functioned as intended.</li>
+</ol>
+
+
+<p>Feature specs became my best friend. The most difficult part was <a href="https://github.com/AlexPatriquin/BitcoinMessenger/blob/master/spec/support/omniauth_macros.rb">mocking the omniauth login</a> (so I&rsquo;d have a valid test user who could &ldquo;send&rdquo; bitcoin). With this covered, I was able to run the code below.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (form_spec.rb)</span> <a href='/downloads/code/form_spec.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># before block, etc.</span>
+</span><span class='line'><span class="n">it</span> <span class="s2">&quot;sends bitcoin and message&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;name_or_email&#39;</span><span class="p">,</span> <span class="ss">:with</span><span class="o">=&gt;</span><span class="s2">&quot;c.kohlbrenner@gmail.com&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;amount&#39;</span><span class="p">,</span> <span class="ss">:with</span><span class="o">=&gt;</span><span class="s2">&quot;0.002&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="ss">:with</span><span class="o">=&gt;</span><span class="s2">&quot;Capybara feature test&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">click_button</span> <span class="s2">&quot;Send&quot;</span>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_text</span><span class="p">(</span><span class="s2">&quot;Sent 0.002 to c.kohlbrenner@gmail.com.&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="c1"># more tests</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+And voilà, Capybara tests the feature perfectly. This was, of course, very easy to replicate to test form validations, requests, Bitcoin requests (instead of payments), etc.</p>
+
+<h2>The why</h2>
+
+
+<p>Is this whole blog post about a shiny green badge on the Readme? Yes, in part. It looks so nice!</p>
+
+<p><img class="center" src="/images/tender-readme.png"></p>
+
+<p>Jokes aside, it&rsquo;s validating to have a <a href="https://coveralls.io/r/AlexPatriquin/BitcoinMessenger?branch=master">seemingly comprehensive test suite</a>. But it&rsquo;s only validating because there&rsquo;s value in an <strong>actually</strong> comprehensive test suite.</p>
+
+<p>Testing is ultimately about <strong>making our jobs easier</strong>. As <a href="http://guides.rubyonrails.org/v3.2.13/testing.html#why-write-tests-for-your-rails-applications">the RailsGuide on testing</a> says:
+<blockquote><p></p></p><p><ul><br/>  <li>By simply running your Rails tests you can ensure your code adheres to the desired functionality even after some major code refactoring.</li><br/>  <li>Rails tests can also simulate browser requests and thus you can test your application’s response without having to test it through your browser.</li><br/></ul></p><p><br/><p></p><footer><strong>RailsGuides <a href="http://guides.rubyonrails.org/v3.2.13/testing.html#why-write-tests-for-your-rails-applications">http://guides.rubyonrails.org/v3.2.13/testing.html#why-write-tests-for-your-rails-applications</a> A Guide to Testing Rails Applications</strong></footer></blockquote>
+Doesn&rsquo;t that sound great? Ensuring adherence to the desired functionality even after refactoring. Knowing how your application will respond without opening your browser. Of course there are other ways of testing your app&mdash;you can open the browser and try it out. But how much more reliable, fast, and easy is it to have a test suite that you can run and trust?</p>
+
+<p>This became evident over the course of building Tender. We&rsquo;d have the functionality we wanted, then add a feature, which would break a different (previously working) feature, but we wouldn&rsquo;t know that until hours or days later. Testing makes that feedback immediate, and ensures that your code is always working (or at least points out where it&rsquo;s not working).</p>
+
+<h2>Better Specs</h2>
+
+
+<p>This was all great&mdash;I&rsquo;m now more comfortable writing tests, and I see their value more clearly (ensuring my app is running is as simple as running <code>rspec</code> or looking at my <a href="https://travis-ci.org/AlexPatriquin/BitcoinMessenger">Travis build</a>). That said, I&rsquo;m certainly still learning. A helpful lesson came from John Kelly Ferguson, Flatiron alum and web developer extraordinaire who reviewed Tender&rsquo;s code. His feedback is laid out nicely in <a href="https://github.com/AlexPatriquin/BitcoinMessenger/pull/4">this pull request</a>.</p>
+
+<p>What it boils down to is what <a href="http://betterspecs.org/">Better Specs</a> says on its homepage:
+<blockquote><p>On the web there are many resources that give complete overview of <em>what</em> you can do with RSpec. But there are fewer resources devoted to how to create a great RSpec test suite.</p></p><p><p>Better Specs tries to fill this gap by collecting most of the &ldquo;best practices&rdquo; that other developers learn through years of experience.</p><footer><strong>BetterSpecs <a href="http://betterspecs.org/">http://betterspecs.org/</a> { rspec guidelines with ruby }</strong></footer></blockquote></p>
+
+<p>My learning has gotten me to an initial implementation of an RSpec test suite&mdash;I now look to Better Specs for some better (or even best) practices. That said, getting this far was an accomplishment in itself. Now to continue that pursuit of happiness.</p>
+
+<h4>Bonus: straight from the creator of Ruby on Rails</h4>
+
+
+<p>DHH just happened to post <a href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">this essay</a> the day after I wrote this blog. A helpful reminder to focus on what&rsquo;s helpful&mdash;what makes programming easier&mdash;and not on dogmas of TDD or test-first.</p>
+]]></content>
+  </entry>
+  
+</feed>

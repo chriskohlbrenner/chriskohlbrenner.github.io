@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Boolean | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/boolean/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Two Truths and a [False]: Booleans and Truthiness in Ruby and JavaScript]]></title>
+    <link href="http://cek.io/blog/2014/04/30/ruby-vs-javascript-booleans/"/>
+    <updated>2014-04-30T10:34:23-04:00</updated>
+    <id>http://cek.io/blog/2014/04/30/ruby-vs-javascript-booleans</id>
+    <content type="html"><![CDATA[<p>We all know the icebreaker game &ldquo;Two Truths and a Lie&rdquo;: each individual in a group tells three statements about themselves; the rest of the group tries to distinguish which of the three is a lie. For example:</p>
+
+<ol>
+  <li>I speak Arabic, French, German, Spanish, and Hebrew.</li>
+  <li>I once broke my collarbone in a game of wiffleball.</li>
+  <li>I have been to Staten Island.</li>
+</ol>
+
+
+<p>(The lie is revealed below).</p>
+
+<h3>Context in Programming: Ruby vs. JavaScript</h3>
+
+
+<p>What&rsquo;s Boolean? <a href="http://en.wikipedia.org/wiki/Boolean_data_type">Per Wikipedia</a>, &ldquo;the Boolean or logical data type is a data type, having two values (usually denoted true and false), intended to represent the truth values of logic and Boolean algebra. It is named after George Boole, who first defined an algebraic system of logic in the mid 19th century.&rdquo;</p>
+
+<!--more-->
+
+
+<p>Some context in JavaScript:
+<blockquote><p>JavaScript makes a somewhat arbitrary distinction between values:<ul><br/>  <li>The primitive values are Booleans, numbers, strings, null, and undefined.</li><br/>  <li>All other values are objects.</li></ul></p><footer><strong>&ldquo;Speaking JavaScript&rdquo; <a href="http://speakingjs.com/es5/ch01.html#basic_prim_vs_obj">http://speakingjs.com/es5/ch01.html#basic_prim_vs_obj</a> { &ldquo;Primitive Values Versus Objects&rdquo; }</strong></footer></blockquote></p>
+
+<p>This distinction between primitives and objects is important, as we&rsquo;ll see in a minute.</p>
+
+<h3>What's False in JavaScript?</h3>
+
+
+<p>JavaScript interprets the following values as false (i.e., if these values were to follow a conditional (<code>if</code>), the conditional code wouldn&rsquo;t run:</p>
+
+<ul>
+  <li>undefined, null</li>
+  <li>Boolean: false</li>
+  <li>Number: -0, NaN</li>
+  <li>String: ''</li>
+</ul>
+
+
+<p>All other values are considered true, particularly <strong>all objects</strong>.</p>
+
+<h3>And Ruby?</h3>
+
+
+<p>It&rsquo;s even simpler in Ruby. The following are false:</p>
+
+<ul>
+  <li>nil</li>
+  <li>Boolean: false</li>
+</ul>
+
+
+<p>Everything else is true!</p>
+
+<h3>Is it really that simple?</h3>
+
+
+<p>Yes and no. In terms of how Ruby and JavaScript evaluate certain values, yes. Where a Boolean is expected, Ruby evaluates nil as false, JavaScript evaluates NaN as false.</p>
+
+<p>That said, what we&rsquo;re doing is evaluating non-Boolean values as Boolean. For that reason, values like 8, &ldquo;abc&rdquo;, undefined, and nil are &ldquo;truthy&rdquo; or &ldquo;falsey&rdquo;. They&rsquo;re not technically true or false, because only true and false are Booleans.</p>
+
+<p><a href="https://gist.github.com/jfarmer/2647362">Note</a>: &ldquo;In some languages, like C and Python, 0 counts as false. In fact, in Python, empty arrays, strings, and hashes all count as false. In JavaScript, empty strings count as false, but empty arrays count as true.&rdquo; Again, in Ruby, only nil and false evaluate as false. Even 0 evaluates as true.</p>
+
+<h3>Proof that this is accurate</h3>
+
+
+<p>The best way to become familiar with Boolean values is to try them out in the console. In JavaScript, the <code>Boolean([value])</code> object evaluates the Boolean value (i.e., converts non-Boolean to Boolean). In Ruby, the double bang (<code>!!</code>) converts non-Boolean values to Boolean. See some examples below: first JavaScript, then Ruby.</p>
+
+<p><img class="center" src="/images/js-boolean.png">
+<img class="center" src="/images/ruby-boolean.png">
+(note, that warning&mdash;&ldquo;string literal in condition&rdquo;&mdash;is telling us what we already know: that a string literal like &ldquo;abc&rdquo; is non-Boolean but being evaluated as such.)</p>
+
+<h3>My lie revealed</h3>
+
+
+<p>For those readers interested in my personal truths and lies&hellip;</p>
+
+<ol>
+  <li>I speak Arabic, French, German, Spanish, and Hebrew.
+      <strong>FALSE[Y]</strong> - I speak (to some degree) Arabic, French, German, and Spanish. I do not speak Hebrew.
+  </li>
+  <li>I once broke my collarbone in a game of wiffleball.
+      <strong>TRUE</strong> - I ran (very quickly) into someone much bigger than myself.</li>
+  <li>I have been to Staten Island.
+      <strong>TRU[THY]</strong> - I haven't <u>really</u> been to Staten Island, but I've taken the ferry a few times and driven across the Verrazano Bridge.
+  </li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

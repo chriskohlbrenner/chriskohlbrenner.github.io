@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Performance | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/performance/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[JavaScript's Call Stack, Callback Queue, and Event Loop]]></title>
+    <link href="http://cek.io/blog/2015/12/03/event-loop/"/>
+    <updated>2015-12-03T09:01:39-05:00</updated>
+    <id>http://cek.io/blog/2015/12/03/event-loop</id>
+    <content type="html"><![CDATA[<p>In this video, Philip Roberts clears up a lot of the details surrounding JavaScript&rsquo;s call stack, callback queue, and event loop. Feel free to skip this blog post and spend a half hour watching <a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">the video</a> instead. But if you&rsquo;d rather skim my highlights, don&rsquo;t let me stop you!</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8aGhZQkoFbQ" frameborder="0" allowfullscreen></iframe>
+
+
+
+
+<!--more-->
+
+
+
+
+<h3>What is JavaScript</h3>
+
+
+<p>What is JavaScript anyway? Some words:</p>
+
+<ul>
+<li>It&rsquo;s a single-threaded, non-blocking, asynchronous, concurrent language"</li>
+<li>It has a call stack, an event loop, a callback queue, some other apis and stuff</li>
+</ul>
+
+
+<p>If you&rsquo;re like me (or Philip Roberts, it seems), these words themselves don&rsquo;t mean a ton. So let&rsquo;s parse that out.</p>
+
+<h3>JavaScript Runtimes</h3>
+
+
+<p>JavaScript runtimes (like V8) have a heap (memory allocation) and stack (execution contexts). But they don&rsquo;t have <code>setTimeout</code>, the DOM, etc. Those are web APIs in the browser.</p>
+
+<h3>JavaScript as we know it</h3>
+
+
+<p>JavaScript in the browser has:</p>
+
+<ul>
+<li>a runtime like V8 (heap/stack)</li>
+<li>Web APIs that the browser provides, like the DOM, ajax, and <code>setTimeout</code></li>
+<li>a callback queue for events with callbacks like <code>onClick</code>, <code>onLoad</code>, <code>onDone</code></li>
+<li>an event loop</li>
+</ul>
+
+
+<p><img src="/images/event-loop/javascript.png"></p>
+
+<h3>What's the call stack?</h3>
+
+
+<p>JavaScript is single-threaded, meaning it has a single call stack, meaning it can do one thing at a time. The call stack is basically a data structure which records where in the program we are. If we step into a function, we push something onto the stack. If we return from a function, we pop off the top of the stack.</p>
+
+<p>When our program throws an error, we see the call stack in the console. We see the state of the stack (which functions have been called) when that error happened.</p>
+
+<h3>Blocking</h3>
+
+
+<p>An important question that this relates to: what happens when things are slow? In other words, blocking. Blocking doesn&rsquo;t have a strict definition; really it&rsquo;s just things that are slow. <code>console.log</code> isn&rsquo;t slow, but <code>while</code> loops from 1 to 1,000,000,000, image processing, or network requests are slow. Those things that are slow and on the stack are blocking.</p>
+
+<p>Since JS is single-threaded, we make a network request and have to wait until it&rsquo;s done. This is a problem in the browser&mdash;while we wait on a request, the browser is blocked (can&rsquo;t click things, submit forms, etc.). The solution is asynchronous callbacks.</p>
+
+<h3>Concurrency, where we realize there's a lie above</h3>
+
+
+<p>It&rsquo;s a lie that JavaScript can only do one thing at a time. It&rsquo;s true: JavaScript the runtime can only do one thing at a time. It can&rsquo;t make an ajax request while doing other code. It can&rsquo;t do a <code>setTimeout</code> while doing other code. But we can do things concurrently, because the browser is more than the runtime (remember the grainy image above).</p>
+
+<p>The stack can put things into web APIs, which (when done) push callbacks onto task queue, and then&hellip;the event loop. Finally we get to the event loop. It&rsquo;s the simplest little piece in this equation, and it has one very simple job. Look at the stack and look at the task queue; if the stack is empty, it takes the first thing off of the queue and pushes it onto the stack (back in JS land, back inside V8).</p>
+
+<h3>Louping it all together</h3>
+
+
+<p>Philip built an awesome tool to visualize all of this, called <a href="http://latentflip.com/loupe">Loupe</a>. It&rsquo;s a tool that can visualize the JavaScript runtime at runtime.</p>
+
+<p>Let&rsquo;s use it to look at a simple example: logging a few things to the console, with one <code>console.log</code> happening asynchronously in a <code>setTimeout</code>.</p>
+
+<p><img src="/images/event-loop/loupe.gif"></p>
+
+<p>What&rsquo;s actually happening here? Let&rsquo;s go through it:</p>
+
+<ol>
+<li>We step into the <code>console.log('Hi');</code> function, so it&rsquo;s pushed onto the call stack.</li>
+<li><code>console.log('Hi');</code> returns, so it&rsquo;s popped off the top of the stack.</li>
+<li>We step into the <code>setTimeout</code> function, so it&rsquo;s pushed onto the call stack.</li>
+<li><code>setTimeout</code> is part of the web API, so the web API handles that and times out the 2 seconds.</li>
+<li>We continue our script, stepping into the <code>console.log('Everybody')</code> function, pushing it onto the stack.</li>
+<li><code>console.log('Everybody')</code> returns, so it&rsquo;s popped off the stack.</li>
+<li>The 2-second timeout completes, so the callback moves to the callback queue.</li>
+<li>The event loop checks if the call stack is empty. If it were <em>not</em> empty, it would wait. Because it <em>is</em> empty, the callback is pushed onto the call stack.</li>
+<li><code>console.log('Everybody')</code> returns, so it&rsquo;s popped off the call stack.</li>
+</ol>
+
+
+<p>An interesting aside: <code>setTimeout(function(...), 0)</code>. <code>setTimeout</code> with 0 isn&rsquo;t necessarily intuitive, except when considered in the context of call stack and event loop. It basically defers something until the stack is clear.</p>
+
+<h3>Considering UI render performance</h3>
+
+
+<p>To this back to something more surface level, something we deal with every day, let&rsquo;s consider rendering. The browser is constrained by what we&rsquo;re doing in JavaScript. It would like to repaint the screen every 16.6ms (or 60 frames/second). But it can&rsquo;t actually do a render if there&rsquo;s code on the stack.</p>
+
+<p>As Philip says,</p>
+
+<p><blockquote><p>When people say &ldquo;don&rsquo;t block the event loop&rdquo;, this is exactly what they&rsquo;re talking about. Don&rsquo;t put slow code on the stack because, when you do that, the browser can&rsquo;t do what it needs to do, like create a nice fluid UI.</p><footer><strong>Philip Roberts <a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">https://www.youtube.com/watch?v=8aGhZQkoFbQ</a> &ldquo;What the heck is the event loop anyway&rdquo;</strong></footer></blockquote></p>
+
+<p>So, for example, scroll handlers trigger a lot and can cause a lagging UI. Incidentally, this is the clearest explanation I&rsquo;ve heard of debouncing, which is exactly what you need to do to prevent blocking the event loop (that is, let&rsquo;s only do those slow events every X times the scroll handler triggers).</p>
+
+<h3>Closing</h3>
+
+
+<p>In summary, that&rsquo;s what the heck the event loop is. Philip&rsquo;s talk helped me understand a lot of what JavaScript is, what it isn&rsquo;t, which parts of it are runtime vs. browser, and how to use it effectively. Give the talk a watch!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Performance Process: Takeaways From AEA]]></title>
+    <link href="http://cek.io/blog/2015/10/09/performance/"/>
+    <updated>2015-10-09T13:39:03-04:00</updated>
+    <id>http://cek.io/blog/2015/10/09/performance</id>
+    <content type="html"><![CDATA[<p>The stars have aligned lately to focus my attention on performance. Consider the following:</p>
+
+<ul>
+<li>A few months ago, I was tasked with assessing and documenting the differences between our app&rsquo;s functionality/performance in Chrome vs. Firefox.</li>
+<li>This exercise resulted in a pull request that improved Firefox performance by over 2 seconds (~25%) on initial page load.</li>
+<li><a href="/blog/2015/10/08/an-event-apart/">Earlier this week</a>, two separate talks (by <a href="http://twitter.com/yeseniaa">Yesenia Perez-Cruz</a> and <a href="http://twitter.com/lara_hogan">Lara Hogan</a>) focused on designing for performance.</li>
+<li>Also this week, <a href="http://www.nateberkopec.com/2015/10/07/frontend-performance-chrome-timeline.html">Nate Berkopec&rsquo;s post on front end performance</a> made the rounds on Hacker News.</li>
+</ul>
+
+
+<p>What does this add up to? I&rsquo;ve been thinking a lot about performance, particularly front end performance of web apps. In this post, I&rsquo;ll summarize some takeaways from AEA regarding performance, particularly as they relate to integrating performance into planning and design.</p>
+
+<!--more-->
+
+
+
+
+<h3>Set up for failure</h3>
+
+
+<p>Summarizing a few points from Yesenia&rsquo;s talk, consider this project plan, one that we&rsquo;ve all presumed to follow:</p>
+
+<p><img src="/images/performance/ideal-plan.png"></p>
+
+<p>But then realize that, due to biz dev requirements, delays in research, and longer-than-expected design time, all while keeping the same sprint/client/deployment deadline, the actual project plan looks like this:</p>
+
+<p><img src="/images/performance/actual-plan.png"></p>
+
+<p>We&rsquo;ve all seen it! And it probably happens more often this way than the ideal case. What&rsquo;s the definition of insanity again?</p>
+
+<p>Now I could speculate and hypothesize about the underlying issues of failed project management, but I&rsquo;ll leave that to someone else. I want to focus on performance. A question: with that development timeline in mind, when do we think about performance? During the software development segment, right?</p>
+
+<p><img src="/images/performance/perf-timeline-reality.png"></p>
+
+<p>But why? We developers think we can implement user functionality, meet the design specs, and still have time left over to optimize at the end. But that never happens. Could we not consider performance at the beginning of the process?</p>
+
+<p><img src="/images/performance/perf-timeline-improved.png"></p>
+
+<p>We need to think about performance as a design feature. We need to think about performance early. We need to prioritize page speed and load times just as much as UX and beautiful interfaces. But how?</p>
+
+<h3>Performance Budgets</h3>
+
+
+<p><span class='caption-wrapper'><img class='caption' src='/images/performance/dilbert-budget.gif' width='' height='' title='&ldquo;We only have the budget for a poor job&rdquo;'><span class='caption-text'>&ldquo;We only have the budget for a poor job&rdquo;</span></span></p>
+
+<p>I&rsquo;m not sure we&rsquo;re being cheap <em>or</em> smart by thinking about performance this way. We don&rsquo;t have any budget at all! A theme throughout AEA, and not just in Yesenia&rsquo;s and Lara&rsquo;s talks, was <strong>setting a performance budget</strong>.</p>
+
+<p>Yesenia explained that a performance budget is both &ldquo;a performance goal used to guide design &amp; development&rdquo; and &ldquo;a tangible way to talk about performance.&rdquo; How well do those conversations about performance-intensive features usually go? For developers, it&rsquo;s often either &ldquo;no, we can&rsquo;t do that&rdquo; or a resigned &ldquo;ok, I guess we have to do it.&rdquo;</p>
+
+<p><span class='caption-wrapper'><img class='caption' src='/images/performance/google-designer-developer.png' width='' height='' title='One incredible trick will render 728,000 Google results obselete!'><span class='caption-text'>One incredible trick will render 728,000 Google results obselete!</span></span></p>
+
+<p>What if, instead of a win-lose scenario between designers and devs, the conversation was framed around a budget? We talk about the inherent tradeoffs between technologies, so why not consider performance tradeoffs in discussions about design?</p>
+
+<p>&ldquo;But how do I go about setting a performance budget?&rdquo;, you might ask. Yesenia and Lara made some suggestions:</p>
+
+<ul>
+<li><em>Browser-based approach</em>: &ldquo;our pages should weigh no more than 400kb, and make no more than 15 requests.&rdquo;</li>
+<li><em>User experience-based</em>: &ldquo;our pages should take no more than 10 seconds to load over a sub-3G connection.&rdquo;</li>
+<li><em>Look to your competitors</em>: aim for a 20% improvement over your competitors.</li>
+</ul>
+
+
+<p>I&rsquo;m still working on this, on how to practically establish a performance budget on the job. I don&rsquo;t have access to my competitors' product, so for now I can only set the goal as arbitrarily better performance.</p>
+
+<p>One thing I will say: everything I&rsquo;ve said in this blogpost has to be a culture change. Stealing from Lara&rsquo;s talk, it can&rsquo;t be all on one individual. You have to establish a culture of performance.</p>
+
+<blockquote class="twitter-tweet" lang="en"><p lang="en" dir="ltr">&quot;There should be no performance cops or janitors. It&#39;s not sustainable. You need a culture of performance.&quot; <a href="https://twitter.com/lara_hogan">@lara_hogan</a> <a href="https://twitter.com/hashtag/aeaaus?src=hash">#aeaaus</a></p>&mdash; Chris EK (@cek_io) <a href="https://twitter.com/cek_io/status/651406414225649666">October 6, 2015</a></blockquote>
+
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[An Event Apart]]></title>
+    <link href="http://cek.io/blog/2015/10/08/an-event-apart/"/>
+    <updated>2015-10-08T17:09:32-04:00</updated>
+    <id>http://cek.io/blog/2015/10/08/an-event-apart</id>
+    <content type="html"><![CDATA[<p>This week, I had the good fortune of attending <a href="http://aneventapart.com/event/austin-2015">An Event Apart in Austin, TX</a>. Coordinated by the same great people behind <a href="http://alistapart.com/">A List Apart</a>, An Event Apart (AEA) is two days of fantastic talks about the web&mdash;content, design, development&mdash;and a full-day workshop (A Day Apart). Many of the concepts we now take for granted as web best practices, like mobile first and responsive design, have been introduced and elaborated at AEA events.</p>
+
+<p>Before I continue, some thanks are in order. AEA made three scholarships available to Flatiron School alumni. Now, in retrospect, I realize the value of attending is well worth the $1,000+ price tag, but the reality is: I wouldn&rsquo;t have been able to justify that cost on my own. So some major thank yous for making this happen, first to AEA for offering those scholarships, and then to Flatiron School for enabling that hookup. <strong>Thank you!</strong></p>
+
+<p>Moving on, I want to share some of my notes and highlights from the three days. For a quick summary of the conference in the form of 140-character highlights, <a href="https://twitter.com/hashtag/aeaaus">#aeaaus</a> is a great place to start. A summary of my takeaways from the conference (as well as my full notes) are below.</p>
+
+<!--more-->
+
+
+<p>My full unfiltered/unedited notes can be viewed <a href="/downloads/aea_notes.txt">here</a>, and videos of all talks will be posted online at some point, so you should sign up <a href="http://aneventapart.com/subscribe">here</a>. For now, these are my highlights/summaries of each talk, some of which may turn into full posts.</p>
+
+<ul>
+<li><strong>Jeffrey Zeldman</strong> opened the conference by telling his personal narrative, from starving artist to professional creative to disillusioned advertiser to web practitioner. <br><em>Takeaways</em>: Talk about the problems you&rsquo;re solving, not the aesthetics; attitude trumps work; blog!</li>
+<li><strong>Yesenia Perez-Cruz</strong> discussed design from the perspective of performance. <br><em>Takeaways</em>: performance isn&rsquo;t a last-minute add-on, it&rsquo;s part of the UX; consider performance at the beginning.</li>
+<li><strong>Jen Simmons</strong> presented modern layouts and recent/upcoming additions to CSS. <br><em>Takeaways</em>: we see the same layout with sidebar everywhere; use CSS shapes/flexbox; layout should serve content.</li>
+<li><strong>Cameron Moll</strong> walked us through interfaces and the ways we interact with them. <br><em>Takeaways</em>: the best interface is the one within reach; forget about mobile/desktop and instead build a unified interface.</li>
+<li><strong>Karen McGrane</strong> summarized issues around content and how it should be separated from form. <br><em>Takeaways</em>: separating form from content makes web design much easier than an interconnected blob of a website.</li>
+<li><strong>Ethan Marcotte</strong> argued that laziness is good, that less is more when it comes to responsive design. <br><em>Takeaways</em>: use flexible layout systems rather than device-specific designs.</li>
+<li><strong>Lara Callender Hogan</strong> built on Yesenia&rsquo;s talk about performance <br><em>Takeaways</em>: we optimize for design/layout but not page speed; need happy medium of aesthetics and speed; tips for image optimization; need a culture of performance; set a performance budget.</li>
+<li><strong>Eric Meyer</strong> presented an incredibly vulnerable talk about personal tragedy and how his experience as someone in crisis informs his understanding of web design<br><em>Takeaways</em>: design with crisis-driven personas in mind; empathy; don&rsquo;t consider just the ideal user.</li>
+<li><strong>Jason Grigsby</strong> got into the nitty gritty of responsive images.<br><em>Takeaways</em>: responsive images matter for resolution switching and art direction; look-ahead preparser.</li>
+<li><strong>Brad Frost</strong> framed web design from the perspective of atoms &ndash;> molecules &ndash;> organisms.<br><em>Takeaways</em>: design systems of components not pages.</li>
+<li><strong>Matt Haughey</strong> brought a customer service perspective to web design.<br><em>Takeaways</em>: everyone at Slack does customer service; need to have empathy for the user.</li>
+<li><strong>Jeremy Keith</strong> took us through the history of the web and argued for using basic, supported technologies that don&rsquo;t break.<br><em>Takeaways</em>: identify core functionality and implement using simplest technology, then enhance.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

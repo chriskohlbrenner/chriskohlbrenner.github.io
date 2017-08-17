@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: CSS | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/css/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[A Single Set of Color Vars With PostCSS]]></title>
+    <link href="http://cek.io/blog/2016/06/30/postcss-color-vars/"/>
+    <updated>2016-06-30T08:05:35-04:00</updated>
+    <id>http://cek.io/blog/2016/06/30/postcss-color-vars</id>
+    <content type="html"><![CDATA[<p>In this post, I describe how to create a single list of color variables (in JavaScript) so that those colors can be shared across JavaScript files and CSS stylesheets. Using PostCSS within a Webpack app, I outline the problem of sharing styles between CSS and JS and how it can be solved. For step-by-step code examples, skip ahead to &ldquo;Enter PostCSS (Problem Solved)&rdquo;.</p>
+
+<h3>The Problem We're Solving</h3>
+
+
+<p>At my day job, we&rsquo;d had a <code>colors.css</code> file for a while, where we define all the hex codes for our color scheme, as defined by our designers. It looked something like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (colors.css)</span> <a href='/downloads/code/postcss/colors.css'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nd">:root</span> <span class="p">{</span>
+</span><span class='line'>  <span class="o">--</span><span class="nb">black</span><span class="o">:</span> <span class="m">#1d3744</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">--</span><span class="nb">white</span><span class="o">:</span> <span class="m">#fff</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">--</span><span class="nb">red</span><span class="o">:</span> <span class="m">#c21e48</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This enabled us to use the same colors in any of our other CSS files using CSS modules:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (component-specific.css)</span> <a href='/downloads/code/postcss/component-specific.css'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="k">@import</span> <span class="s2">&quot;../theme/colors&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.my-special-component</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">background-color</span><span class="o">:</span> <span class="n">var</span><span class="p">(</span><span class="o">--</span><span class="nb">white</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">color</span><span class="o">:</span> <span class="n">var</span><span class="p">(</span><span class="o">--</span><span class="nb">red</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Straightforward, keeps things DRY, makes it easy to change colors when it strikes the designer&rsquo;s fancy, etc.</p>
+
+<p>For a long time, while our CSS colors were nicely organized, our JS colors weren&rsquo;t. We have colors in our D3 visualizations and our inline styles on React components. As a simple improvement, I decided to pull all our colors into a single map that could be read by both our CSS and JS files. <em>NB</em>: this post is about CSS <em>colors</em>, but can apply to any CSS variables you&rsquo;d like shared to JS.</p>
+
+<!--more-->
+
+
+
+
+<h3>Enter PostCSS (Problem Solved)</h3>
+
+
+<p><a href="https://github.com/postcss/postcss">PostCSS</a> does a lot of things. I&rsquo;ll leave it as an exercise to the reader to explore the <a href="https://github.com/postcss/postcss/blob/master/docs/plugins.md">various plugins</a> (or just <a href="https://github.com/postcss/postcss#plugins">some of the most popular ones</a>).</p>
+
+<p>For my purposes, I needed <a href="https://github.com/postcss/postcss-loader">postcss-loader</a> (a loader for Webpack), <a href="https://github.com/MoOx/postcss-cssnext">postcss-cssnext</a> (enables the latest CSS syntax, which we were already using through <a href="http://cssnext.io/">cssnext</a>), <a href="https://github.com/postcss/postcss-url">postcss-url</a>, and <a href="https://github.com/postcss/postcss-import">postcss-import</a>.</p>
+
+<p>The change was effectively X steps (X easy steps to a single list of color variables!):</p>
+
+<ol>
+  <li>
+    Add PostCSS plugins to package.json:
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (package.json)</span> <a href='/downloads/code/postcss/package.json'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="err">//</span> <span class="err">...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">&quot;devDependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">//</span> <span class="err">...</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-browser-reporter&quot;</span><span class="p">:</span> <span class="s2">&quot;^0.5.0&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-cssnext&quot;</span><span class="p">:</span> <span class="s2">&quot;^2.6.0&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-import&quot;</span><span class="p">:</span> <span class="s2">&quot;^8.1.2&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-loader&quot;</span><span class="p">:</span> <span class="s2">&quot;^0.9.1&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-reporter&quot;</span><span class="p">:</span> <span class="s2">&quot;^1.3.3&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;postcss-url&quot;</span><span class="p">:</span> <span class="s2">&quot;^5.1.2&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="err">//</span> <span class="err">...</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="err">//</span> <span class="err">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+
+  <li>
+    Since I had previously been using cssnext, I followed [these migration steps](http://cssnext.io/postcss/#postcss-loader) to upgrade to postcss-cssnext. This meant swapping the `cssnext-loader` for `postcss-loader` in my Webpack loaders, removing cssnext from my webpack config, and adding the postcss options to webpack config:
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (webpack.config.js)</span> <a href='/downloads/code/postcss/webpack.config.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">module</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">loaders</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="nx">test</span><span class="o">:</span>   <span class="sr">/\.css$/</span><span class="p">,</span>
+</span><span class='line'>          <span class="nx">loader</span><span class="o">:</span> <span class="s2">&quot;style-loader!css-loader!postcss-loader&quot;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">]</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">postcss</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">webpack</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span>
+</span><span class='line'>      <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;postcss-import&quot;</span><span class="p">)({</span> <span class="nx">addDependencyTo</span><span class="o">:</span> <span class="nx">webpack</span> <span class="p">}),</span>
+</span><span class='line'>      <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;postcss-url&quot;</span><span class="p">)(),</span>
+</span><span class='line'>      <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;postcss-cssnext&quot;</span><span class="p">)({</span>
+</span><span class='line'>        <span class="nx">features</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">customProperties</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">variables</span><span class="o">:</span> <span class="nx">colorVars</span> <span class="c1">// `colorVars` will be defined above, see step 4.</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">}),</span>
+</span><span class='line'>      <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;postcss-browser-reporter&quot;</span><span class="p">)(),</span>
+</span><span class='line'>      <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;postcss-reporter&quot;</span><span class="p">)(),</span>
+</span><span class='line'>    <span class="p">]</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+
+  <li>
+    Add a colors.js. I chose to CONSTANT_CASE the variables (for idiomatic JS).
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (colors.js)</span> <a href='/downloads/code/postcss/colors.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;BLACK&quot;</span><span class="o">:</span> <span class="s2">&quot;#1d3744&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;WHITE&quot;</span><span class="o">:</span> <span class="s2">&quot;#fff&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;RED&quot;</span><span class="o">:</span> <span class="s2">&quot;#c21e48&quot;</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+
+  <li>
+    Require `colors.js` in webpack.config.js.
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (require-colors.js)</span> <a href='/downloads/code/postcss/require-colors.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// to be added aboce `module.exports` of webpack.config.js</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">colorVars</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./app/constants/colors&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+
+  <li>
+    (OPTIONAL) Because I wanted CSS variables to be lowercase and hyphen-separated so I could maintain our old `color: var(--light-grey);` syntax, I added a transformation from the constant case (using Ramda's `curry` and `reduce`):
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (case-transform.js)</span> <a href='/downloads/code/postcss/case-transform.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// to be added above `module.exports` of webpack.config.js</span>
+</span><span class='line'><span class="c1">// color vars in JS are CONST_CASE, but need to be converted to hyphen-case for CSS</span>
+</span><span class='line'><span class="kr">const</span> <span class="nx">renameKeys</span> <span class="o">=</span> <span class="nx">R</span><span class="p">.</span><span class="nx">curry</span><span class="p">((</span><span class="nx">renameFn</span><span class="p">,</span> <span class="nx">obj</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">R</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">acc</span><span class="p">[</span><span class="nx">renameFn</span><span class="p">(</span><span class="nx">key</span><span class="p">)]</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">acc</span>
+</span><span class='line'>  <span class="p">},</span> <span class="p">{},</span> <span class="nx">R</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'><span class="kr">const</span> <span class="nx">constCaseToHyphenCase</span> <span class="o">=</span> <span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/_/g</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">).</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">colorVars</span> <span class="o">=</span> <span class="nx">renameKeys</span><span class="p">(</span><span class="nx">constCaseToHyphenCase</span><span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./app/constants/colors&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+  
+  <li>
+    Go forth and use styles!
+    
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (color-vars.js)</span> <a href='/downloads/code/postcss/color-vars.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// we can now do this in React components or any other JS file</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">colors</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;app/constants/colors&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">// ...</span>
+</span><span class='line'><span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">style</span><span class="o">=</span><span class="p">{{</span><span class="nx">backgroundColor</span><span class="o">:</span> <span class="nx">colors</span><span class="p">.</span><span class="nx">white</span><span class="p">}}</span> <span class="o">/&gt;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (color-vars.css)</span> <a href='/downloads/code/postcss/color-vars.css'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="c">/* and this still works, without even needing to `@import &quot;../theme/colors&quot;;` */</span>
+</span><span class='line'><span class="nc">.my-special-component</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">background-color</span><span class="o">:</span> <span class="n">var</span><span class="p">(</span><span class="o">--</span><span class="nb">white</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">color</span><span class="o">:</span> <span class="n">var</span><span class="p">(</span><span class="o">--</span><span class="nb">red</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+  </li>
+
+</ol>
+
+
+<p>And that&rsquo;s it! Now, in addition to everything it already did, running <code>webpack-dev-server</code> will (1) compile using PostCSS, (2) read from colors.js, and (3) set all colors in colors.js as global CSS variables.</p>
+
+<h3>Limitations</h3>
+
+
+<p>The one limitation is hot-reloading. That is, hot reloading works perfectly on changes to JavaScript files and CSS files, with one exception: colors.js. Since colors.js is read on build, we need to restart the webpack dev server anytime we change or add a color variable. <a href="https://stackoverflow.com/questions/35174069/can-i-have-a-single-variables-file-using-cssnext-with-webpack">This question</a> poses effectively the same issue (&ldquo;&hellip;every time I change a variable I have to restart the webpack dev server&rdquo;). For now, that&rsquo;s a tradeoff I can live with.</p>
+
+<h3>Parting thoughts</h3>
+
+
+<p>This new pattern enables much more inline styling with JavaScript. That is, now our React components and D3 visualizations can, in theory, read style variables from JavaScript and never know about CSS.</p>
+
+<p>Following this to its extreme of no-CSS/all-JS may seem crazy, but I remain curious. <a href="https://www.youtube.com/watch?v=ERB1TJBn32c">A lot</a> <a href="https://twitter.com/necolas/status/718517376711405568">has been</a> <a href="https://speakerdeck.com/vjeux/react-css-in-js">said</a> about how inline styles with JavaScript may be the future. At a minimum, it&rsquo;s convenient and fun to do more JS and less CSS. I&rsquo;m excited to see how the community experiments with inline styling and if there come to be best practices around separation of concerns.</p>
+]]></content>
+  </entry>
+  
+</feed>

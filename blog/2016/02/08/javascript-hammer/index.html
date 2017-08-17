@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>The Hammer of JavaScript (and Other Tools for Other Nails) - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="The one where I get a harsh reminder to question my instincts from a real-life experience of this XKCD comic. As a mental exercise, a friend proposed &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2016/02/08/javascript-hammer">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">The Hammer of JavaScript (and Other Tools for Other Nails)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-08T11:10:04-05:00" pubdate data-updated="true">Feb 8<span>th</span>, 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><em>The one where I get a harsh reminder to question my instincts from a real-life experience of <a href="https://xkcd.com/1319/">this XKCD comic</a>.</em></p>
+
+<p>As a mental exercise, a friend proposed the following potential interview question: given a directory with 10,000 files of text, how would you extract all the phone numbers from that directory into a single file?</p>
+
+<p>My immediate thought: this would be a basic assessment of someone&rsquo;s knowledge of:</p>
+
+<ol>
+<li>regular expressions to match patterns of numbers</li>
+<li>how to programmatically read/write files</li>
+<li>basic algorithmic complexity for iterating through files quickly.</li>
+</ol>
+
+
+<p>I even knew how I&rsquo;d implement it: use node&rsquo;s filesystem module to read the files, parse them for regex matches, and write all matches to a new file.</p>
+
+<p><img class="right" src="/images/hammer-nail.jpg" width="300"></p>
+
+<p>I was intrigued enough that I decided to prove it out. I wrote a basic phone number regex by hand (<code>\d{3}(-|\s|\.)?\d{3}(-|\s|\.)?\d{4}\</code> (for 3 digits, 3 digits, and 4 digits separated by hyphens, periods, spaces, or nothing), and looked into popular phone number regexes. I realized how unfamiliar I am with <a href="https://nodejs.org/api/fs.html">Node&rsquo;s filesystem module</a> (<code>readdir</code> and <code>readFile</code> and <code>writeFile</code>). Then I got curious about <a href="https://docs.npmjs.com/getting-started/publishing-npm-packages">publishing npm packages</a>. Before I knew it, I&rsquo;d spent a couple hours and produced a <a href="https://www.npmjs.com/package/collect-phone-numbers">somewhat polished npm project</a> for this hypothetical task.</p>
+
+<p>And it was all wrong.</p>
+
+<!--more-->
+
+
+<p>The thought process I used was logical. My work as a software engineer focuses almost entirely on the web, JavaScript, build tools, UI features, HTTP servers. I&rsquo;m comfortable with databases, front- and back-end code, version control, and countless other things. But that&rsquo;s a small subset of software! Classic hammer/nail.</p>
+
+<p>To Wikipedia:</p>
+
+<blockquote><p>Software: any set of instructions that directs a computer to perform specific tasks or operations.</p><footer><strong>Wikipedia</strong> <cite><a href='https://en.wikipedia.org/wiki/Software'>&#8220;Software&#8221;</a></cite></footer></blockquote>
+
+
+<p>Software is about problem-solving. But problems can&rsquo;t be solved well without being understood. And they won&rsquo;t be well understood if we assume we should use the same solution every time. There&rsquo;s something to be said for using the tools you know, but software also requires a humility to recognize when a given tool is the wrong one.</p>
+
+<p>In this case, I skipped the step of analyzing the problem. I didn&rsquo;t think about the specifics of the problem, the tradeoffs of time, or the alternative solutions I could choose. This was a one-time, approximate task. It was unlikely to be repeated often enough to make automating worthwhile. And yet I instinctually went with what I knew, implementing a &ldquo;good&rdquo;, &ldquo;complete&rdquo; solution that was really just a picture of overengineering.</p>
+
+<p><img class="left" src="https://imgs.xkcd.com/comics/automation.png" width="300"></p>
+
+<p>For a problem like this, why use another language or abstraction when it can be done via the command line, the text interface for the computer itself and a much more direct interface with the filesystem? Why use a language like JavaScript that&rsquo;s best suited for the web or pull in Node just for the sake of using a tool I know?</p>
+
+<p>These are questions I won&rsquo;t soon forget to ask myself when I take on a new problem. Hopefully that&rsquo;ll prevent me from falling into traps that webcomics are made of. I know for sure that, next time I&rsquo;m presented with a problem of finding text within a filesystem, I&rsquo;ll remember that tools like <code>grep</code> were made for exactly that. A simpler, less time-instensive, and more appropriate solution.</p>
+
+<p><code>egrep "\b[[:digit:]]{3}(-|\s|.)?[[:digit:]]{3}(-|\s|.)?[[:digit:]]{4}\b" ./* &gt; ./nums.txt</code></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-08T11:10:04-05:00" pubdate data-updated="true">Feb 8<span>th</span>, 2016</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/command-line/'>Command Line</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/non-code/'>Non-Code</a>, <a class='category' href='/blog/categories/workflow/'>Workflow</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2016/02/08/javascript-hammer/" data-via="heychrisek" data-counturl="http://cek.io/blog/2016/02/08/javascript-hammer/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/03/event-loop/" title="Previous Post: JavaScript's Call Stack, Callback Queue, and Event Loop">&laquo; JavaScript's Call Stack, Callback Queue, and Event Loop</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2016/02/27/react-conf/" title="Next Post: React Conf reactions">React Conf reactions &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

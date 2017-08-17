@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Interfaces | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/interfaces/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Public and Private Interfaces (POODR: Chapter 4)]]></title>
+    <link href="http://cek.io/blog/2014/04/28/poodr-ch-4/"/>
+    <updated>2014-04-28T10:28:38-04:00</updated>
+    <id>http://cek.io/blog/2014/04/28/poodr-ch-4</id>
+    <content type="html"><![CDATA[<p><strong>Having recently graduated from the Flatiron School, I am working my way through programming-related reading, beginning with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="http://cek.io/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
+
+<p><img class="center" src="/images/poodr-figure-4-1.png">
+What you see above are two very different communication patterns. Metz describes them as follows:
+<blockquote><p>In the first application, the messages have no apparent pattern. [&hellip;] In the second application, the messages have a clearly defined pattern. [&hellip;] The design issue in the first application is not necessarily a failure of dependency injection or single responsibility. Those techniques, while necessary, are not enough to prevent the construction of an application whose design causes you pain. The roots of this new problem lie not in what each class does but with what it reveals.&ldquo;</p><footer><strong>&ldquo;Practical Object-Oriented Design in Ruby&rdquo; <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a> Page 60</strong></footer></blockquote></p>
+
+<!--more-->
+
+
+<p>Welcome to public and private interfaces. As Metz explains, we can separate out the methods that we expose and reveal (that is, the public interface) from those that we keep private (known as the&mdash;wait for it&mdash;private interface). A couple other definitions of public and private interfaces:</p>
+
+<table>
+  <tr>
+    <th><strong>Public Interfaces</strong></th>
+    <th><strong>Private Interfaces</strong></th>
+  </tr>
+  <tr>
+    <td>The methods that make up the public interface of your class comprise the face it presents to the world. They:
+      <ul>
+        <li>Reveal its primary responsibility</li>
+        <li>Are expected to be invoked by others</li>
+        <li>Will not change on a whim</li>
+        <li>Are safe for others to depend on</li>
+        <li>Are thoroughly documented in the tests</li>
+      </ul>
+    </td>
+    <td>All other methods in the class are part of its private interface. They:
+      <ul>
+        <li>Handle implementation details</li>
+        <li>Are not expected to be sent by other objects</li>
+        <li>Can change for any reason whatsoever</li>
+        <li>Are unsafe for others to depend on</li>
+        <li>May not even be referenced in the tests</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+
+<p>What does that actually mean? POODR provides a helpful example of a restaurant kitchen: a customer should simply order their meal and have it served to them&mdash;the menu constitutes the public interface&mdash;without needing to go behind-the-scenes into the kitchen.</p>
+
+<p>Awesome. Let&rsquo;s look at a real life example: <a href="http://www.tendermessenger.com/">Tender</a> (Github repo <a href="https://github.com/AlexPatriquin/BitcoinMessenger">here</a>). The image below depicts the main interface for the user: she is given options of sending or requesting bitcoin, typing a message, and designating an amount. This is the user&rsquo;s &ldquo;menu&rdquo;, her public interface, the graphic at right at the top of this post. Of course, there&rsquo;s a private interface as well, the kitchen to this menu, the interwoven left graphic.</p>
+
+<p>How does this play out in code? Like this:
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (tender_user.rb)</span> <a href='/downloads/code/tender_user.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">send_bitcoin</span><span class="p">(</span><span class="n">recipient</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="c1"># Coinbase API uri</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="c1"># uri with necessary params)</span>
+</span><span class='line'>    <span class="n">debit_balance</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">credit_balance</span><span class="p">(</span><span class="n">recipient</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">request_bitcoin</span><span class="p">(</span><span class="n">recipient</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">uri</span> <span class="o">=</span> <span class="c1"># Coinbase API uri</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="c1"># uri with necessary params)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">debit_balance</span><span class="p">(</span><span class="n">amount</span><span class="o">=</span><span class="n">default_amount</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">credit_balance</span><span class="p">(</span><span class="n">recipient</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="n">default_amount</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">urlify</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_send_amount</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_request_amount</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">check_balance</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...Six other methods...</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Without getting into the details of each method, what this structure demonstrates is a public interface that exposes just the <code>send_bitcoin</code> and <code>request_bitcoin</code> methods. This is all the menu that the User needs. Of course, behind the scenes there are lots of private methods being called, to say nothing of the controller actions delegating those methods, but the user only needs these two.</p>
+
+<p>It comes down to creating explicit interfaces. As Metz argues,
+<blockquote><p>Your goal is to write code that works today, that can easily be reused, and that can be adapted for unexpected use in the future. Other people will invoke your methods; it is your obligation to communicate which ones are dependable.</p></p><p><p>Every time you create a class, declare its interfaces. Methods in the public<br/>interface should<ul><br/><li>Be explicitly identified as such</li><br/><li>Be more about what than how</li><br/><li>Have names that, insofar as you can anticipate, will not change</li><br/><li>Take a hash as an options parameter</li></p><footer><strong>&ldquo;Practical Object-Oriented Design in Ruby&rdquo; <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a> Page 76</strong></footer></blockquote></p>
+
+<p>The code in the User model above was my attempt to do these things and thus apply practical techniques of object-oriented design.</p>
+]]></content>
+  </entry>
+  
+</feed>

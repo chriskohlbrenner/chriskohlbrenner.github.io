@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Introducing Tender - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="Note: This post is a reblog. It originally appeared on Alex Patriquin&rsquo;s blog. Introducing Tender It&rsquo;s been a few weeks since I last &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2014/04/29/reblog-introducing-tender">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Introducing Tender</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-29T09:46:48-04:00" pubdate data-updated="true">Apr 29<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Note:</strong> This post is a reblog. It originally appeared on <a href="http://squarecraft.co/introducing-tender">Alex Patriquin&rsquo;s blog</a>.</p>
+
+<!--more-->
+
+
+
+
+<h1>Introducing Tender</a></h1>
+
+
+<p>It&rsquo;s been a few weeks since I last posted, as I&rsquo;ve been über busy. In the final month of The Flatiron School, my fellow students and I were in an all-out sprint to build and launch our apps at the Science Fair, a kind of show-and-tell for our projects and the culmination of all our Ruby, Rails and Javascript training over the three month program.</p>
+
+<p>The Science Fair was a resounding success and I&rsquo;m excited to share the first app that I worked on: Tender, a Venmo for Bitcoin. How&rsquo;s how my teammate and I made Tender.</p>
+
+<p><img src="/images/tender-main.png"></p>
+
+<h2>Tender</h2>
+
+
+<p><a href="http://www.tendermessenger.com/">Tender</a> (<a href="https://github.com/alexpatriquin/BitcoinMessenger">Github</a>) is a social payments app (think Venmo) for Bitcoin. Users can send or receive any amount of Bitcoin, including extremely small amounts which can be used to validated the identity of counter-parties. Tender also comes with an inbox/outbox for messages.</p>
+
+<p>I built Tender with my fellow Flatiron student <a href="https://twitter.com/CKohlbrenner">Chris Kohlbrenner</a>. I came up with the initial idea for the project as a Bitcoin dating site&hellip; hence the triple-play on words with the name &ldquo;Tender&rdquo;. However, we decided to generalize the app and make it usable (or at least instructive) for other open source projects as a general social messaging utility. </p><h3>Why Bitcoin Messaging?</h3><p>Bitcoin gets a lot of hype these days, but after working with the cryptocurrency a bit, I really do see its potential to transform online payments and <a target="_blank" data-cke-saved-href="http://blog.pmarca.com/2014/01/22/why-bitcoin-matters/" href="http://blog.pmarca.com/2014/01/22/why-bitcoin-matters/">much more</a>. For example, a messaging system can require a very small amount of Bitcoin get sent with each message as a way to prevent or at least deter bulk volume spammers. After practicing our web development skills, our main purpose in building Tender was to demonstrate this anti-spam concept.</p>
+
+<p>We used Ruby on Rails as the framework and built the Bitcoin transactions features with the Coinbase API and the messaging functionality with a gem called Mailboxer. In the process of weaving those two features together, we learned a lot about them. Payments and messaging share the concept of &ldquo;credits&rdquo; and &ldquo;debits&rdquo; to a balance or mailbox. Kind of like double-ledger accounting, we had to do a credit and a debit whenever a user sent money and a message to another user, and vice-versa. You can see that code play out in the snippet below.</p>
+
+<script src="https://gist.github.com/alexpatriquin/10937359.js"></script>
+
+
+
+
+<h3>Coinbase and Typeahead.js</h3>
+
+
+<p>To build Tender, we used Devise and Omniauth to authenticate users, enable them to sign in via Coinbase and to validate their balances on Coinbase. The app features a lot of validations and notices to users to confirm that their transactions go through when they should and shows descriptive alerts when they shouldn&rsquo;t, such as when the user has insufficient Bitcoin balance.</p>
+
+<p>We also made it easy for users to find each other by implementing an autosuggest user search feature with Twitter&rsquo;s Typeahead.js, and brought the user objects to the views with the gon gem. Finally, Tender features a robust testing suite with Rspec and Capybara, at 92% code coverage.</p>
+
+<p>This was a very interesting project on many levels, from working with a new payment type like Bitcoin, to getting deep into the mechanics of messaging. I also learned quite a bit about implementing complex Javascript features in Rails.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-29T09:46:48-04:00" pubdate data-updated="true">Apr 29<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/portfolio/'>Portfolio</a>, <a class='category' href='/blog/categories/reblog/'>Reblog</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2014/04/29/reblog-introducing-tender/" data-via="heychrisek" data-counturl="http://cek.io/blog/2014/04/29/reblog-introducing-tender/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/28/poodr-ch-4/" title="Previous Post: Public and Private Interfaces (POODR: Chapter 4)">&laquo; Public and Private Interfaces (POODR: Chapter 4)</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/04/30/ruby-vs-javascript-booleans/" title="Next Post: Two Truths and a [False]: Booleans and Truthiness in Ruby and JavaScript">Two Truths and a [False]: Booleans and Truthiness in Ruby and JavaScript &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

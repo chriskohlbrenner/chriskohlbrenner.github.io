@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>JavaScript's Historical Context (According to Douglas Crockford) - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="Summary: I&rsquo;m working my way through a few must-watch videos about JavaScript. If you know JavaScript, pretend to know JavaScript, or hope to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2014/07/21/javascripts-historical-context-crockford">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">JavaScript's Historical Context (According to Douglas Crockford)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-21T10:01:39-04:00" pubdate data-updated="true">Jul 21<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Summary</strong>: I&rsquo;m working my way through a few <a href="https://github.com/bolshchikov/js-must-watch">must-watch videos about JavaScript</a>. If you know JavaScript, pretend to know JavaScript, or hope to learn JavaScript, check out those videos. Or read this and the <a href="/blog/2014/07/21/intro-to-javascript-crockford">following post</a> (and save yourself three hours of video-watching), in which I pull some of my favorite quotes from what <a href="https://en.wikipedia.org/wiki/Douglas_Crockford">Douglas Crockford</a> has to say about JavaScript.</p>
+
+<p><strong>Notes</strong>: The quotes below represent some of the key statements (as I judge them) in order of their appearance in Crockford&rsquo;s <a href="http://youtu.be/JxAXlJEmNMg">first</a> and <a href="http://youtu.be/RO1Wnu-xKoY">second</a> talks on JavaScript. Read together, they outline the main trajectory of Crokford&rsquo;s presentation, but they are not intended to replace the entirety of the talk. The first 50 minutes of the first talk, which cover the history of programming before 1970, are excluded from this post, not because they&rsquo;re unimportant (they are!), but because it was difficult to pull single quotes that represented the content. All emphases mine.</p>
+
+<h3>Crockford on JavaScript&#8217;s historical context, distilled into key quotes</h3>
+
+
+<p><u><h5>Innovation since the &lsquo;70s</h5></u>
+&ldquo;The other thing we&rsquo;ve seen is an end to CPU innovation. <strong>We used to see a lot of really radical new designs happening all the time, but we don&rsquo;t see that happening anymore</strong>. Basically we&rsquo;ve got three architectures that we use for most of our stuff: virtually all the computers are on Intel, most of the game platforms are on Power PCs, most of the mobile devices are on ARM, and that&rsquo;s it. Nobody&rsquo;s making new stuff, nothing radical, it&rsquo;s just refinements of stuff that&rsquo;s been happening for several decades.</p>
+
+<p>&ldquo;We&rsquo;re doing even worse in operating systems. It used to be that every model of every machine had its own operating system, and that came with a lot of obvious inefficiency, so we&rsquo;ve pushed that down and now we have just two: we&rsquo;ve got Unix which was developed in the &lsquo;70s, and we&rsquo;ve got Windows that was developed in the &#8217;80s. Of the two, Unix is obviously the better one, but there&rsquo;s no innovation happening in operating systems. Basically we&rsquo;ve been rewriting the same systems for 40 years. That&rsquo;s just not where we do innovation. <strong>Where we do innovation is in programming languages, and that&rsquo;s been going on for quite a long time.</strong>&rdquo;  (<a href="http://youtu.be/JxAXlJEmNMg?t=56m50s">link</a>)</p>
+
+<!--more-->
+
+
+<p><u><h5>Leaps</h5></u>
+&ldquo;Software development comes in leaps, and our leaps are much farther apart than the hardware experiences. Moore&rsquo;s Law lets the hardware leap every two years; we leap more like every twenty years. Again, <strong>basically we need a generation to retire before we can get the good new ideas going</strong>, so despite the fact that we&rsquo;re always talking about innovation and how we love innovation and we&rsquo;re always innovating, <strong>we tend to be extremely conservative in the way we adopt new technology</strong>.&rdquo; (<a href="http://youtu.be/JxAXlJEmNMg?t=1h21m5s">Link</a>)</p>
+
+<p><u><h5>The beginning of JavaScript</h5></u>
+&ldquo;Basically, [<a href="https://en.wikipedia.org/wiki/Brendan_Eich#CEO_appointment_and_resignation">Brendan Eich</a>] took these components: he took the <strong>syntax of Java</strong>, he took <strong>the function model of Scheme</strong>&mdash;which was brilliant, one of the best ideas in the history of programming languages&mdash;and he took <strong>the prototype objects from Self</strong>. He put them together in a really interesting way, really fast; he completed the whole thing in a couple of weeks. It&rsquo;s a shame that he wasn&rsquo;t given the freedom that Xerox had to spend a decade to get this right. Instead of ten years it was more like ten days, and that was it. I challenge any language designer to come up with a brand new design from scratch in ten days and then release it to the world and call it done and see what happens with that.</p>
+
+<p>&ldquo;One of the consequences of it was that there are parts of it that are just awful. If they&rsquo;d had more time they probably would have recognized that and fixed it, but they didn&rsquo;t. Netscape was not a company that had time to get it right, which is why there&rsquo;s no longer a Netscape.</p>
+
+<p>&ldquo;But despite that, <strong>there is absolutely deep profound brilliance in this language, and this language is succeeding in places where many other languages have failed because of that brilliance; it&rsquo;s not accidental that JavaScript has become the most popular programming language in the world</strong>.&rdquo; (<a href="http://youtu.be/JxAXlJEmNMg?t=1h37m34s">Link</a>)</p>
+
+<p><u><h5>A great time to be a programmer</h5></u>
+&ldquo;One thing that&rsquo;s different now than in the &lsquo;50s and &#8217;60s is there are lot of computers out there, and there are a lot of people writing programs now. It&rsquo;s possible to get a <strong>community of people</strong> even if you have a minor language, enough to do useful things, to do a lot of group work. You&rsquo;ve got a group large enough to justify writing books, which was something we didn&rsquo;t have back in the &#8217;50s and &#8217;60s. So I think <strong>this is a great time to be a programmer</strong>. We have lots of choices, and we need to be smart about making those choices and be open to accepting the new ideas, because there are a lot of new ideas out there that we shouldn&rsquo;t be rejecting just because they&rsquo;re unfamiliar and we don&rsquo;t see the need for them. There are actually a lot of good ideas in all of these languages, not least of which is JavaScript&hellip;&rdquo; (<a href="http://youtu.be/JxAXlJEmNMg?t=1h40m44s">Link</a>)</p>
+
+<p><u><h5>Mythology of innovation</h5></u>
+&ldquo;Now, if you were here last time you’ll remember I went through the history of everything that ever happened, starting with The Big Bang, going through The Dawn of Man, and then finally there was JavaScript. The reason I did that was because understanding the context in which this stuff happens is really important to understanding what we have now. Without that understanding you’re consumed by <strong>mythology which has no truth in it</strong>, that the history of innovation has been one thing after another where the new, good thing always displaces the old stuff. That’s not how it works, generally. <strong>Generally the most important new innovations are received with contempt and horror and are accepted very slowly, if ever</strong>. That’s an important bit of knowledge to have, in the case of JavaScript.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=18s">Link</a>)</p>
+
+<p><u><h5>JavaScript has good parts</h5></u>
+&ldquo;Having that background [understanding history and innovation] allowed me to make the first important discovery of the 21st century, which was that <strong>JavaScript has good parts</strong>. This was an <strong>unexpected discovery</strong>, and when I tried to share it with the rest of the community there was a huge amount of skepticism; a lot of people refused to believe it was possible that JavaScript had any redeeming value whatsoever. In fact, it has very, very good parts. But I’m getting a little ahead of the story, so let’s back up a little bit.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=1m44s">Link</a>)</p>
+
+<p><u><h5>Why it&rsquo;s called JavaScript (Netscape-Sun history)</h5></u>
+&ldquo;It was very clear at the time that there was a lot of excitement about Java and the Netscape browser, and Sun and Netscape decided they needed to work together against Microsoft because if they didn’t join forces Microsoft would play them off against each other and they’d both lose. The biggest point of contention in that arrangement was what to do with LiveScript. Sun’s position was: &#8220;Well, we’ll put Java into the Netscape browser, we’ll kill LiveScript, and that’ll be that.&rdquo; And Netscape said no, that they really believed in the HyperCard-like functionality, and they wanted a simpler programming model in order to capture a much larger group of programmers.</p>
+
+<p>&ldquo;So there was an impasse, and the relationship almost broke up, when I think Marc Andreessen&mdash;and I have been able to document this, but <strong>people have told me&mdash;Marc Andreessen, maybe as a joke, suggested: &lsquo;let’s change the name to JavaScript.&rsquo; And it worked</strong>! Except that Sun claimed ownership of the trademark. Even though they had nothing to do with the language and they tried to kill the language, they said ‘we own the trademark, but we’ll give you a license to use the trademark’. Netscape said &lsquo;great, an exclusive license, only we can call it JavaScript, that’s fine&rsquo;.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=7m4s">Link</a>)</p>
+
+<p><u><h5>The destruction of Microsoft</h5></u>
+&ldquo;At Microsoft they’d been watching this with some alarm, particularly when folks at Netscape were saying that Netscape Navigator was going destroy Microsoft. Microsoft said ‘oh, we don’t want to be destroyed’. It turned out Netscape Navigator didn’t destroy Microsoft. In fact, <strong>the software that is going to destroy Microsoft is Windows Mobile</strong>.&rdquo; (<a href="http://youtu.be/RO1Wnu-xKoY?t=8m28s">Link</a>)</p>
+
+<p><u><h5>JavaScript naming confusion</h5></u>
+&ldquo;What should we call the language? There’s a lot of confusion. Some people still think that JavaScript, JScript, and ECMAScript are three different languages, and that’s not the case. It’s three silly names for one silly language. JavaScript isn’t actually an open name, which is surprising in that this is the language of the world’s biggest open system. It’s a trademark now of Oracle, and we don’t know what they’re going to do with that. We probably should call it ECMAScript, except it’s such an awful thing to call it.&rdquo;</p>
+
+<h3>Resources</h3>
+
+
+<p><a href="http://youtu.be/JxAXlJEmNMg">Crockford on JavaScript &ndash; Volume 1: The Early Years [Video]</a><br>
+<a href="https://teaching.cs.uml.edu/~heines/91.461/resources/CrockfordOnJavaScript/crockonjs-1-transcript.pdf">Crockford on JavaScript &ndash; Volume 1: The Early Years [Full transcript]</a><br>
+<a href="http://youtu.be/RO1Wnu-xKoY">Crockford on JavaScript &ndash; Chapter 2: And Then There Was JavaScript [Video]</a><br>
+<a href="http://abraham.cs.uml.edu/~heines/91.461/resources/CrockfordOnJavaScript/crockonjs-2-transcript.pdf">Crockford on JavaScript &ndash; Chapter 2: And Then There Was JavaScript [Full transcript]</a><br></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-21T10:01:39-04:00" pubdate data-updated="true">Jul 21<span>st</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/douglas-crockford/'>Douglas Crockford</a>, <a class='category' href='/blog/categories/history/'>History</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2014/07/21/javascripts-historical-context-crockford/" data-via="heychrisek" data-counturl="http://cek.io/blog/2014/07/21/javascripts-historical-context-crockford/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/07/16/closures-ruby/" title="Previous Post: Understanding Closures">&laquo; Understanding Closures</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/07/21/intro-to-javascript-crockford/" title="Next Post: Intro to JavaScript (according to Douglas Crockford)">Intro to JavaScript (according to Douglas Crockford) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Understanding Closures - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="As I continue to learn JavaScript, I continue to run in to closures. And while I had some understanding of what that word means, when I came across &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2014/07/16/closures-ruby">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Understanding Closures</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-16T12:12:48-04:00" pubdate data-updated="true">Jul 16<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>As I continue to learn JavaScript, I continue to run in to closures. And while I had some understanding of what that word means, when I came across <a href="http://www.skorks.com/2010/05/closures-a-simple-explanation-using-ruby/">this blog post</a> from <a href="https://twitter.com/skorks">Alan Sorkin</a>, it helped clear a few things up. This post focuses on closures in Ruby, hopefully in a way that illustrates the concept of closures more generally, irrespective of language.</p>
+
+<h3>Closures defined</h3>
+
+
+<p>Sorkin defines closures as follows:</p>
+
+<blockquote><p>A closure is basically a function/method that has the following two properties:<br/>    - You can pass it around like an object (to be called later)<br/>    - It remembers the values of all the variables that were in scope when the function was created. It is then able to access those variables when it is called even though they may no longer be in scope.</p><footer><strong>Alan Sorkin</strong> <cite><a href='http://www.skorks.com/2010/05/closures-a-simple-explanation-using-ruby/'>Closures – a Simple Explanation (Using Ruby)</a></cite></footer></blockquote>
+
+
+<p>This is much clearer than the other definitions we sometimes hear, which Sorkin alludes to as (1) &ldquo;In computer science, a closure is a first-class function with free variables that are bound in the lexical environment&rdquo; or (2) &ldquo;A closure is a function that is said to be &lsquo;closed over&rsquo; its free variables&rdquo;. As we&rsquo;ll see, these definitions have value, but what exactly do they mean? Let&rsquo;s look at some code.</p>
+
+<!--more-->
+
+
+<h3>Code example in Ruby</h3>
+
+
+
+
+<figure class='code'><figcaption><span>SomeClass of Closures</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">SomeClass</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">value1</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@value1</span> <span class="o">=</span> <span class="n">value1</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">value_printer</span><span class="p">(</span><span class="n">value2</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">lambda</span> <span class="p">{</span><span class="nb">puts</span> <span class="s2">&quot;Value1: </span><span class="si">#{</span><span class="vi">@value1</span><span class="si">}</span><span class="s2">, Value2: </span><span class="si">#{</span><span class="n">value2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>   <span class="c1">#=&gt; create closure using a lambda</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">caller</span><span class="p">(</span><span class="n">some_closure</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">some_closure</span><span class="o">.</span><span class="n">call</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">some_class</span> <span class="o">=</span> <span class="no">SomeClass</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span><span class='line'><span class="n">printer</span> <span class="o">=</span> <span class="n">some_class</span><span class="o">.</span><span class="n">value_printer</span><span class="p">(</span><span class="s2">&quot;some value)</span>
+</span><span class='line'><span class="s2"> </span>
+</span><span class='line'><span class="s2">caller(printer)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When executed, this code prints: <code>Value1: 5, Value2: some value</code>. So what&rsquo;s going on here? As Sorkin describes, &ldquo;the <code>value_printer</code> function creates a closure, using the lambda construct, and then returns it. We then assign our closure to a variable and pass that variable to another function, which then calls our closure. This satisfies the first property of a closure – we can pass it around.&rdquo;</p>
+
+<p>Furthermore, &ldquo;when we called our closure, we printed out <code>5</code> and <code>some value</code>. Even though both the <code>@value1</code> and <code>value2</code> variables were both well and truly out of scope in the rest of the program when we finally called the closure; inside the closure they were still in scope as it retained the state of all the variables that were in scope when it was defined. And so, our lambda satisfies the second property also which makes it a closure.&rdquo;</p>
+
+<p>To the earlier point, we can now better understand the technical definitions. First-class function: a function that can be passed around like an object. Lexical environment: variables that are defined in the closure&rsquo;s scope. These are what make a closure a closure.</p>
+
+<h3>Why?</h3>
+
+
+<p>This made closures a lot clearer to me, but a question remained: why? What are some use cases for this pattern? Sorkin argues that closures are especially useful in functional languages (which are inherently stateless) because &ldquo;we can use closures to essentially store some state which will persist as long as our closure lives on (i.e. if the closure changes the value of a variable it will retain the new value the next time the closure is invoked).&rdquo; This enables us to <strong>do more with less code</strong>.</p>
+
+<p>In non-functional languages? Also to do more with less code. Closures in Ruby come in the form of blocks, lambdas (as in the code example above), and blocks, all of which provide advantages in refactoring, customization, iterating across collections, managing resources, and enforcing policy. There are a number of use cases, some of which are described in <a href="http://www.technicalecstasy.net/closures-in-ruby-blocks-procs-and-lambdas/">this overview</a>.</p>
+
+<h3>Resources</h3>
+
+
+<ul>
+  <li><a href="http://www.skorks.com/2010/05/closures-a-simple-explanation-using-ruby/">Closures – A Simple Explanation (Using Ruby)</a></li>
+  <li><a href="http://innig.net/software/ruby/closures-in-ruby">Closures in Ruby: Blocks, Procs and Lambdas</a></li>
+  <li><a href="http://www.technicalecstasy.net/closures-in-ruby-blocks-procs-and-lambdas/">Closures in Ruby</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-16T12:12:48-04:00" pubdate data-updated="true">Jul 16<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/closures/'>Closures</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2014/07/16/closures-ruby/" data-via="heychrisek" data-counturl="http://cek.io/blog/2014/07/16/closures-ruby/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/06/24/low-to-high-testing/" title="Previous Post: Testing, Low- to High-Level">&laquo; Testing, Low- to High-Level</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/07/21/javascripts-historical-context-crockford/" title="Next Post: JavaScript's historical context (according to Douglas Crockford)">JavaScript's historical context (according to Douglas Crockford) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

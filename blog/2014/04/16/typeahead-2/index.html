@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Typeahead: A How-To Guide (Part 2 of 2) - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="Note: If you haven&rsquo;t already read Part 1, which covers the Gon gem in detail, you can see it here. In this post, I&rsquo;ll cover the . &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2014/04/16/typeahead-2">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Typeahead: A How-To Guide (Part 2 of 2)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-16T09:00:00-04:00" pubdate data-updated="true">Apr 16<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><i><strong>Note:</strong> If you haven&rsquo;t already read Part 1, which covers the Gon gem in detail, you can see it <a href="/blog/2014/04/15/typeahead/">here</a>. In this post, I&rsquo;ll cover the <code>.typeahead</code> JavaScript method.</i></p>
+
+<h2>The How-To (cont.)</h2>
+
+
+
+
+<ul>
+  Typeahead.js depends on having a source of data available. In fact, <a href="http://twitter.github.io/typeahead.js/examples/#the-basics">Twitter&#8217;s &#8220;basic&#8221; typeahead example</a> includes <code>var states</code>, with all 50 states input as strings, directly in the JavaScript file. That&#8217;s effectively what I did in the previous post with Gon: I made Rails variables available in JavaScript. I&#8217;ll use those same variables here.
+  <!--more-->
+  <br><br>
+  <h3>2. Typeahead.js</h3>
+  <li>
+      Add the gem: <code>gem <a href="https://github.com/yourabi/twitter-typeahead-rails/">'twitter-typeahead-rails'</a></code>.
+  </li><br>
+  <li>
+      Add <code>//= require twitter/typeahead</code> to the application.js manifest.
+  </li><br>
+  <li>
+      Determine the css selector for the input on which you want to implement typeahead. In my case, I added a class of &#8220;typeahead&#8221; to my targeted text field as follows:
+        <figure class='code'><figcaption><span> (form.html.erb)</span> <a href='/downloads/code/form.html.erb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&lt;!-- ...preceding html/erb... --&gt;</span>
+</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">text_field_tag</span> <span class="ss">:name_or_email</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="ss">placeholder</span><span class="p">:</span> <span class="s2">&quot;To: name or email&quot;</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s2">&quot;typeahead&quot;</span> <span class="cp">%&gt;</span><span class="x"> </span>
+</span><span class='line'><span class="x">&lt;!-- ... --&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+  </li><br>
+  <li>
+      In whichever JavaScript file you&#8217;ve made the dataset available, add <code>$('.typeahead').typeahead()</code>. Replace &#8220;.typeahead&#8221; with whatever CSS selector you&#8217;re using (see previous step). You now have the entire structure into which you can try the various <a href="http://twitter.github.io/typeahead.js/examples/">typeahead.js examples</a>.
+  </li><br>
+  <li>
+      I started with <a href="http://twitter.github.io/typeahead.js/examples/#the-basics">the basics</a>, copying line 1-23 above my typeahead method, and everything withing the curly braces from line 37-44 into my typeahead method. Make sure to change the example&#8217;s default variable (&#8220;states&#8221; in the basic example, &#8220;best-pictures&#8221; in the custom templates example) to whatever variable you assigned using Gon. Depending on how your Rails app is structured&#8211;particularly what your asset pipeline looks like&#8211;this may be all you need.
+  </li><br>
+  <li>
+      <p>I had conflicting stylesheets and JavaScript files, plus I wanted more flexibility creating templates for the typeahead, so I implemented the <a href="http://twitter.github.io/typeahead.js/examples/#custom-templates">custom templates example</a>. Full code for what I describe is below.
+      </p>
+      <p>
+      To begin, I added the templates (lines 28-40). The &#8220;empty&#8221; template worked easily&#8211;the code copied from Twitter&#8217;s example worked on its own. I had more difficulty with the &#8220;suggestion&#8221; template, primarily because I didn&#8217;t immediately realize that it&#8217;s a function, as opposed to the string that the &#8220;empty&#8221; template was. At this point, I was able to style the template as I liked, even including an image.
+      </p>
+      <p>
+      Next I had to configure the typeahead to use the pictures connected to each user. Gon and typeahead seem to support a pattern of passing entire objects and calling two or more different attributes (best pictures&#8217; names and years in the custom template example), but I was unable to configure my JavaScript this way. Instead, knowing that my &#8220;gravatars&#8221; array directly mirrored my &#8220;usernames&#8221;, I used JavaScript&#8217;s <code>indexOf()</code> method, as seen in line 37. This enabled me to the the index of a given username and find the gravatar url at that index of the gravatars array. Not ideal, but it worked.
+      </p>
+        <figure class='code'><figcaption><span> (typeahead.js)</span> <a href='/downloads/code/typeahead.js'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// Twitter Typeahead</span>
+</span><span class='line'><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">substringMatcher</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">strs</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kd">function</span> <span class="nx">findMatches</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">matches</span><span class="p">,</span> <span class="nx">substringRegex</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">matches</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>      <span class="nx">substrRegex</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">strs</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">substrRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">str</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">matches</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">str</span> <span class="p">});</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>      <span class="nx">cb</span><span class="p">(</span><span class="nx">matches</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">gravatars</span> <span class="o">=</span> <span class="nx">gon</span><span class="p">.</span><span class="nx">gravatars</span><span class="p">;</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">usernames</span> <span class="o">=</span> <span class="nx">gon</span><span class="p">.</span><span class="nx">usernames</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.typeahead&#39;</span><span class="p">).</span><span class="nx">typeahead</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">hint</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">highlight</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">minLength</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;usernames&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">displayKey</span><span class="o">:</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">source</span><span class="o">:</span> <span class="nx">substringMatcher</span><span class="p">(</span><span class="nx">usernames</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">templates</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">empty</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s1">&#39;&lt;div class=&quot;empty-message&quot;&gt;&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;No username matches found. Enter an email instead!&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;&lt;/div&gt;&#39;</span>
+</span><span class='line'>      <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="nx">suggestion</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">return</span>  <span class="s1">&#39;&lt;div id=&quot;user-selection&quot;&gt;&#39;</span> <span class="o">+</span>
+</span><span class='line'>                <span class="s1">&#39;&lt;p&gt;&lt;strong&gt;&#39;</span> <span class="o">+</span> <span class="nx">username</span><span class="p">.</span><span class="nx">value</span> <span class="o">+</span> <span class="s1">&#39;&lt;/strong&gt;&lt;/p&gt;&#39;</span> <span class="o">+</span>
+</span><span class='line'>                <span class="s1">&#39;&lt;img src=&quot;&#39;</span> <span class="o">+</span> <span class="nx">gravatars</span><span class="p">[</span><span class="nx">usernames</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">username</span><span class="p">.</span><span class="nx">value</span><span class="p">)]</span> <span class="o">+</span> <span class="s1">&#39;&quot;/&gt;&#39;</span> <span class="o">+</span>
+</span><span class='line'>                <span class="s1">&#39;&lt;/div&gt;&#39;</span> <span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+  </li><br>
+  <li>
+    My final issue came with the highlighting. The <code>highlight:true</code> line within the typeahead method indicates that it should work right out of the box, but it did not for me (again, due to conflicting other assets). For this reason, I needed to debug in my JavaScript console, eventually finding that an item selected using typeahead was situated in a div with class of &#8220;tt-cursor&#8221;. A lot of the default styling was fine with me but, since the highlighting itself did not work, I added the following to my css, thus giving the selected item a background color.
+      &#8220;` css styling.css
+        div .tt-cursor {
+          background-color: #16A085;
+        }
+      &#8220;`
+    (that selector, &#8220;.tt-cursor&#8221;, was very important!)
+  </li>
+</ul>
+
+
+<p>And that concludes my adventures with typeahead. It took some time, but, as I described before, it&rsquo;s those seemingly minor finishing touches that can end up taking the most time. This exercise was certainly proof of that. But it was worth it to get a working&mdash;and good-looking&mdash;typeahead form input.</p>
+
+<h3>Resources</h3>
+
+
+<ul>
+  <li><a href="http://stackoverflow.com/questions/10873312/how-to-customize-bootstrap-typeahead-layout-function-for-more-than-just-text">Relevant StackOverflow question</a></li>
+  <li><a href="http://fusiongrokker.com/post/heavily-customizing-a-bootstrap-typeahead">Great blog post chronicling similar struggles with typeahead</a></li>
+  <li><a href="http://twitter.github.io/typeahead.js/">Twitter Typeahead.js source code</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-16T09:00:00-04:00" pubdate data-updated="true">Apr 16<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/front-end/'>Front End</a>, <a class='category' href='/blog/categories/gems/'>Gems</a>, <a class='category' href='/blog/categories/gon/'>Gon</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/typeahead/'>Typeahead</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2014/04/16/typeahead-2/" data-via="heychrisek" data-counturl="http://cek.io/blog/2014/04/16/typeahead-2/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/15/typeahead/" title="Previous Post: Typeahead and Gon: a How-To Guide (Part 1 of 2)">&laquo; Typeahead and Gon: a How-To Guide (Part 1 of 2)</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/04/22/pursuit-of-happyness/" title="Next Post: Pursuit of (Programming) Happiness: Testing">Pursuit of (Programming) Happiness: Testing &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

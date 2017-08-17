@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Kernel | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/kernel/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Terminally Bashing the Kernel]]></title>
+    <link href="http://cek.io/blog/2014/02/12/terminally-bashing-the-kernel/"/>
+    <updated>2014-02-12T11:34:52-05:00</updated>
+    <id>http://cek.io/blog/2014/02/12/terminally-bashing-the-kernel</id>
+    <content type="html"><![CDATA[<blockquote>"Live in the command line."</blockquote>
+
+
+<p>One of earliest instructions in week one was to &ldquo;live in the command line.&rdquo; Avi described that computers should be more than the media consumption devices they are to most users. That everything we need to do on a computer can be done exclusively from the shell. That, as programmers, we need to make the command line our home.</p>
+
+<p>But what <i>is</i> the command line? I&rsquo;ve used Terminal long enough to be comfortable using it, but what is it? Is Terminal the same as the command line and the shell and bash? What am I really doing when I use these tools? What are the kernel and command line and Bash, and how should I even use all those words?</p>
+
+<!--more-->
+
+
+<p>Rest assured, I can&rsquo;t and won&rsquo;t answer all of those questions in their completion. I&rsquo;m keeping a narrow scope, as Avi instructed, looking to understand a few specifics rather than write a book on computing.</p>
+
+<h2>A few definitions</h2>
+
+
+<p>In a couple minutes, these terms and definitions will fit into a more cohesive framework.
+<li><strong>Terminal (Terminal.app)</strong>: the terminal emulator on Mac OSX, a GUI for the command line interface.</li>
+<li><strong>Command line interface (CLI)</strong>: a means of interacting with a computer program where the user issues successive lines of text commands.</li>
+<li><strong>Shell (or command-line interpreter)</strong>: the user interface for access to an operating system&rsquo;s kernel services, the first of which was Bell Labs' Multics, followed by Unix, etc.</li>
+<li><strong>Bash</strong>: the Bourne-again shell, a Unix shell replacing the Bourne shell (sh), default on Linux and Mac OSX.</li>
+<li><strong>Kernel</strong>: a computer program that manages input/output requests from software and translates them into data processing instructions for the central processing unit and other electronic components of a computer.</li></p>
+
+<h2>The framework</h2>
+
+
+<p>With those definitions in mind, the framework in the image below may be helpful.</p>
+
+<p><img src="http://cek.io/images/command-line-whiteboard.jpg"></p>
+
+<p>Just kidding&mdash;look at this one instead.</p>
+
+<p><img src="http://cek.io/images/terminal-kernel.png"></p>
+
+<p>The left side of image includes the hardware (which includes the CPU, memory, devices, etc.) and the software applications (which includes all the applications we know and love) bridged by the kernel. As was defined earlier, the kernel manages the hardware and enables programs to use it. It is a fundamental part of a modern computer&rsquo;s operating system. It&rsquo;s hugely important. And it is where the terminal and command line come in.</p>
+
+<h2>Making it clearer</h2>
+
+
+<p>Go back and reread the definitions; you&rsquo;ll notice an order to the terms. They appear from highest to lowest level, from the graphical user interface of the Terminal application to the kernel, a core piece of the machine&rsquo;s infrastructure.</p>
+
+<p>When we type a command into the Terminal (at the highest level), that command is interpreted by the shell (aka, the command line interpreter, which is very slightly removed from the command line interface) and then passed to the kernel</p>
+
+<p>That&rsquo;s all I need to know for now; I&rsquo;ll leave it to people much smarter than me to explain the kernel. Suffice it to say: that interaction between the Terminal, CLI, and kernel is what enables us, as programmers, to type simple lines of text that are also very powerful commands.</p>
+
+<h2>Bringing it home</h2>
+
+
+<p>My main takeaway is this: I now know what I mean when I say I&rsquo;m using the command line, or Terminal, or the shell, or Bash, etc. We were pointed to this Chinese proverb recently:</p>
+
+<blockquote>“The beginning of wisdom is to call things by their right names”</blockquote>
+
+
+<p>Perhaps by recognizing these subtle differences I can attain programming wisdom.</p>
+
+<p>One final idea: <i>metaphors</i>. So much of our computer is made up of metaphors: windows, the screen, double-clicks&mdash;all metaphors for something else the computer is doing. When Avi introduced us to Alan Kay recently, he introduced the idea that by inventing the GUI Kay introduced a metaphor&mdash;a tool that makes the user&rsquo;s life easier&mdash;for a given process. If nothing else, think of the terminal as exactly that: a (high-level and vastly simplified) metaphor for the kernel&rsquo;s management of the underlying processes running on the machine.</p>
+]]></content>
+  </entry>
+  
+</feed>

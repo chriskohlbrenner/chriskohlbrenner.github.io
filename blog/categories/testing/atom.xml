@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Testing | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/testing/atom.xml" rel="self"/>
+  <link href="http://cek.io/"/>
+  <updated>2017-08-17T18:08:27-04:00</updated>
+  <id>http://cek.io/</id>
+  <author>
+    <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
+    <email><![CDATA[c.kohlbrenner@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Testing, Low- to High-Level]]></title>
+    <link href="http://cek.io/blog/2014/06/24/low-to-high-testing/"/>
+    <updated>2014-06-24T14:32:42-04:00</updated>
+    <id>http://cek.io/blog/2014/06/24/low-to-high-testing</id>
+    <content type="html"><![CDATA[<p>Google &ldquo;low level&rdquo; and you&rsquo;ll see the following definition.</p>
+
+<p><img class="right" src="/images/low-to-high-testing/low-level.png" width="400"></p>
+
+<p>We often hear about low-level languages like Assembly or C (which was once a high-level language) vs. high-level languages like Java or Ruby (which may come to be considered low-level?).</p>
+
+<p>Applying that same logic to testing, this blog post covers the various types of tests for Rails applications, working its way up from low-level unit tests up to high-level acceptance tests, with functional and integration tests in between. Along the way, I&rsquo;ll reference examples of tests I wrote for a side project: my <a href="http://world-cup-14.herokuapp.com/">World Cup tracker</a>.</p>
+
+<!--more-->
+
+
+
+
+<h3>Unit Tests (Model Tests)</h3>
+
+
+<p>The <a href="http://guides.rubyonrails.org/testing.html">Rails Guide on testing</a> describes unit tests as &ldquo;what you write to test your models.&rdquo; It continues, &ldquo;It&rsquo;s a good practice to have at least one test for each of your validations and at least one test for every method in your model.&rdquo;</p>
+
+<p>I won&rsquo;t get into FactoryGirl in detail, but here I create a factory for the Team model, which I use instead of fixtures as test data for team_spec.rb.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (teams_factory.rb)</span> <a href='/downloads/code/low-to-high-testing/teams_factory.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">factory</span> <span class="ss">:team</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">api_id</span> <span class="s2">&quot;A0CD1355-B6FC-48D3-B67B-AF5AA2B2C1E1&quot;</span>
+</span><span class='line'>    <span class="nb">name</span> <span class="s2">&quot;Croatia&quot;</span>
+</span><span class='line'>    <span class="n">logo</span> <span class="s2">&quot;http://cache.images.globalsportsmedia.com/soccer/teams/150x150/514.png&quot;</span>
+</span><span class='line'>    <span class="n">website</span> <span class="s2">&quot;http://www.hns-cff.hr/&quot;</span>
+</span><span class='line'>    <span class="n">group_letter</span> <span class="s2">&quot;A&quot;</span>
+</span><span class='line'>    <span class="n">group_rank</span> <span class="mi">3</span>
+</span><span class='line'>    <span class="n">group_points</span> <span class="mi">3</span>
+</span><span class='line'>    <span class="n">matches_played</span> <span class="mi">3</span>
+</span><span class='line'>    <span class="n">wins</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="n">losses</span> <span class="mi">2</span>
+</span><span class='line'>    <span class="n">draws</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="n">goals_for</span> <span class="mi">6</span>
+</span><span class='line'>    <span class="n">goals_against</span> <span class="mi">6</span>
+</span><span class='line'>    <span class="n">goal_differential</span> <span class="s2">&quot;+0&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (team_spec.rb)</span> <a href='/downloads/code/low-to-high-testing/team_spec.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="no">Team</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">it</span> <span class="s1">&#39;has a valid factory&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">build</span><span class="p">(</span><span class="ss">:team</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">be_valid</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:croatia</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:team</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:brazil</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:team</span><span class="p">,</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Brazil&quot;</span><span class="p">,</span> <span class="ss">:group_rank</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">:group_points</span> <span class="o">=&gt;</span> <span class="mi">7</span><span class="p">,</span> <span class="ss">:wins</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="ss">:losses</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="ss">:draws</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">:goals_for</span> <span class="o">=&gt;</span> <span class="mi">7</span><span class="p">,</span> <span class="ss">:goals_against</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#next_match&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;when there are upcoming matches&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s1">&#39;returns the match object&#39;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">pending</span><span class="p">(</span><span class="s2">&quot;pending until test can retrieve match objects&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">this_should_not_get_executed</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#next_opponent&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;when there are upcoming matches&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s1">&#39;returns the team object&#39;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">pending</span><span class="p">(</span><span class="s2">&quot;pending until test can retrieve team objects&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">this_should_not_get_executed</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#avg_goals_against&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;returns the avg goals against value&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">croatia</span><span class="o">.</span><span class="n">avg_goals_against</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#avg_goals_for&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;returns the avg goals for value&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">brazil</span><span class="o">.</span><span class="n">avg_goals_for</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">33</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Functional Tests (Controller Tests)</h3>
+
+
+<p>The testing RailsGuide explains, &ldquo;In Rails, testing the various actions of a single controller is called writing functional tests for that controller. Controllers handle the incoming web requests to your application and eventually respond with a rendered view.&rdquo; RSpec&rsquo;s documentation explains &ldquo;A controller spec is an RSpec wrapper for a Rails functional test.&rdquo; So functional tests and controller tests are synonymous.</p>
+
+<p>The main purpose of functional tests, as the quote above makes clear, is to ensure that individual controllers handle requests appropriately and render the proper view. This can mean testing <a href="http://guides.rubyonrails.org/testing.html#what-to-include-in-your-functional-tests">the following</a>:</p>
+
+<ul>
+<li>Was the web request successful?</li>
+<li>Was the user redirected to the right page?</li>
+<li>Was the user successfully authenticated?</li>
+<li>Was the correct object stored in the response template?</li>
+<li>Was the appropriate message displayed to the user in the view?</li>
+</ul>
+
+
+<p>In the following example, I simply test that TeamsController assigns the correct resources (teams) and renders the correct views on get requests.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (teams_controller_spec.rb)</span> <a href='/downloads/code/low-to-high-testing/teams_controller_spec.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rails_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="no">TeamsController</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;GET index&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;assigns @teams&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">team</span> <span class="o">=</span> <span class="no">Team</span><span class="o">.</span><span class="n">create</span>
+</span><span class='line'>      <span class="n">get</span> <span class="ss">:index</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">assigns</span><span class="p">(</span><span class="ss">:teams</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="o">[</span><span class="n">team</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;renders the index template&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">get</span> <span class="ss">:index</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;GET show&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;renders the show template&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">team</span> <span class="o">=</span> <span class="no">Team</span><span class="o">.</span><span class="n">create</span>
+</span><span class='line'>      <span class="n">get</span><span class="p">(</span><span class="ss">:show</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="s2">&quot;1&quot;</span><span class="p">})</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;show&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Integration Tests (Acceptance Tests)</h3>
+
+
+<p>Depending who you ask, integration tests and acceptance tests are either identical or subtly different. They both test functionality from end-to-end (or close to it) and are both forms of black box testing, but acceptance tests have a customer orientation, whereas integration tests are written by developers for developers. The first five slides of <a href="http://www.slideshare.net/AlanHecht/integration-and-acceptance-testing">this talk</a> provide a helpful summary.</p>
+
+<p>The testing RailsGuide defines integration tests as intended to test &ldquo;the interaction among any number of controllers. They are generally used to test important work flows within your application.&rdquo; The &ldquo;important work flows&rdquo; are the key; integration tests should test the application from end-to-end&mdash;across multiple models, controllers, and views&mdash;to ensure that the application works &ldquo;in integration&rdquo;.</p>
+
+<p>ExtremeProgramming.org defines acceptance tests as follows: &ldquo;Acceptance tests are created from user stories. During an iteration the user stories selected during the iteration planning meeting will be translated into acceptance tests. &hellip; Acceptance tests are black box system tests. Each acceptance test represents some expected result from the system.&rdquo; Another key: black box testing, testing an for the proper output given a certain input, without knowing what happens inside the &ldquo;black box&rdquo; (that&rsquo;s what unit and functional tests are for).</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (team_index_spec.rb)</span> <a href='/downloads/code/low-to-high-testing/team_index_spec.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="s1">&#39;Team index page&#39;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:team</span><span class="p">,</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Croatia&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s1">&#39;renders the correct text&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">visit</span> <span class="s1">&#39;/teams&#39;</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_text</span><span class="p">(</span><span class="s1">&#39;2014 World Cup Teams&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_text</span><span class="p">(</span><span class="s1">&#39;Croatia&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Conclusion</h3>
+
+
+<p>CodeClimate describes what they call <a href="http://blog.codeclimate.com/blog/2013/10/09/rails-testing-pyramid/">the Rails Testing Pyramid</a>, depicted below:</p>
+
+<p><img class="left <a" src="href="http://blog.codeclimate.com/images/posts/rails-testing-pyramid.png">http://blog.codeclimate.com/images/posts/rails-testing-pyramid.png</a>" width="400"></p>
+
+<p>They write, &ldquo;Blending unit tests, service-level tests and acceptance tests yields faster test suites that still provide confidence the application is working, and are resistant to incidental breakage. As you develop, take care to prune tests that are not pulling their weight. When you fix a bug, implement your regression test at the lowest possible level. Over time, keep an eye on the ratio between the counts of each type of test, as well as the time of your acceptance test suite.&rdquo;</p>
+
+<p>In the case of the Team resource in my World Cup app, my ratio was 1 integration test:3 functional tests:5 unit tests&mdash;a perfectly pyramidal ratio if you ask me! Of course, this is a simple example, but it illustrates the goal for a test suite more generally.</p>
+
+<h3>Resources</h3>
+
+
+<ul>
+<li><a href="http://betterspecs.org/">BetterSpecs</a></li>
+<li><a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a></li>
+<li><a href="http://guides.rubyonrails.org/testing.html">RailsGuides: A Guide to Testing Rails Applications</a></li>
+<li>&ldquo;How I learned to test my Rails applications&rdquo; (Part <a href="http://everydayrails.com/2012/03/12/testing-series-intro.html">1</a> | <a href="http://everydayrails.com/2012/03/12/testing-series-rspec-setup.html">2</a> | <a href="http://everydayrails.com/2012/03/19/testing-series-rspec-models-factory-girl.html">3</a> | <a href="http://everydayrails.com/2012/04/07/testing-series-rspec-controllers.html">4</a>)</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Notes on Cost-Effective Testing (POODR: Chapter 9)]]></title>
+    <link href="http://cek.io/blog/2014/06/10/poodr-ch-9/"/>
+    <updated>2014-06-10T10:17:18-04:00</updated>
+    <id>http://cek.io/blog/2014/06/10/poodr-ch-9</id>
+    <content type="html"><![CDATA[<p><strong>I am working my way through programming-related reading, currently with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="http://cek.io/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
+
+<hr />
+
+<br>
+
+
+<p>I&rsquo;ve written about testing <a href="http://cek.io/blog/categories/testing/">previously</a>, but Sandi Metz, in the last chapter of POODR, lends some valuable insights to testing, specifically about writing <strong>cost-effective</strong> tests with an emphasis on <strong>changeable code</strong>. In this post, I simply reference some of her comments on testing that I found most helpful.</p>
+
+<h3>Why Test?</h3>
+
+
+<p>Metz starts by describing, &ldquo;Writing changeable code is an art whose practice relies on three different skills&rdquo; (191). These three skills, as she sees them, are:</p>
+
+<ul>
+<li>Understanding object-oriented design</li>
+<li>Refactoring code</li>
+<li>Writing high-value tests</li>
+</ul>
+
+
+<!--more-->
+
+
+
+
+<h3>What if the tests are costly themselves?</h3>
+
+
+<p>&ldquo;The true purpose of testing, just like the true purpose of design, is to reduce costs. If writing, maintaining, and running tests consumes more time than would otherwise be needed to fix bugs, write documentation, and design applications tests are clearly not worth writing and no rational person would argue otherwise&rdquo; (192).</p>
+
+<p>&ldquo;The solution to the problem of costly tests, however, is not to stop testing but instead to get better at it. Getting good value from tests requires clarity of intention and knowing what, when, and how to test&rdquo; (192).</p>
+
+<h3>Benefits of Testing</h3>
+
+
+<ul>
+<li><u>Finding Bugs [and finding them early]</u> &ndash; &ldquo;Fixing bugs early always lowers costs&rdquo; (193).</li>
+<li><u>Supplying Documentation</u> &ndash; &ldquo;Tests provide the only reliable documentation of design&hellip;long after paper documents become obsolete and human memory fails&rdquo; (193).</li>
+<li><u>Deferring Design Decisions</u> &ndash; &ldquo;Tests allow you to safely defer design decisions&hellip;when you are aware of just one concrete case in the present but you fully expect new cases to arrive in the near future&rdquo; (193).</li>
+<li><u>Supporting Abstractions</u> &ndash; &ldquo;There is a level of design abstraction where it is almost impossible to safely make any change unless the code has tests&rdquo; (194).</li>
+<li><u>Exposing Design Flaws</u> &ndash; &ldquo;Tests are the canary in the coal mine; when the design is bad, testing is hard&rdquo; (194).</li>
+</ul>
+
+
+<h3>Know what to test</h3>
+
+
+<p>&ldquo;Most programmers write too many tests&hellip;The safest way to [write fewer tests] is to test everything just once and in the proper place&rdquo; (194).</p>
+
+<h3>Know when to test</h3>
+
+
+<p>&ldquo;You should write tests first, whenever it makes sense to do so&hellip;Be warned, however, that writing tests first is no substitute for and does not guarantee a well-designed application&rdquo; (197).</p>
+
+<h3>Know how to test</h3>
+
+
+<p>&ldquo;There are many good reasons to stay within the testing mainstream [with frameworks like MiniTest and RSpec]&hellip;Both [TDD and BDD] are completely acceptable. Each has costs and benefits&rdquo; (199).</p>
+
+<h3>In conclusion</h3>
+
+
+<p><blockquote><p>Tests are indispensable. Well-designed applications are highly abstract and under constant pressure to evolve; without tests these applications can neither be understood nor safely changed. The best tests are loosely coupled to the underlying code and test everything once and in the proper place. They add value without increasing costs.</p></p><p><p>A well-designed application with a carefully crafted test suite is a joy to behold and a pleasure to extend. It can adapt to every new circumstance and meet any unexpected need.</p><footer><strong>Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (240)</strong></footer></blockquote></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cucumber: The Basics]]></title>
+    <link href="http://cek.io/blog/2014/05/19/cucumber/"/>
+    <updated>2014-05-19T12:47:20-04:00</updated>
+    <id>http://cek.io/blog/2014/05/19/cucumber</id>
+    <content type="html"><![CDATA[<p><a href="http://railscasts.com/episodes/155-beginning-with-cucumber"></a></p>
+
+<p><a href="http://railscasts.com/episodes/159-more-on-cucumber"></a></p>
+
+<p>Cucumber is useful, right? It provides <a href="http://cukes.info/">&ldquo;behavior driven development with elegance and joy&rdquo;</a>.</p>
+
+<p>But <a href="http://www.jackkinsella.ie/2011/09/26/why-bother-with-cucumber-testing.html">some</a> call Cucumber &ldquo;no more than a clumsy wrapper over basic integration tests&rdquo;, insisting that &ldquo;Cucumber’s syntax is costly&rdquo; and recommending that programmers &ldquo;swap Cucumber for pure integration tests using Capybara&rdquo;. <a href="http://pivotallabs.com/cucumber-when-to-use-it-when-to-lose-it/">Others</a> agree, but argue that the benefit of Cucumber is for the product manager, not the programmer.</p>
+
+<p>Ryan Bates, for one, likes Cucumber (or did as of 2009, when he published this RailsCast&hellip;):
+<blockquote><p>It might seem like quite a lot of work to define the tests in English and implement each step one at a time, but Cucumber testing has several advantages. With it you’re testing your whole stack, so you’re writing tests that cover everything from the user interface down to the database. While they’re not a replacement for unit tests, they provide an excellent way of writing high-level tests to test the overall behaviour of your application.</p><footer><strong>RailsCasts <a href="http://railscasts.com/episodes/155-beginning-with-cucumber">http://railscasts.com/episodes/155-beginning-with-cucumber</a> #155 Beginning with Cucumber</strong></footer></blockquote></p>
+
+<p>I side with the nuanced view: Cucumber tests seem like a lot of extra work for an integration test that can be implemented using Capybara. That said, there&rsquo;s enough of a pro-Cucumber audience espousing the advantages&mdash;BDD, outside-in development<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>, user stories, readability&mdash;that it&rsquo;s worth being familiar.</p>
+
+<!--more-->
+
+
+
+
+<h3>How does it work?</h3>
+
+
+<p>Cucumber<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> boils down to:</p>
+
+<ol>
+  <li>
+    Cucumber definition(s) (a <code>.feature</code> file): this file defines both:<ul>
+      <li>the feature itself (syntax of “In order”, “As a” and “I Want”)
+      <li>one or more scenarios ("Given", "When", and "Then").</li>
+    </ul>
+    <strong>Note</strong>: the Cucumber definition is enough to run <code>cucumber</code> from the command line, though it will return a message describing skipped and undefined steps.
+  </li>
+  <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Feature: Manage Articles
+</span><span class='line'>    In order to make a blog
+</span><span class='line'>    As an author
+</span><span class='line'>    I want to create and manage articles
+</span><span class='line'>    
+</span><span class='line'>    Scenario: Articles List
+</span><span class='line'>      Given I have articles titled Caching, Cucumber, Redis
+</span><span class='line'>      When I go to the list of articles
+</span><span class='line'>      Then I should see "Caching"
+</span><span class='line'>      And I should see "Cucumber"
+</span><span class='line'>      And I should see "Redis"</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+  <li>Step definition(s): these connect to the aforementioned cucumber steps, using Ruby code inside the blocks following each of the "Given", "When", and "Then" regexes.</li>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (view_articles_steps.rb)</span> <a href='/downloads/code/cucumber/step_definitions/view_articles_steps.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">Given</span> <span class="sr">/^I have articles titled (.+)$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">titles</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">titles</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">title</span><span class="o">|</span>
+</span><span class='line'>    <span class="no">Article</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span><span class="ss">:title</span> <span class="o">=&gt;</span> <span class="n">title</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">When</span> <span class="sr">/^I go to the list of articles$/</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">click_on</span> <span class="s2">&quot;All articles&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Then</span><span class="p">(</span><span class="sr">/^I should see &quot;Caching&quot;$/</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_content</span> <span class="s2">&quot;Caching&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Then</span><span class="p">(</span><span class="sr">/^I should see &quot;Cucumber&quot;$/</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_content</span> <span class="s2">&quot;Cucumber&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Then</span><span class="p">(</span><span class="sr">/^I should see &quot;Redis&quot;$/</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_content</span> <span class="s2">&quot;Redis&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+</ol>
+
+
+<p>It&rsquo;s really that simple. And it does require extra effort&mdash;even the copying of the Cucumber definition into the step definition regex feels wrong&mdash;but the process is easy enough.</p>
+
+<p>What it comes down to is a different syntax for a behavior-driven process or integration test. Cucumber is one more way to implement it (in addition to Capybara, etc.). Where Cucumber really has its value is in its different syntax, which is more human-readable, meaning a non-technical person can write the Cucumber definitions (which are then implemented as step definitions).</p>
+
+<p>So there may be limited value for a promgrammer on his or her own, but Cucumber can be valuable for a company or team as a whole.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Avdi Grimm walks through outside-in testing nicely (albeit with more programming complexity/sophistication than Cucumber) in <a href="http://www.rubytapas.com/episodes/120-Outside-In">this video</a>, in which he references the Cucumber &ldquo;given/when/then&rdquo; syntax.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>For a full outline of configuring a Cucumber environment, Daniel Chang outlines the setup <a href="https://github.com/danielchangNYC/YATL/blob/master/testing_setup.md">here</a>.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pursuit of (Programming) Happiness: Testing]]></title>
+    <link href="http://cek.io/blog/2014/04/22/pursuit-of-happyness/"/>
+    <updated>2014-04-22T15:29:33-04:00</updated>
+    <id>http://cek.io/blog/2014/04/22/pursuit-of-happyness</id>
+    <content type="html"><![CDATA[<p>I recently remarked that I&rsquo;m beginning to enjoy writing tests, but&mdash;in the same breath&mdash;acknowledged that &ldquo;enjoy&rdquo; is not quite accurate. It&rsquo;s more like I&rsquo;ve moved from avoidance of testing to a neutrality about it, a mindset that sees its value and knows it&rsquo;s attainable. That transition is an ongoing pursuit: of testing, of test-driven development, and of &ldquo;enjoyment&rdquo; of those things. An ongoing pursuit of happiness.</p>
+
+<p>There&rsquo;s a ton of variety to testing. There are different frameworks (an old but helpful <a href="http://www.ultrasaurus.com/2009/08/ruby-unit-test-frameworks/">breakdown of a few frameworks here</a> and <a href="http://en.wikipedia.org/wiki/Unit_testing_frameworks_for_Ruby#Unit-testing_frameworks">Wikipedia&rsquo;s overview here</a>):</p>
+
+<ul>
+  <li><a href="https://github.com/rspec/rspec">Rspec</a>,</li>
+  <li><a href="http://ruby-doc.org/stdlib-1.9.3/libdoc/minitest/spec/rdoc/MiniTest/Spec.html,">Minitest</a> </li>
+  <li><a href="http://www.ruby-doc.org/stdlib-2.1.1/libdoc/test/unit/rdoc/Test/Unit.html">Test::Unit</a>,</li>
+  <li><a href="https://github.com/thoughtbot/shoulda">Shoulda</a>,</li>
+</ul>
+
+
+<p>There are different types of tests:</p>
+
+<ul>
+  <li>Unit and integration tests</li>
+  <li>Model, view, and controller specs</li>
+  <li>Feature and request specs</li>
+</ul>
+
+
+<p>There are even differences of opinions about best practices (though, for RSpec, <a href="http://betterspecs.org/">here are some practices</a> that seem to be considered &ldquo;better&rdquo;). Acknowledging all of that diversity in test-driven development, my experience has been primarily contrained to RSpec, so this blog post will be too.</p>
+
+<!--more-->
+
+
+
+
+<h2>An example: testing Tender</h2>
+
+
+<p><img class="right" src="/images/typeahead.png" width="400">
+One application I&rsquo;ve built recently is Tender (<a href="http://github.com/AlexPatriquin/BitcoinMessenger">code on Github</a> and <a href="http://tendermessenger.com">live deployed app</a>). The key components to Tender boil down to the interface you see at right: (1) a User model and (2) the functionality of sending messages and bitcoin.</p>
+
+<p>For that reason I decided on two key test areas:</p>
+
+<ol>
+  <li>A <a href="https://github.com/AlexPatriquin/BitcoinMessenger/blob/master/spec/models/user_spec.rb">User model spec</a>.</li>
+  <li>A <a href="https://github.com/AlexPatriquin/BitcoinMessenger/blob/master/spec/features/form_feature_spec.rb">feature spec</a> ensuring the form functioned as intended.</li>
+</ol>
+
+
+<p>Feature specs became my best friend. The most difficult part was <a href="https://github.com/AlexPatriquin/BitcoinMessenger/blob/master/spec/support/omniauth_macros.rb">mocking the omniauth login</a> (so I&rsquo;d have a valid test user who could &ldquo;send&rdquo; bitcoin). With this covered, I was able to run the code below.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (form_spec.rb)</span> <a href='/downloads/code/form_spec.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># before block, etc.</span>
+</span><span class='line'><span class="n">it</span> <span class="s2">&quot;sends bitcoin and message&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;name_or_email&#39;</span><span class="p">,</span> <span class="ss">:with</span><span class="o">=&gt;</span><span class="s2">&quot;c.kohlbrenner@gmail.com&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;amount&#39;</span><span class="p">,</span> <span class="ss">:with</span><span class="o">=&gt;</span><span class="s2">&quot;0.002&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="ss">:with</span><span class="o">=&gt;</span><span class="s2">&quot;Capybara feature test&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">click_button</span> <span class="s2">&quot;Send&quot;</span>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_text</span><span class="p">(</span><span class="s2">&quot;Sent 0.002 to c.kohlbrenner@gmail.com.&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="c1"># more tests</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+And voilà, Capybara tests the feature perfectly. This was, of course, very easy to replicate to test form validations, requests, Bitcoin requests (instead of payments), etc.</p>
+
+<h2>The why</h2>
+
+
+<p>Is this whole blog post about a shiny green badge on the Readme? Yes, in part. It looks so nice!</p>
+
+<p><img class="center" src="/images/tender-readme.png"></p>
+
+<p>Jokes aside, it&rsquo;s validating to have a <a href="https://coveralls.io/r/AlexPatriquin/BitcoinMessenger?branch=master">seemingly comprehensive test suite</a>. But it&rsquo;s only validating because there&rsquo;s value in an <strong>actually</strong> comprehensive test suite.</p>
+
+<p>Testing is ultimately about <strong>making our jobs easier</strong>. As <a href="http://guides.rubyonrails.org/v3.2.13/testing.html#why-write-tests-for-your-rails-applications">the RailsGuide on testing</a> says:
+<blockquote><p></p></p><p><ul><br/>  <li>By simply running your Rails tests you can ensure your code adheres to the desired functionality even after some major code refactoring.</li><br/>  <li>Rails tests can also simulate browser requests and thus you can test your application’s response without having to test it through your browser.</li><br/></ul></p><p><br/><p></p><footer><strong>RailsGuides <a href="http://guides.rubyonrails.org/v3.2.13/testing.html#why-write-tests-for-your-rails-applications">http://guides.rubyonrails.org/v3.2.13/testing.html#why-write-tests-for-your-rails-applications</a> A Guide to Testing Rails Applications</strong></footer></blockquote>
+Doesn&rsquo;t that sound great? Ensuring adherence to the desired functionality even after refactoring. Knowing how your application will respond without opening your browser. Of course there are other ways of testing your app&mdash;you can open the browser and try it out. But how much more reliable, fast, and easy is it to have a test suite that you can run and trust?</p>
+
+<p>This became evident over the course of building Tender. We&rsquo;d have the functionality we wanted, then add a feature, which would break a different (previously working) feature, but we wouldn&rsquo;t know that until hours or days later. Testing makes that feedback immediate, and ensures that your code is always working (or at least points out where it&rsquo;s not working).</p>
+
+<h2>Better Specs</h2>
+
+
+<p>This was all great&mdash;I&rsquo;m now more comfortable writing tests, and I see their value more clearly (ensuring my app is running is as simple as running <code>rspec</code> or looking at my <a href="https://travis-ci.org/AlexPatriquin/BitcoinMessenger">Travis build</a>). That said, I&rsquo;m certainly still learning. A helpful lesson came from John Kelly Ferguson, Flatiron alum and web developer extraordinaire who reviewed Tender&rsquo;s code. His feedback is laid out nicely in <a href="https://github.com/AlexPatriquin/BitcoinMessenger/pull/4">this pull request</a>.</p>
+
+<p>What it boils down to is what <a href="http://betterspecs.org/">Better Specs</a> says on its homepage:
+<blockquote><p>On the web there are many resources that give complete overview of <em>what</em> you can do with RSpec. But there are fewer resources devoted to how to create a great RSpec test suite.</p></p><p><p>Better Specs tries to fill this gap by collecting most of the &ldquo;best practices&rdquo; that other developers learn through years of experience.</p><footer><strong>BetterSpecs <a href="http://betterspecs.org/">http://betterspecs.org/</a> { rspec guidelines with ruby }</strong></footer></blockquote></p>
+
+<p>My learning has gotten me to an initial implementation of an RSpec test suite&mdash;I now look to Better Specs for some better (or even best) practices. That said, getting this far was an accomplishment in itself. Now to continue that pursuit of happiness.</p>
+
+<h4>Bonus: straight from the creator of Ruby on Rails</h4>
+
+
+<p>DHH just happened to post <a href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">this essay</a> the day after I wrote this blog. A helpful reminder to focus on what&rsquo;s helpful&mdash;what makes programming easier&mdash;and not on dogmas of TDD or test-first.</p>
+]]></content>
+  </entry>
+  
+</feed>

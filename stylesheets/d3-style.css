@@ -1,0 +1,55 @@
+.bar {
+  fill: teal;
+}
+
+.bar-text {
+  font-family: sans-serif;
+  font-size: 11px;
+  fill: white;
+}
+
+.bar:hover {
+  fill: #35D3A7;
+}
+
+.circle-data {
+  fill: blue;
+  stroke: teal;
+  stroke-width: 5;
+}
+
+svg {
+  background-color: #6899D3;
+  border: 1px solid;
+  width: 510px;
+}
+
+h3 {
+  font-family: sans-serif;
+}
+
+.scatterplot-text {
+  font-size: 10px;
+  fill: #04346C;
+  font-family: sans-serif;
+}
+
+circle {
+  fill: #35D3A7;
+}
+
+circle:hover {
+  fill: teal;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}

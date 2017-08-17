@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Gems and Weather Forecasts - CEK.io</title>
+  <meta name="author" content="Chris Eaves-Kohlbrenner">
+
+  
+  <meta name="description" content="What&#8217;s a gem anyway? What is a gem? According to RubyGems.org, &ldquo;Each gem has a name, version, and platform.&rdquo; That&rsquo;s literally &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cek.io/blog/2014/03/03/gems-and-weather">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="CEK.io" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<link href='//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50621247-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <a class="header__rss-link" href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a>
+  <h1><a href="/">CEK.io</a></h1>
+  
+    <h2>Chris EK, on life as a continually learning software engineer.</h2>
+  
+</hgroup>
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Gems and Weather Forecasts</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-03T08:47:00-05:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>What&#8217;s a gem anyway?</h2>
+
+
+<p><img class="right" src="http://chriskohlbrenner.github.io/images/what_is_a_gem.png" width="335" height="400">
+What is a gem? According to RubyGems.org, &ldquo;Each gem has a name, version, and platform.&rdquo; That&rsquo;s literally the first sentence of its answer to that question. Clear as mud.</p>
+
+<p>Simply put, a gem is a packaged Ruby application or library. That&rsquo;s all. It&rsquo;s just Ruby code, arranged in a format that&rsquo;s easy to share.</p>
+
+<h5>And RubyGems?</h5>
+
+
+<p>Gems actually exist apart from RubyGems (i.e., you can have your own internal gems), but RubyGems is the package that became part Ruby&rsquo;s standard library (in version 1.9 of Ruby). With RubyGems, developers can search, install, build, and publicly share gems straight from the command line. When you type <code>gem list</code> (or any other <code>gem</code> command into the command line, you&rsquo;re depending on RubyGems. Typing <code>gem -h</code>, you&rsquo;ll see that &ldquo;RubyGems is a <i>sophisticated</i> package manager for Ruby,&rdquo; so I suppose we can add pretentious to the list of RubyGems&#8217; attributes.</p>
+
+<!--more-->
+
+
+
+
+<h2>My own exploration</h2>
+
+
+<p>In the interest of learning by doing, I made a gem. The process is straightforward; I followed the <a href="http://guides.rubygems.org/make-your-own-gem/">RubyGems guide</a>, which lays out each step quite clearly. It comes down to the following:</p>
+
+<ul>
+  <li>Name your gem name, write your code, and put it in a &#8216;lib&#8217; directory.</li>
+  <li>Create the gemspec (named [gem name].gemspec). The content follows a clear template specifying the gem&#8217;s name, version, date, etc.</li>
+  <li>From the command line, run <code>gem build [gem name].gemspec</code></li>
+  <li>Once built, run <code>gem install ./[gemfile name]</code> (the gemfile will end with the &#8220;.gem&#8221; extension and will be included in the return value of the build command.</li>
+  <li>Run <code>curl -u [RubyGems username] https://rubygems.org/api/v1/api_key.yaml</code> to connect to RubyGems.org (it&#8217;s very easy to create a RubyGems account).</li>
+  <li>Run <code>gem push [gemfile name]</code></li>
+</ul>
+
+
+
+
+<h2>NY Forecast</h2>
+
+
+<p>I could&rsquo;ve done a simple &ldquo;Hello World&rdquo; example like the one in the guide, but I wanted to make something more &ldquo;useful.&rdquo; I could describe it here, but you should just try it out isnstead: <code>gem install ny_forecast</code>.</p>
+
+<p>I now have an extra layer of illusive legitimacy, with <a href="https://rubygems.org/gems/ny_forecast">my NY Forecast gem on RubyGems.org</a>. It means there&rsquo;s not so much separating <a href="https://rubygems.org/profiles/chriskohlbrenner">me</a> from a programmer like <a href="https://rubygems.org/profiles/webster132">DHH</a>! Except maybe 23 extra gems and 250 more million downloads&hellip;</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Chris Eaves-Kohlbrenner</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-03T08:47:00-05:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/gems/'>Gems</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cek.io/blog/2014/03/03/gems-and-weather/" data-via="heychrisek" data-counturl="http://cek.io/blog/2014/03/03/gems-and-weather/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/28/on-blog-scheduling/" title="Previous Post: On Blog Scheduling">&laquo; On Blog Scheduling</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/03/04/sinatra-what/" title="Next Post: Sinatra What?">Sinatra What? &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2017 Chris Eaves-Kohlbrenner -
+  <a href="https://twitter.com/heychrisek">Twitter</a> -
+  <a href="https://github.com/heychrisek">Github</a>
+</p>
+
+</footer>
+  
+
+
+<!-- 
+ -->
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
