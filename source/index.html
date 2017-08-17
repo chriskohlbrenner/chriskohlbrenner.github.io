@@ -1,11 +1,11 @@
 ---
 layout: default
 ---
-<div style="padding-top: 0;">
+<div class="index">
   <article role="article">
     <br />
-    <div style="font-size:.9em; border-top:1px solid #f2f2f2; border-bottom:1px solid #f2f2f2; padding:10px 0;">
-      <span>Hey there. I'm Chris Eaves-Kohlbrenner, a software engineer currently working for <a href="https://redowl.com/">RedOwl</a>. This blog covers some of my technical interests, like JavaScript, functional programming, and UI development with React and Redux. You can find me on <a href="https://twitter.com/heychrisek">Twitter</a> and <a href="https://github.com/heychrisek">Github</a> or email me at heychrisek at gmail dot com.</span>
+    <div class="index__header">
+      <span>Hey there. I'm Chris Eaves-Kohlbrenner, a software engineer currently working for Reuters. You can find me on <a href="https://twitter.com/heychrisek">Twitter</a> and <a href="https://github.com/heychrisek">Github</a> or email me at heychrisek at gmail dot com.</span>
       <br />
     </div>
     <div id="blog-archives">
@@ -13,7 +13,7 @@ layout: default
         {% capture this_year %}{{ post.date | date: "%Y" }}{% endcapture %}
         {% unless year == this_year %}
           {% assign year = this_year %}
-          <h2>{{ year }}</h2>
+          <h2 class="index__blog-year">{{ year }}</h2>
         {% endunless %}
         <article>
           {% include index_post.html %}

@@ -34,3 +34,23 @@
 }
 
 body > div > div { border-right-width: 0px;}
+
+.index { padding-top: 0; }
+
+.index__header {
+  font-size: .9em;
+  border-top: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
+  padding: 10px 0;
+}
+
+.index__blog-year {
+  clear: both;
+}
+
+.header__rss-link {
+  float: right;
+  margin-top:.6em;
+}
+
+code { font-family: $mono; }
