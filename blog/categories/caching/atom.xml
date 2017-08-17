@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Caching | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/caching/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:13:01-04:00</updated>
+  <updated>2017-08-17T18:15:21-04:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -38,7 +38,9 @@
 
 
 <p>Caching defined:
-<blockquote><p>In computing, a cache (/ˈkæʃ/ kash) is a component that transparently stores data so that future requests for that data can be served faster.</p><footer><strong>Wikipedia <a href="http://en.wikipedia.org/wiki/Cache_">http://en.wikipedia.org/wiki/Cache_</a>(computing) &ldquo;Cache (computing)&rdquo;</strong></footer></blockquote></p>
+{% blockquote Wikipedia <a href="http://en.wikipedia.org/wiki/Cache_">http://en.wikipedia.org/wiki/Cache_</a>(computing) &ldquo;Cache (computing)&rdquo; %}
+In computing, a cache (/ˈkæʃ/ kash) is a component that transparently stores data so that future requests for that data can be served faster.
+{% endblockquote %}</p>
 
 <p>And why cache? According to <a href="http://guides.rubyonrails.org/caching_with_rails.html">the RailsGuide on the topic</a>, caching can help with &ldquo;avoiding that expensive round-trip to your database and returning what you need to return to the web clients in the shortest time possible.&rdquo; So let&rsquo;s figure out how to avoid that expensive trip.</p>
 
@@ -101,7 +103,11 @@
 
 
 <p>So Rails has a lot of [active] support for caching built in, but how do we use it? I&rsquo;ll quote Ryan Bates on this one:
-<blockquote><p>Rails’ cache store functionality is very modular. It uses the file system to store the cache by default but we can easily change this to store it elsewhere. Rails comes with several cache store options that we can choose from. The default used to be a memory store which stored the cache in local memory of that Rails process. This issue with this is that in production we often have multiple Rails instances running and each of these will have their own cache store which isn’t a good use of resources. The file store works well for smaller applications but isn’t very efficient as reading from and writing to the hard drive is relatively slow. If we use this for a cache that’s accessed frequently we’d be better off using something else.</p></p><p><p>This brings us to the memcache store which offers the best of both worlds.</p><footer><strong>RailsCasts <a href="http://railscasts.com/episodes/380-memcached-dalli">http://railscasts.com/episodes/380-memcached-dalli</a> &ldquo;#380 Memcached &amp; Dalli&rdquo;</strong></footer></blockquote></p>
+{% blockquote RailsCasts <a href="http://railscasts.com/episodes/380-memcached-dalli">http://railscasts.com/episodes/380-memcached-dalli</a> &ldquo;#380 Memcached &amp; Dalli&rdquo; %}
+Rails’ cache store functionality is very modular. It uses the file system to store the cache by default but we can easily change this to store it elsewhere. Rails comes with several cache store options that we can choose from. The default used to be a memory store which stored the cache in local memory of that Rails process. This issue with this is that in production we often have multiple Rails instances running and each of these will have their own cache store which isn’t a good use of resources. The file store works well for smaller applications but isn’t very efficient as reading from and writing to the hard drive is relatively slow. If we use this for a cache that’s accessed frequently we’d be better off using something else.</p>
+
+<p>This brings us to the memcache store which offers the best of both worlds.
+{% endblockquote %}</p>
 
 <p>Taking Ryan&rsquo;s advice, let&rsquo;s jump straight to ActiveSupport::Cache::MemCacheStore.</p>
 
@@ -127,14 +133,7 @@
 <p>If you don&rsquo;t already have memcached installed (it&rsquo;s preinstalled on OS X), you can run <code>brew install memcached</code>, and add <code>gem &lsquo;dalli&rsquo;</code> to your Gemfile. Dalli is default in Rails 4 (but still needs to appear in the Gemfile).</p>
 
 <p>Next, set up the development config file (/config/development.rb) as follows:
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (dalli_development.rb)</span> <a href='/downloads/code/dalli_development.rb'>download</a></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">consider_all_requests_local</span>       <span class="o">=</span> <span class="kp">true</span>
-</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">action_controller</span><span class="o">.</span><span class="n">perform_caching</span> <span class="o">=</span> <span class="kp">true</span>
-</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">cache_store</span> <span class="o">=</span> <span class="ss">:dalli_store</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% include_code dalli_development.rb %}</p>
 
 <p>Run <code>memcached</code> from the terminal to start a memcached server. If you see <code>DalliError: No server available</code>, this is likely the problem.</p>
 
@@ -150,59 +149,11 @@
 <p>Imagine a web page that is a gallery of images. We want to save ourselves the long trip to the database everytime, and instead cache the images so that they render more quickly. How can we do this?</p>
 
 <p>A simple controller, rendering an index page with all the images. Note line 2&mdash;this will store the page in a file-based cache separate from the Memcached cache store. This is because page caching is one of the few caching techniques that down not use the cache store.
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (images_controller.rb)</span> <a href='/downloads/code/images_controller.rb'>download</a></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">ImagesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-</span><span class='line'>  <span class="n">caches_page</span> <span class="ss">:index</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">index</span>
-</span><span class='line'>    <span class="vi">@images</span> <span class="o">=</span> <span class="no">Image</span><span class="o">.</span><span class="n">all</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% include_code images_controller.rb %}</p>
 
 <p>Layering on fragment caching in addition to or instead of page caching, we can go to the view, call <code>cache</code>, and pass a block. Everything inside the block will now be cached, namely each image. Pay attention to line 3&mdash;in addition to simply calling <code>cache</code>, we can pass certain options like <code>expires_in</code>. This helps Memcached serve its purpose as a <strong>temporary</strong> data store. If the data were intended to be persisted, it should be persisted to a traditional database.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (images_index.html.erb)</span> <a href='/downloads/code/images_index.html.erb'>download</a></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&lt;h1&gt;Images&lt;/h1&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">&lt;%</span> <span class="n">cache</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span> <span class="n">expires_in</span><span class="p">:</span> <span class="mi">5</span><span class="o">.</span><span class="n">minutes</span> <span class="k">do</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">  &lt;table id=&quot;images&quot;&gt;</span>
-</span><span class='line'><span class="x">    &lt;tr&gt;</span>
-</span><span class='line'><span class="x">      &lt;th&gt;Image Name&lt;/th&gt;</span>
-</span><span class='line'><span class="x">      &lt;th&gt;Image&lt;/th&gt;</span>
-</span><span class='line'><span class="x">    &lt;/tr&gt;</span>
-</span><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="vi">@images</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">image</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">    &lt;tr&gt;</span>
-</span><span class='line'><span class="x">      &lt;td&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x">&lt;/td&gt;</span>
-</span><span class='line'><span class="x">      &lt;td&gt;&lt;img src=&quot;</span><span class="cp">&lt;%=</span> <span class="n">image</span><span class="o">.</span><span class="n">url</span> <span class="cp">%&gt;</span><span class="x">&quot;&gt;&lt;/td&gt;</span>
-</span><span class='line'><span class="x">    &lt;/tr&gt;</span>
-</span><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">  &lt;/table&gt;</span>
-</span><span class='line'><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code images_index.html.erb %}</p>
 
 <p>And there you have it! A simple caching solution to a slow-loading page. We could continue even deeper to caching at the model level, but fragment caching at the view level suffices as a simple solution.</p>
 

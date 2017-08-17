@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Modules | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/modules/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:13:01-04:00</updated>
+  <updated>2017-08-17T18:15:21-04:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -27,7 +27,15 @@
 
 <p>Sandi Metz describes object-oriented composition&mdash;the combining of simple, independent objects into larger, more complex wholes, in which the larger object is connected to its parts via a &lsquo;has-a&rsquo; relationship&mdash;and code arrangement in Ruby more generally:</p>
 
-<p><blockquote><p>Composition allows you to combine small parts to create more complex objects such that the <strong>whole becomes more than the sum of its parts</strong>. Composed objects tend to consist of simple, discrete entities that can easily be rearranged into new combinations. These simple objects are easy to understand, reuse, and test, but because they combine into a more complicated whole, the operation of the bigger application may not be as easy to understand as that of the individual parts.</p></p><p><p>Composition, <a href="http://cek.io/blog/2014/05/06/poodr-ch-6/">classical inheritance</a>, and <a href="http://cek.io/blog/2014/05/26/poodr-ch-7/">behavior sharing via modules</a> are competing techniques for arranging code. Each has different costs and benefits; these differences predispose them to be better at solving slightly different problems.</p></p><p><p>These techniques are tools, nothing more, and <strong>you’ll become a better designer if you practice each of them</strong>. Learning to use them properly is a matter of experience and judgment, and one of the best ways to gain experience is to learn from your own mistakes. <strong>The key to improving your design skills is to attempt these techniques, accept your errors cheerfully, remain detached from past design decisions, and refactor mercilessly</strong>.</p></p><p><p>As you gain experience, you’ll get better at choosing the correct technique the first time, your costs will go down, and your applications will improve.</p><footer><strong>Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (190)</strong></footer></blockquote></p>
+<p>{% blockquote Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (190)  %}
+Composition allows you to combine small parts to create more complex objects such that the <strong>whole becomes more than the sum of its parts</strong>. Composed objects tend to consist of simple, discrete entities that can easily be rearranged into new combinations. These simple objects are easy to understand, reuse, and test, but because they combine into a more complicated whole, the operation of the bigger application may not be as easy to understand as that of the individual parts.</p>
+
+<p>Composition, <a href="http://cek.io/blog/2014/05/06/poodr-ch-6/">classical inheritance</a>, and <a href="http://cek.io/blog/2014/05/26/poodr-ch-7/">behavior sharing via modules</a> are competing techniques for arranging code. Each has different costs and benefits; these differences predispose them to be better at solving slightly different problems.</p>
+
+<p>These techniques are tools, nothing more, and <strong>you’ll become a better designer if you practice each of them</strong>. Learning to use them properly is a matter of experience and judgment, and one of the best ways to gain experience is to learn from your own mistakes. <strong>The key to improving your design skills is to attempt these techniques, accept your errors cheerfully, remain detached from past design decisions, and refactor mercilessly</strong>.</p>
+
+<p>As you gain experience, you’ll get better at choosing the correct technique the first time, your costs will go down, and your applications will improve.
+{% endblockquote %}</p>
 
 <p>Cheerful, detached, and merciless. New descriptors of a <a href="http://threevirtues.com/">virtuous programmer</a>?</p>
 ]]></content>
@@ -75,16 +83,22 @@
 <h3>Roles</h3>
 
 
-<p><blockquote><p>Some problems require <strong>sharing behavior among otherwise unrelated objects</strong>. This common behavior is orthogonal to class; it’s <strong>a role an object plays</strong>. [&hellip;] When formerly unrelated objects begin to play a common role, they enter into a relationship with the objects for whom they play the role. These relationships are not as visible as those created by the subclass/superclass requirements of classical inheritance but they exist nonetheless.</p></blockquote></p>
+<p>{% blockquote %}
+Some problems require <strong>sharing behavior among otherwise unrelated objects</strong>. This common behavior is orthogonal to class; it’s <strong>a role an object plays</strong>. [&hellip;] When formerly unrelated objects begin to play a common role, they enter into a relationship with the objects for whom they play the role. These relationships are not as visible as those created by the subclass/superclass requirements of classical inheritance but they exist nonetheless.
+{% endblockquote %}</p>
 
 <p>Furthermore, Metz writes:
-<blockquote><p>When a role needs shared behavior you’re faced with <strong>the problem of organizing the shared code</strong>. [&hellip;] Many object-oriented languages provide a way to define a named group of methods that are independent of class and can be mixed in to any object. <strong>In Ruby, these mix-ins are called modules</strong>. Methods can be defined in a module and then the module can be added to any object. Modules thus provide a perfect way to <strong>allow objects of different classes to play a common role using a single set of code.</strong>&ldquo;</p><footer><strong>Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (142-143)</strong></footer></blockquote></p>
+{% blockquote Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (142-143)  %}
+When a role needs shared behavior you’re faced with <strong>the problem of organizing the shared code</strong>. [&hellip;] Many object-oriented languages provide a way to define a named group of methods that are independent of class and can be mixed in to any object. <strong>In Ruby, these mix-ins are called modules</strong>. Methods can be defined in a module and then the module can be added to any object. Modules thus provide a perfect way to <strong>allow objects of different classes to play a common role using a single set of code.</strong>&ldquo;
+{% endblockquote %}</p>
 
 <h3>Inheritable Code</h3>
 
 
 <p>The whole point of modules is to enable us to write good code. But Metz warns:
-<blockquote><p>&hellip;you are equipped to write some truly frightening code. Imagine the possibilities. You can write modules that include other modules. You can write modules that override the methods defined in other modules. You can create deeply nested class inheritance hierarchies and then include these various modules at different levels of the hierarchy. You can write code that is impossible to understand, debug, or extend.</p><footer><strong>Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (158)</strong></footer></blockquote></p>
+{% blockquote Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (158)  %}
+&hellip;you are equipped to write some truly frightening code. Imagine the possibilities. You can write modules that include other modules. You can write modules that override the methods defined in other modules. You can create deeply nested class inheritance hierarchies and then include these various modules at different levels of the hierarchy. You can write code that is impossible to understand, debug, or extend.
+{% endblockquote %}</p>
 
 <p>She follows this warning, however, by saying &ldquo;this very same power is what allows you to create simple structures of related objects
 that elegantly fulfill the needs of your application, your task is not to avoid these
@@ -111,7 +125,7 @@ correct way.&rdquo; The first step in this direction, Metz argues, is to write p
   </li>
   <li>
       <strong>"Create Shallow Hierarchies"</strong>: The shallower and narrower, the better.
-      <img class="center" src="/images/poodr/shallow-hierarchies.png">
+      {% img center /images/poodr/shallow-hierarchies.png %}
   </li>
 </ul>
 
@@ -126,93 +140,10 @@ correct way.&rdquo; The first step in this direction, Metz argues, is to write p
 <p>This code allows an instance of <code>MemorialDay</code> to call (1) methods that have been implemented in the <code>MemorialDay</code> class itself, (2) methods implemented in all objects above it in the hierarchy (in this case, <code>Object</code>), and (3) methods implemented in any module that has been added, namely <code>May</code> and <code>Holiday</code>.</p>
 
 <p><strong>Note</strong>: there is a difference between <code>include</code> and <code>extend</code> when mixing in modules&mdash;<code>include</code> is for instance methods, <code>extend</code> for class methods.
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (may.rb)</span> <a href='/downloads/code/modules-mixins-poodr/may.rb'>download</a></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">module</span> <span class="nn">May</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">mondays</span>
-</span><span class='line'>    <span class="c1"># Array of all Mondays in May</span>
-</span><span class='line'>        <span class="o">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">26</span><span class="o">]</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">month_of_year</span>
-</span><span class='line'>        <span class="mi">5</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (holiday.rb)</span> <a href='/downloads/code/modules-mixins-poodr/holiday.rb'>download</a></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">module</span> <span class="nn">Holiday</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">cause</span>
-</span><span class='line'>        <span class="k">case</span> <span class="nb">name</span>
-</span><span class='line'>        <span class="k">when</span> <span class="s2">&quot;Memorial Day&quot;</span>
-</span><span class='line'>            <span class="s2">&quot;remembering the men and women who died while serving in the country&#39;s armed forces&quot;</span>
-</span><span class='line'>        <span class="k">when</span> <span class="s2">&quot;Thanksgiving&quot;</span>
-</span><span class='line'>            <span class="s2">&quot;giving thanks for the blessing of the harvest and of the preceding year&quot;</span>
-</span><span class='line'>        <span class="c1"># ...</span>
-</span><span class='line'>        <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># ...</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (memorial_day.rb)</span> <a href='/downloads/code/modules-mixins-poodr/memorial_day.rb'>download</a></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">MemorialDay</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="no">May</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="no">Holiday</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">name</span>
-</span><span class='line'>        <span class="s2">&quot;Memorial Day&quot;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Memorial Day always occurs on the last Monday in May</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">day_of</span>
-</span><span class='line'>      <span class="n">mondays</span><span class="o">.</span><span class="n">last</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">date</span>
-</span><span class='line'>        <span class="no">Date</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">month_of_year</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">day_of</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<img class="center" src="/images/poodr/memorial_day_irb.png"></p>
+{% include_code modules-mixins-poodr/may.rb %}
+{% include_code modules-mixins-poodr/holiday.rb %}
+{% include_code modules-mixins-poodr/memorial_day.rb %}
+{% img center /images/poodr/memorial_day_irb.png %}</p>
 
 <p>Happy Memorial Day!</p>
 ]]></content>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Dirty_Checking | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/dirty-checking/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:13:01-04:00</updated>
+  <updated>2017-08-17T18:15:21-04:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -40,12 +40,12 @@
 <p>(To skip the background context and jump straight to the technical explanation, click <a href="http://cek.io/blog/2014/05/21/dirty-checking#code">here</a>).<br>
 In a recent pairing session, I was asked to implement a feature for a Q&amp;A polling application. Imagine the application depicted below:</p>
 
-<p><img class="center" src="/images/dirty_checking/q_and_a_img.png"></p>
+<p>{% img center /images/dirty_checking/q_and_a_img.png %}</p>
 
 <p>Now imagine yourself on the flip side, not as a user answering a poll, but as an admin at the portal implementing a poll, creating new questions, and populating prospective choices. This was the context for my challenge.</p>
 
 <p>The challenge broke down into two parts:
-<img class="right" src="/images/dirty_checking/rand-spec-answer.png"></p>
+{% img right /images/dirty_checking/rand-spec-answer.png %}</p>
 
 <ol>
   <li>
@@ -65,103 +65,16 @@ In a recent pairing session, I was asked to implement a feature for a Q&amp;A po
 
 
 <p>Imagine the class below. In creating an answer as an administrator, we create an answer object with multiple choices (take my word for it that there was a lot more going on than this):
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (answer_choices.rb)</span> <a href='/downloads/code/dirty_checking/answer_choices.rb'>download</a></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Answer</span>
-</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:choices</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">Mongoid</span><span class="p">:</span><span class="ss">:Document</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% include_code dirty_checking/answer_choices.rb %}</p>
 
 <p>We need to add an attribute for <code>:special_answer</code>&mdash;easy enough. But how do we ensure that our new <code>special_answer</code> becomes an element in the array of our answer object&rsquo;s <code>choices</code>? A simple append method. And how do we ensure things are saved as necessary? A simple callback: <code>before_save :add_special_answer</code>.
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (answer_choices_2.rb)</span> <a href='/downloads/code/dirty_checking/answer_choices_2.rb'>download</a></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Answer</span>
-</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:choices</span>
-</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:special_answer</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">Mongoid</span><span class="p">:</span><span class="ss">:Document</span>
-</span><span class='line'>  <span class="n">embeds_many</span> <span class="ss">:special_answers</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">before_save</span> <span class="ss">:add_special_answer_to_choices</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">add_special_answer_to_choices</span>
-</span><span class='line'>    <span class="n">choices</span> <span class="o">&lt;&lt;</span> <span class="n">special_answer</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% include_code dirty_checking/answer_choices_2.rb %}</p>
 
 <p>One problem:each time we change the special answer, we&rsquo;ll get an additional answer.
-<img class="center" src="/images/dirty_checking/answer_irb.png"></p>
+{% img center /images/dirty_checking/answer_irb.png %}</p>
 
 <p>There should only ever be one special answer, so we need the new special answer to replace the previous one rather than continuing to add additional ones. And that&rsquo;s a job that dirty checking can handle.
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (answer_choices_3.rb)</span> <a href='/downloads/code/dirty_checking/answer_choices_3.rb'>download</a></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Answer</span>
-</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:choices</span>
-</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:special_answer</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">ActiveModel</span><span class="p">:</span><span class="ss">:Dirty</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">Mongoid</span><span class="p">:</span><span class="ss">:Document</span>
-</span><span class='line'>  <span class="n">embeds_many</span> <span class="ss">:special_answers</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">before_save</span> <span class="ss">:add_special_answer_to_choices</span><span class="p">,</span> <span class="k">if</span><span class="p">:</span> <span class="n">special_answer_changed?</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">add_special_answer_to_choices</span>
-</span><span class='line'>    <span class="n">choices</span> <span class="o">&lt;&lt;</span> <span class="n">special_answer</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% include_code dirty_checking/answer_choices_3.rb %}</p>
 
 <p>The difference here? That simple <code>if: special_answer_changed?</code> following the callback, as well as <code>  include ActiveModel::Dirty</code>. The <a href="http://api.rubyonrails.org/classes/ActiveModel/Dirty.html">ActiveModel::Dirty module</a> gives us a few key methods, most notable <code>changed?</code>. As the code above illustrates, we can make the callback conditional by dirty checking whether the <code>special_answer</code> attribute has changed.</p>
 

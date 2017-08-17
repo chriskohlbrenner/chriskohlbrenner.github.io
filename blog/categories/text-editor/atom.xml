@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Workflow | CEK.io]]></title>
-  <link href="http://cek.io/blog/categories/workflow/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Text_editor | CEK.io]]></title>
+  <link href="http://cek.io/blog/categories/text-editor/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
   <updated>2017-08-17T18:15:21-04:00</updated>
   <id>http://cek.io/</id>
