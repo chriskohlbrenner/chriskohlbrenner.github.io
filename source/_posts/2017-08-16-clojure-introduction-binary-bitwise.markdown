@@ -185,7 +185,7 @@ user=> (bit-flip 2r1010 3)   ;; flips the 3rd bit from right
 ``` clojure
 ;; `bit-set` sets the bit to 1 at a given index
 
-user=> (bit-set 2r1010 2)   ;; sets the 1st bit from right to 1
+user=> (bit-set 2r1010 2)   ;; sets the 2nd bit from right to 1
 14  ;; 2r1110
 ```
 
