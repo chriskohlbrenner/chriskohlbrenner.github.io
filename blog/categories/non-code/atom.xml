@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Non-Code | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/non-code/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[The Hammer of JavaScript (and Other Tools for Other Nails)]]></title>
     <link href="http://cek.io/blog/2016/02/08/javascript-hammer/"/>
-    <updated>2016-02-08T11:10:04-05:00</updated>
+    <updated>2016-02-08T08:10:04-08:00</updated>
     <id>http://cek.io/blog/2016/02/08/javascript-hammer</id>
     <content type="html"><![CDATA[<p><em>The one where I get a harsh reminder to question my instincts from a real-life experience of <a href="https://xkcd.com/1319/">this XKCD comic</a>.</em></p>
 
@@ -64,7 +64,7 @@
   <entry>
     <title type="html"><![CDATA[Old and New Years]]></title>
     <link href="http://cek.io/blog/2015/01/03/new-year/"/>
-    <updated>2015-01-03T12:14:20-05:00</updated>
+    <updated>2015-01-03T09:14:20-08:00</updated>
     <id>http://cek.io/blog/2015/01/03/new-year</id>
     <content type="html"><![CDATA[<p>Happy new year! A resolution of mine for 2015 is to write more&mdash;not just code, which is itself an admirable goal, but human-readable English. This was motivated by (1) the advice in <a href="http://www.shubhro.com/2014/12/27/software-engineers-should-write/">this article</a> I read recently, which is <a href="http://bit.ly/1K9MAZk">not new advice</a>, (2) the hope that, for all the benefits of specialization, there&rsquo;s value in maintaining competence in both programming and verbal language, and (3) the fact that I like writing! So you can expect more consistent posts than the last six months have yielded.</p>
 
@@ -136,7 +136,7 @@
   <entry>
     <title type="html"><![CDATA[Ira Glass on Storytelling [and Programming]]]></title>
     <link href="http://cek.io/blog/2014/05/11/the-gap/"/>
-    <updated>2014-05-11T13:54:09-04:00</updated>
+    <updated>2014-05-11T10:54:09-07:00</updated>
     <id>http://cek.io/blog/2014/05/11/the-gap</id>
     <content type="html"><![CDATA[<p><a href="http://vimeo.com/85040589">&ldquo;For everyone in doubt, especially for myself&hellip;&rdquo;</a>.</p>
 
@@ -153,7 +153,7 @@
   <entry>
     <title type="html"><![CDATA[Then and Now]]></title>
     <link href="http://cek.io/blog/2014/02/04/then-and-now/"/>
-    <updated>2014-02-04T18:40:22-05:00</updated>
+    <updated>2014-02-04T15:40:22-08:00</updated>
     <id>http://cek.io/blog/2014/02/04/then-and-now</id>
     <content type="html"><![CDATA[<p>It is August 2007, and I&rsquo;m sitting in my freshman dorm at Wheaton College. A few days after arriving on campus to <a href="http://www.wunderground.com/history/airport/KDPA/2007/8/23/DailyHistory.html">record-setting rains</a> and a few days before classes began, there was one unified, collective priority: internet. In those days we hadn&rsquo;t yet realized how bad the internet would be: how low the bandwidth, how weak the wifi, and just how persistent(ly annoying) the Bradford Agent.  They were simple times&mdash;the first iPhone had just been released, for example, and few of us had even heard of Twitter&mdash;and we were simply excited to check our email and Facebook.  Yet so few of us could.</p>
 
@@ -176,7 +176,7 @@
   <entry>
     <title type="html"><![CDATA[Hello World]]></title>
     <link href="http://cek.io/blog/2014/02/04/hello-world/"/>
-    <updated>2014-02-04T17:42:46-05:00</updated>
+    <updated>2014-02-04T14:42:46-08:00</updated>
     <id>http://cek.io/blog/2014/02/04/hello-world</id>
     <content type="html"><![CDATA[<p>Hello, world! First post coming out of Flatiron School, Ruby 004. More to come.</p>
 ]]></content>

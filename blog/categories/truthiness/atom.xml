@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Truthiness | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/truthiness/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:21-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Two Truths and a [False]: Booleans and Truthiness in Ruby and JavaScript]]></title>
     <link href="http://cek.io/blog/2014/04/30/ruby-vs-javascript-booleans/"/>
-    <updated>2014-04-30T10:34:23-04:00</updated>
+    <updated>2014-04-30T07:34:23-07:00</updated>
     <id>http://cek.io/blog/2014/04/30/ruby-vs-javascript-booleans</id>
     <content type="html"><![CDATA[<p>We all know the icebreaker game &ldquo;Two Truths and a Lie&rdquo;: each individual in a group tells three statements about themselves; the rest of the group tries to distinguish which of the three is a lie. For example:</p>
 
@@ -38,11 +38,7 @@
 
 
 <p>Some context in JavaScript:
-{% blockquote &ldquo;Speaking JavaScript&rdquo; <a href="http://speakingjs.com/es5/ch01.html#basic_prim_vs_obj">http://speakingjs.com/es5/ch01.html#basic_prim_vs_obj</a> { &ldquo;Primitive Values Versus Objects&rdquo; } %}
-JavaScript makes a somewhat arbitrary distinction between values:<ul>
-  <li>The primitive values are Booleans, numbers, strings, null, and undefined.</li>
-  <li>All other values are objects.</li></ul>
-{% endblockquote %}</p>
+<blockquote><p>JavaScript makes a somewhat arbitrary distinction between values:<ul><br/>  <li>The primitive values are Booleans, numbers, strings, null, and undefined.</li><br/>  <li>All other values are objects.</li></ul></p><footer><strong>&ldquo;Speaking JavaScript&rdquo; <a href="http://speakingjs.com/es5/ch01.html#basic_prim_vs_obj">http://speakingjs.com/es5/ch01.html#basic_prim_vs_obj</a> { &ldquo;Primitive Values Versus Objects&rdquo; }</strong></footer></blockquote></p>
 
 <p>This distinction between primitives and objects is important, as we&rsquo;ll see in a minute.</p>
 
@@ -88,8 +84,8 @@ JavaScript makes a somewhat arbitrary distinction between values:<ul>
 
 <p>The best way to become familiar with Boolean values is to try them out in the console. In JavaScript, the <code>Boolean([value])</code> object evaluates the Boolean value (i.e., converts non-Boolean to Boolean). In Ruby, the double bang (<code>!!</code>) converts non-Boolean values to Boolean. See some examples below: first JavaScript, then Ruby.</p>
 
-<p>{% img center /images/js-boolean.png %}
-{% img center /images/ruby-boolean.png %}
+<p><img class="center" src="/images/js-boolean.png">
+<img class="center" src="/images/ruby-boolean.png">
 (note, that warning&mdash;&ldquo;string literal in condition&rdquo;&mdash;is telling us what we already know: that a string literal like &ldquo;abc&rdquo; is non-Boolean but being evaluated as such.)</p>
 
 <h3>My lie revealed</h3>

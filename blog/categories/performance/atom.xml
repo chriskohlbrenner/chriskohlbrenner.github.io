@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Performance | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/performance/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[JavaScript's Call Stack, Callback Queue, and Event Loop]]></title>
     <link href="http://cek.io/blog/2015/12/03/event-loop/"/>
-    <updated>2015-12-03T09:01:39-05:00</updated>
+    <updated>2015-12-03T06:01:39-08:00</updated>
     <id>http://cek.io/blog/2015/12/03/event-loop</id>
     <content type="html"><![CDATA[<p>In this video, Philip Roberts clears up a lot of the details surrounding JavaScript&rsquo;s call stack, callback queue, and event loop. Feel free to skip this blog post and spend a half hour watching <a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">the video</a> instead. But if you&rsquo;d rather skim my highlights, don&rsquo;t let me stop you!</p>
 
@@ -131,7 +131,7 @@
   <entry>
     <title type="html"><![CDATA[Performance Process: Takeaways From AEA]]></title>
     <link href="http://cek.io/blog/2015/10/09/performance/"/>
-    <updated>2015-10-09T13:39:03-04:00</updated>
+    <updated>2015-10-09T10:39:03-07:00</updated>
     <id>http://cek.io/blog/2015/10/09/performance</id>
     <content type="html"><![CDATA[<p>The stars have aligned lately to focus my attention on performance. Consider the following:</p>
 
@@ -210,7 +210,7 @@
   <entry>
     <title type="html"><![CDATA[An Event Apart]]></title>
     <link href="http://cek.io/blog/2015/10/08/an-event-apart/"/>
-    <updated>2015-10-08T17:09:32-04:00</updated>
+    <updated>2015-10-08T14:09:32-07:00</updated>
     <id>http://cek.io/blog/2015/10/08/an-event-apart</id>
     <content type="html"><![CDATA[<p>This week, I had the good fortune of attending <a href="http://aneventapart.com/event/austin-2015">An Event Apart in Austin, TX</a>. Coordinated by the same great people behind <a href="http://alistapart.com/">A List Apart</a>, An Event Apart (AEA) is two days of fantastic talks about the web&mdash;content, design, development&mdash;and a full-day workshop (A Day Apart). Many of the concepts we now take for granted as web best practices, like mobile first and responsive design, have been introduced and elaborated at AEA events.</p>
 

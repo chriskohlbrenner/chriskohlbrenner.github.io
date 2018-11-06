@@ -4,7 +4,7 @@
   <title><![CDATA[Category: RabbitMQ | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/rabbitmq/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Advanced Message Queuing Protocol (AMQP) Using RabbitMQ in Ruby]]></title>
     <link href="http://cek.io/blog/2014/04/30/amqp-rabbitmq-ruby/"/>
-    <updated>2014-04-30T17:08:10-04:00</updated>
+    <updated>2014-04-30T14:08:10-07:00</updated>
     <id>http://cek.io/blog/2014/04/30/amqp-rabbitmq-ruby</id>
     <content type="html"><![CDATA[<p><strong>Summary</strong>: message queueing with RabbitMQ helps software applications connect and scale, by enabling messaging patterns like data delivery, push notifications, publish/subscribe, and text messages. It can be easily implemented in Ruby.</p>
 

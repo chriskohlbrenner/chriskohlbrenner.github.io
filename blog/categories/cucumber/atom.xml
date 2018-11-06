@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Cucumber | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/cucumber/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:21-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,11 +16,11 @@
   <entry>
     <title type="html"><![CDATA[Testing, Low- to High-Level]]></title>
     <link href="http://cek.io/blog/2014/06/24/low-to-high-testing/"/>
-    <updated>2014-06-24T14:32:42-04:00</updated>
+    <updated>2014-06-24T11:32:42-07:00</updated>
     <id>http://cek.io/blog/2014/06/24/low-to-high-testing</id>
     <content type="html"><![CDATA[<p>Google &ldquo;low level&rdquo; and you&rsquo;ll see the following definition.</p>
 
-<p>{% img right /images/low-to-high-testing/low-level.png 400 %}</p>
+<p><img class="right" src="/images/low-to-high-testing/low-level.png" width="400"></p>
 
 <p>We often hear about low-level languages like Assembly or C (which was once a high-level language) vs. high-level languages like Java or Ruby (which may come to be considered low-level?).</p>
 
@@ -38,8 +38,126 @@
 
 <p>I won&rsquo;t get into FactoryGirl in detail, but here I create a factory for the Team model, which I use instead of fixtures as test data for team_spec.rb.</p>
 
-<p>{% include_code low-to-high-testing/teams_factory.rb %}
-{% include_code low-to-high-testing/team_spec.rb %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (teams_factory.rb)</span> <a href='/downloads/code/low-to-high-testing/teams_factory.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">factory</span> <span class="ss">:team</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">api_id</span> <span class="s2">&quot;A0CD1355-B6FC-48D3-B67B-AF5AA2B2C1E1&quot;</span>
+</span><span class='line'>    <span class="nb">name</span> <span class="s2">&quot;Croatia&quot;</span>
+</span><span class='line'>    <span class="n">logo</span> <span class="s2">&quot;http://cache.images.globalsportsmedia.com/soccer/teams/150x150/514.png&quot;</span>
+</span><span class='line'>    <span class="n">website</span> <span class="s2">&quot;http://www.hns-cff.hr/&quot;</span>
+</span><span class='line'>    <span class="n">group_letter</span> <span class="s2">&quot;A&quot;</span>
+</span><span class='line'>    <span class="n">group_rank</span> <span class="mi">3</span>
+</span><span class='line'>    <span class="n">group_points</span> <span class="mi">3</span>
+</span><span class='line'>    <span class="n">matches_played</span> <span class="mi">3</span>
+</span><span class='line'>    <span class="n">wins</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="n">losses</span> <span class="mi">2</span>
+</span><span class='line'>    <span class="n">draws</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="n">goals_for</span> <span class="mi">6</span>
+</span><span class='line'>    <span class="n">goals_against</span> <span class="mi">6</span>
+</span><span class='line'>    <span class="n">goal_differential</span> <span class="s2">&quot;+0&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (team_spec.rb)</span> <a href='/downloads/code/low-to-high-testing/team_spec.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="no">Team</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">it</span> <span class="s1">&#39;has a valid factory&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">build</span><span class="p">(</span><span class="ss">:team</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">be_valid</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:croatia</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:team</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:brazil</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:team</span><span class="p">,</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Brazil&quot;</span><span class="p">,</span> <span class="ss">:group_rank</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">:group_points</span> <span class="o">=&gt;</span> <span class="mi">7</span><span class="p">,</span> <span class="ss">:wins</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="ss">:losses</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="ss">:draws</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">:goals_for</span> <span class="o">=&gt;</span> <span class="mi">7</span><span class="p">,</span> <span class="ss">:goals_against</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#next_match&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;when there are upcoming matches&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s1">&#39;returns the match object&#39;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">pending</span><span class="p">(</span><span class="s2">&quot;pending until test can retrieve match objects&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">this_should_not_get_executed</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#next_opponent&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;when there are upcoming matches&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s1">&#39;returns the team object&#39;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">pending</span><span class="p">(</span><span class="s2">&quot;pending until test can retrieve team objects&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">this_should_not_get_executed</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#avg_goals_against&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;returns the avg goals against value&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">croatia</span><span class="o">.</span><span class="n">avg_goals_against</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#avg_goals_for&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;returns the avg goals for value&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">brazil</span><span class="o">.</span><span class="n">avg_goals_for</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">33</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h3>Functional Tests (Controller Tests)</h3>
 
@@ -58,7 +176,60 @@
 
 
 <p>In the following example, I simply test that TeamsController assigns the correct resources (teams) and renders the correct views on get requests.
-{% include_code low-to-high-testing/teams_controller_spec.rb %}</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (teams_controller_spec.rb)</span> <a href='/downloads/code/low-to-high-testing/teams_controller_spec.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rails_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="no">TeamsController</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;GET index&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;assigns @teams&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">team</span> <span class="o">=</span> <span class="no">Team</span><span class="o">.</span><span class="n">create</span>
+</span><span class='line'>      <span class="n">get</span> <span class="ss">:index</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">assigns</span><span class="p">(</span><span class="ss">:teams</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="o">[</span><span class="n">team</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;renders the index template&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">get</span> <span class="ss">:index</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;GET show&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;renders the show template&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">team</span> <span class="o">=</span> <span class="no">Team</span><span class="o">.</span><span class="n">create</span>
+</span><span class='line'>      <span class="n">get</span><span class="p">(</span><span class="ss">:show</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="s2">&quot;1&quot;</span><span class="p">})</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;show&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h3>Integration Tests (Acceptance Tests)</h3>
 
@@ -69,14 +240,47 @@
 
 <p>ExtremeProgramming.org defines acceptance tests as follows: &ldquo;Acceptance tests are created from user stories. During an iteration the user stories selected during the iteration planning meeting will be translated into acceptance tests. &hellip; Acceptance tests are black box system tests. Each acceptance test represents some expected result from the system.&rdquo; Another key: black box testing, testing an for the proper output given a certain input, without knowing what happens inside the &ldquo;black box&rdquo; (that&rsquo;s what unit and functional tests are for).</p>
 
-<p>{% include_code low-to-high-testing/team_index_spec.rb %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (team_index_spec.rb)</span> <a href='/downloads/code/low-to-high-testing/team_index_spec.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="s1">&#39;Team index page&#39;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:team</span><span class="p">,</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Croatia&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s1">&#39;renders the correct text&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">visit</span> <span class="s1">&#39;/teams&#39;</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_text</span><span class="p">(</span><span class="s1">&#39;2014 World Cup Teams&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_text</span><span class="p">(</span><span class="s1">&#39;Croatia&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h3>Conclusion</h3>
 
 
 <p>CodeClimate describes what they call <a href="http://blog.codeclimate.com/blog/2013/10/09/rails-testing-pyramid/">the Rails Testing Pyramid</a>, depicted below:</p>
 
-<p>{% img left <a href="http://blog.codeclimate.com/images/posts/rails-testing-pyramid.png">http://blog.codeclimate.com/images/posts/rails-testing-pyramid.png</a> 400 %}</p>
+<p><img class="left <a" src="href="http://blog.codeclimate.com/images/posts/rails-testing-pyramid.png">http://blog.codeclimate.com/images/posts/rails-testing-pyramid.png</a>" width="400"></p>
 
 <p>They write, &ldquo;Blending unit tests, service-level tests and acceptance tests yields faster test suites that still provide confidence the application is working, and are resistant to incidental breakage. As you develop, take care to prune tests that are not pulling their weight. When you fix a bug, implement your regression test at the lowest possible level. Over time, keep an eye on the ratio between the counts of each type of test, as well as the time of your acceptance test suite.&rdquo;</p>
 
@@ -98,7 +302,7 @@
   <entry>
     <title type="html"><![CDATA[Cucumber: The Basics]]></title>
     <link href="http://cek.io/blog/2014/05/19/cucumber/"/>
-    <updated>2014-05-19T12:47:20-04:00</updated>
+    <updated>2014-05-19T09:47:20-07:00</updated>
     <id>http://cek.io/blog/2014/05/19/cucumber</id>
     <content type="html"><![CDATA[<p><a href="http://railscasts.com/episodes/155-beginning-with-cucumber"></a></p>
 
@@ -109,9 +313,7 @@
 <p>But <a href="http://www.jackkinsella.ie/2011/09/26/why-bother-with-cucumber-testing.html">some</a> call Cucumber &ldquo;no more than a clumsy wrapper over basic integration tests&rdquo;, insisting that &ldquo;Cucumber’s syntax is costly&rdquo; and recommending that programmers &ldquo;swap Cucumber for pure integration tests using Capybara&rdquo;. <a href="http://pivotallabs.com/cucumber-when-to-use-it-when-to-lose-it/">Others</a> agree, but argue that the benefit of Cucumber is for the product manager, not the programmer.</p>
 
 <p>Ryan Bates, for one, likes Cucumber (or did as of 2009, when he published this RailsCast&hellip;):
-{% blockquote RailsCasts <a href="http://railscasts.com/episodes/155-beginning-with-cucumber">http://railscasts.com/episodes/155-beginning-with-cucumber</a> #155 Beginning with Cucumber %}
-It might seem like quite a lot of work to define the tests in English and implement each step one at a time, but Cucumber testing has several advantages. With it you’re testing your whole stack, so you’re writing tests that cover everything from the user interface down to the database. While they’re not a replacement for unit tests, they provide an excellent way of writing high-level tests to test the overall behaviour of your application.
-{% endblockquote %}</p>
+<blockquote><p>It might seem like quite a lot of work to define the tests in English and implement each step one at a time, but Cucumber testing has several advantages. With it you’re testing your whole stack, so you’re writing tests that cover everything from the user interface down to the database. While they’re not a replacement for unit tests, they provide an excellent way of writing high-level tests to test the overall behaviour of your application.</p><footer><strong>RailsCasts <a href="http://railscasts.com/episodes/155-beginning-with-cucumber">http://railscasts.com/episodes/155-beginning-with-cucumber</a> #155 Beginning with Cucumber</strong></footer></blockquote></p>
 
 <p>I side with the nuanced view: Cucumber tests seem like a lot of extra work for an integration test that can be implemented using Capybara. That said, there&rsquo;s enough of a pro-Cucumber audience espousing the advantages&mdash;BDD, outside-in development<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>, user stories, readability&mdash;that it&rsquo;s worth being familiar.</p>
 
@@ -133,22 +335,74 @@ It might seem like quite a lot of work to define the tests in English and implem
     </ul>
     <strong>Note</strong>: the Cucumber definition is enough to run <code>cucumber</code> from the command line, though it will return a message describing skipped and undefined steps.
   </li>
-  {% codeblock %}
-  Feature: Manage Articles
-    In order to make a blog
-    As an author
-    I want to create and manage articles
-    
-    Scenario: Articles List
-      Given I have articles titled Caching, Cucumber, Redis
-      When I go to the list of articles
-      Then I should see "Caching"
-      And I should see "Cucumber"
-      And I should see "Redis"
-  {% endcodeblock %}
+  <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Feature: Manage Articles
+</span><span class='line'>    In order to make a blog
+</span><span class='line'>    As an author
+</span><span class='line'>    I want to create and manage articles
+</span><span class='line'>    
+</span><span class='line'>    Scenario: Articles List
+</span><span class='line'>      Given I have articles titled Caching, Cucumber, Redis
+</span><span class='line'>      When I go to the list of articles
+</span><span class='line'>      Then I should see "Caching"
+</span><span class='line'>      And I should see "Cucumber"
+</span><span class='line'>      And I should see "Redis"</span></code></pre></td></tr></table></div></figure></notextile></div>
 
   <li>Step definition(s): these connect to the aforementioned cucumber steps, using Ruby code inside the blocks following each of the "Given", "When", and "Then" regexes.</li>
-{% include_code cucumber/step_definitions/view_articles_steps.rb %}
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (view_articles_steps.rb)</span> <a href='/downloads/code/cucumber/step_definitions/view_articles_steps.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">Given</span> <span class="sr">/^I have articles titled (.+)$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">titles</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">titles</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">title</span><span class="o">|</span>
+</span><span class='line'>    <span class="no">Article</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span><span class="ss">:title</span> <span class="o">=&gt;</span> <span class="n">title</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">When</span> <span class="sr">/^I go to the list of articles$/</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">click_on</span> <span class="s2">&quot;All articles&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Then</span><span class="p">(</span><span class="sr">/^I should see &quot;Caching&quot;$/</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_content</span> <span class="s2">&quot;Caching&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Then</span><span class="p">(</span><span class="sr">/^I should see &quot;Cucumber&quot;$/</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_content</span> <span class="s2">&quot;Cucumber&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Then</span><span class="p">(</span><span class="sr">/^I should see &quot;Redis&quot;$/</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_content</span> <span class="s2">&quot;Redis&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 </ol>
 
 

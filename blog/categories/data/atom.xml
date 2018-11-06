@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Data | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/data/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:21-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,13 +16,13 @@
   <entry>
     <title type="html"><![CDATA[An Introduction to Redis]]></title>
     <link href="http://cek.io/blog/2014/05/06/redis/"/>
-    <updated>2014-05-06T21:54:09-04:00</updated>
+    <updated>2014-05-06T18:54:09-07:00</updated>
     <id>http://cek.io/blog/2014/05/06/redis</id>
     <content type="html"><![CDATA[<p>Redis, which got its name as a <strong>re</strong>mote <strong>di</strong>ctionary <strong>s</strong>erver, is a key-value data store that can be useful for temporary caching or as a NoSQL (&lsquo;not only SQL&rsquo;) data store.</p>
 
 <p>I recommend getting started with <a href="http://labs.alcacoop.it/doku.php?id=articles:redis_land">this post about Redis</a>. It&rsquo;s a little old, but covers some key use cases for Redis. In this post, I will provide an overview to get started with Redis.</p>
 
-<p>{% img right /images/redis-server.png 300 %}</p>
+<p><img class="right" src="/images/redis-server.png" width="300"></p>
 
 <h3>Installation</h3>
 
@@ -49,7 +49,116 @@
 
 <p>So how is Redis being used? Notice some of the main keywords that are unique to Redis: <code>lpush</code>, <code>sadd</code>, and&mdash;two of the most fundamental ones&mdash;<code>set</code> and <code>get</code>, which we&rsquo;ll see in more detail. I give an overview of the others at the end of this post.</p>
 
-<p>{% include_code redis_book.rb %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (redis_book.rb)</span> <a href='/downloads/code/redis_book.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;redis&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;singleton&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">BOOK_STRING_ATTRS</span> <span class="o">=</span> <span class="sx">%w(title isbn description price pages)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">RedisClient</span> <span class="o">&lt;</span> <span class="no">Redis</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Singleton</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="k">super</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Book</span>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:id</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:isbn</span><span class="p">,</span> <span class="ss">:description</span><span class="p">,</span> <span class="ss">:price</span><span class="p">,</span> <span class="ss">:pages</span><span class="p">,</span> <span class="ss">:authors</span><span class="p">,</span> <span class="ss">:topics</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
+</span><span class='line'>    <span class="vi">@hub</span> <span class="o">=</span> <span class="no">RedisClient</span><span class="o">.</span><span class="n">instance</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">hub</span> <span class="o">=</span> <span class="no">RedisClient</span><span class="o">.</span><span class="n">instance</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="n">hub</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;book:</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">:title&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:id</span> <span class="o">=&gt;</span> <span class="nb">id</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kp">nil</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">book</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">get_all</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">save</span>
+</span><span class='line'>    <span class="vi">@hub</span><span class="o">.</span><span class="n">lpush</span><span class="p">(</span><span class="s1">&#39;topic:list&#39;</span><span class="p">,</span> <span class="vi">@id</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@hub</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;topic:</span><span class="si">#{</span><span class="vi">@id</span><span class="si">}</span><span class="s2">:name&quot;</span><span class="p">,</span> <span class="vi">@name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@hub</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;topic:</span><span class="si">#{</span><span class="vi">@id</span><span class="si">}</span><span class="s2">:description&quot;</span><span class="p">,</span> <span class="vi">@description</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@books</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">book</span><span class="o">|</span>
+</span><span class='line'>      <span class="vi">@hub</span><span class="o">.</span><span class="n">sadd</span><span class="p">(</span><span class="s2">&quot;topic:</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">:books&quot;</span><span class="p">,</span> <span class="n">book</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">remove</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">get_books_range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h3>Interacting in IRB</h3>
 

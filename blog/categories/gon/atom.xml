@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Gon | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/gon/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Typeahead: A How-To Guide (Part 2 of 2)]]></title>
     <link href="http://cek.io/blog/2014/04/16/typeahead-2/"/>
-    <updated>2014-04-16T09:00:00-04:00</updated>
+    <updated>2014-04-16T06:00:00-07:00</updated>
     <id>http://cek.io/blog/2014/04/16/typeahead-2</id>
     <content type="html"><![CDATA[<p><i><strong>Note:</strong> If you haven&rsquo;t already read Part 1, which covers the Gon gem in detail, you can see it <a href="http://cek.io/blog/2014/04/15/typeahead/">here</a>. In this post, I&rsquo;ll cover the <code>.typeahead</code> JavaScript method.</i></p>
 
@@ -178,7 +178,7 @@
   <entry>
     <title type="html"><![CDATA[Typeahead and Gon: A How-To Guide (Part 1 of 2)]]></title>
     <link href="http://cek.io/blog/2014/04/15/typeahead/"/>
-    <updated>2014-04-15T17:15:42-04:00</updated>
+    <updated>2014-04-15T14:15:42-07:00</updated>
     <id>http://cek.io/blog/2014/04/15/typeahead</id>
     <content type="html"><![CDATA[<p>I&rsquo;m currently working on <a href="http://www.tendermessenger.com/">a project</a> with users and messages (<a href="https://github.com/AlexPatriquin/BitcoinMessenger">full Github repo here</a>). The main functionality is complete&mdash;the first 80%, if you will&mdash;but there&rsquo;s plenty more to do&mdash;Avi has emphasized that the finishing touches, the final 20%, can drag on for much longer than anticipated. One aspect of that final 20% was a key front end feature: typeahead.</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ember | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/ember/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Rethinking UI Patterns: D3 and React]]></title>
     <link href="http://cek.io/blog/2015/06/23/react-d3/"/>
-    <updated>2015-06-23T08:17:36-04:00</updated>
+    <updated>2015-06-23T05:17:36-07:00</updated>
     <id>http://cek.io/blog/2015/06/23/react-d3</id>
     <content type="html"><![CDATA[<p><strong>Author&rsquo;s note:</strong> I&rsquo;ve followed up on this post with <a href="/blog/2016/07/06/d3-and-react-faux-dom/">another one</a>. I&rsquo;m no longer a fan of building up SVG elements in React components the way I propose in this post. You should read the other post to see what I recommend.</p>
 

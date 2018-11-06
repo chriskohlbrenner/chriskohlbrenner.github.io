@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Polymorphism | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/polymorphism/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:21-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,18 +16,13 @@
   <entry>
     <title type="html"><![CDATA[Polymorphism and Duck Typing (POODR: Chapter 5)]]></title>
     <link href="http://cek.io/blog/2014/05/02/poodr-ch-5/"/>
-    <updated>2014-05-02T09:42:24-04:00</updated>
+    <updated>2014-05-02T06:42:24-07:00</updated>
     <id>http://cek.io/blog/2014/05/02/poodr-ch-5</id>
     <content type="html"><![CDATA[<p><strong>Having recently graduated from the Flatiron School, I am working my way through programming-related reading, beginning with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="http://cek.io/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
 
 <p>My hope for this blog post is not to intimidate (as Sandi Metz suggests below), but to communicate the concepts of polymorphism and duck typing in Ruby, as Metz describes them in Chapter 5 of POODR.</p>
 
-<p>{% blockquote Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  &ldquo;Practical Object-Oriented Design in Ruby (95)&rdquo;  %}
-The term &lsquo;polymorphism&rsquo; is commonly used in object-oriented programming
-but its use in everyday speech is rare enough to warrant a definition. <strong>Polymorphism</strong> expresses a very specific concept and can be used,
-depending on your inclinations, either to <strong>communicate or to intimidate</strong>.
-Either way, it’s important to have a clear understanding of its meaning. First, a general definition: &lsquo;Morph&rsquo; is the Greek word for form, &lsquo;morphism&rsquo; is the state of having a form, and <strong>&lsquo;polymorphism&rsquo; is the state of having many forms</strong>. Biologists use this word. Darwin’s famous finches are polymorphic; a single species has many forms. [&hellip;] <strong>Polymorphism in OOP refers to the ability of many different objects to respond to the same message</strong>. Senders of the message need not care about the class of the receiver; receivers supply their own specific version of the behavior.
-{% endblockquote %}
+<p><blockquote><p>The term &lsquo;polymorphism&rsquo; is commonly used in object-oriented programming<br/>but its use in everyday speech is rare enough to warrant a definition. <strong>Polymorphism</strong> expresses a very specific concept and can be used,<br/>depending on your inclinations, either to <strong>communicate or to intimidate</strong>.<br/>Either way, it’s important to have a clear understanding of its meaning. First, a general definition: &lsquo;Morph&rsquo; is the Greek word for form, &lsquo;morphism&rsquo; is the state of having a form, and <strong>&lsquo;polymorphism&rsquo; is the state of having many forms</strong>. Biologists use this word. Darwin’s famous finches are polymorphic; a single species has many forms. [&hellip;] <strong>Polymorphism in OOP refers to the ability of many different objects to respond to the same message</strong>. Senders of the message need not care about the class of the receiver; receivers supply their own specific version of the behavior.</p><footer><strong>Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  &ldquo;Practical Object-Oriented Design in Ruby (95)&rdquo;</strong></footer></blockquote>
 (Bolded emphases mine)</p>
 
 <!--more-->
@@ -40,15 +35,100 @@ Either way, it’s important to have a clear understanding of its meaning. First
 
 <p>Imagine a bicycle touring company looking to automate its process of booking trips. Each trip needs to be prepared by a mechanic (ensuring the bicycles are in working order), a trip coordinator (handling logistics, like food, for the trip), and a driver (ensuring the vehicle is ready to transport the trip participants). The code below (straight from POODR) is an example of how <u>not</u> to do this. But why?</p>
 
-<p>{% include_code poodr_5_bad_example.rb %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (poodr_5_bad_example.rb)</span> <a href='/downloads/code/poodr_5_bad_example.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Trip</span>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:bicycles</span><span class="p">,</span> <span class="ss">:customers</span><span class="p">,</span> <span class="ss">:vehicle</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="n">preparers</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">preparers</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">preparer</span><span class="o">|</span>
+</span><span class='line'>      <span class="k">case</span> <span class="n">preparer</span>
+</span><span class='line'>      <span class="k">when</span> <span class="no">Mechanic</span>
+</span><span class='line'>        <span class="n">preparer</span><span class="o">.</span><span class="n">prepare_bicycles</span><span class="p">(</span><span class="n">bicycles</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">when</span> <span class="no">TripCoordinator</span>
+</span><span class='line'>        <span class="n">preparer</span><span class="o">.</span><span class="n">buy_food</span><span class="p">(</span><span class="n">customers</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">when</span> <span class="no">Driver</span>
+</span><span class='line'>        <span class="n">preparer</span><span class="o">.</span><span class="n">gas_up</span><span class="p">(</span><span class="n">vehicle</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">preparer</span><span class="o">.</span><span class="n">fill_water_tank</span><span class="p">(</span><span class="n">vehicle</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Mechanic</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prepare_bicycles</span><span class="p">(</span><span class="n">bicycles</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">bicycles</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">bicycle</span><span class="o">|</span> <span class="n">prepare_bicycle</span><span class="p">(</span><span class="n">bicycle</span><span class="p">)}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prepare_bicycle</span><span class="p">(</span><span class="n">bicycle</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1">#...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">TripCoordinator</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">buy_food</span><span class="p">(</span><span class="n">customers</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Driver</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">gas_up</span><span class="p">(</span><span class="n">vehicle</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1">#...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">fill_water_tank</span><span class="p">(</span><span class="n">vehicle</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1">#...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>I&rsquo;ll let Metz explain what&rsquo;s wrong with this:</p>
 
-<p>{% blockquote Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  &ldquo;Practical Object-Oriented Design in Ruby (90)&rdquo;  %}
-Count the number of new dependencies in the prepare method. It relies on specific classes, no others will do. It relies on the explicit names of those classes. It knows the names of the messages that each class understands, along with the arguments that those messages require. All of this knowledge increases risk; many distant changes will now have side effects on this code.</p>
-
-<p>To make matters worse, this style of code propagates itself. When another new trip preparer appears, you, or the next person down the programming line, will add a new when branch to the case statement. Your application will accrue more and more methods like this, where the method knows many class names and sends a specific message based on class. The logical endpoint of this programming style is a stiff and inflexible application, where it eventually becomes easier to rewrite everything than to change anything.
-{% endblockquote %}</p>
+<p><blockquote><p>Count the number of new dependencies in the prepare method. It relies on specific classes, no others will do. It relies on the explicit names of those classes. It knows the names of the messages that each class understands, along with the arguments that those messages require. All of this knowledge increases risk; many distant changes will now have side effects on this code.</p></p><p><p>To make matters worse, this style of code propagates itself. When another new trip preparer appears, you, or the next person down the programming line, will add a new when branch to the case statement. Your application will accrue more and more methods like this, where the method knows many class names and sends a specific message based on class. The logical endpoint of this programming style is a stiff and inflexible application, where it eventually becomes easier to rewrite everything than to change anything.</p><footer><strong>Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  &ldquo;Practical Object-Oriented Design in Ruby (90)&rdquo;</strong></footer></blockquote></p>
 
 <p>A lot of negative consequences: class dependencies, risk of side effects for distant changes, propogation of this type of code, and ultimately a rigid application that requires a rewrite. This is where duck typing comes in. It can prevent all of those things.</p>
 
@@ -57,7 +137,80 @@ Count the number of new dependencies in the prepare method. It relies on specifi
 
 <p>Duck typing is about defining objects by <strong>what they do</strong> instead of <strong>who they are</strong>. Think about Trip&rsquo;s <code>prepare</code> method&mdash;what does it do? Metz describes, &ldquo;the method serves a single purpose, its arguments arrive wishing to collaborate to accomplish a single goal. Every argument is here for the same reason and that reason is unrelated to the argument’s underlying class&rdquo; (90). It&rsquo;s not about the class of each argument, be it <code>Mechanic</code>, <code>TripCoordinator</code>, or <code>Driver</code>. If it walks like a duck and quacks like a duck, treat it like a duck (or, in this case, like a <code>Preparer</code>). Consider the example below:</p>
 
-<p>{% include_code poodr_5_duck_type_example.rb %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (poodr_5_duck_type_example.rb)</span> <a href='/downloads/code/poodr_5_duck_type_example.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Trip</span>
+</span><span class='line'><span class="kp">attr_reader</span> <span class="ss">:bicycles</span><span class="p">,</span> <span class="ss">:customers</span><span class="p">,</span> <span class="ss">:vehicle</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="n">preparers</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">preparers</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">preparer</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">preparer</span><span class="o">.</span><span class="n">prepare_trip</span><span class="p">(</span><span class="nb">self</span><span class="p">)}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># when every preparer is a Duck that responds to ‘prepare_trip’</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Mechanic</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prepare_trip</span><span class="p">(</span><span class="n">trip</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">trip</span><span class="o">.</span><span class="n">bicycles</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">bicycle</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">prepare_bicycle</span><span class="p">(</span><span class="n">bicycle</span><span class="p">)}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">TripCoordinator</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prepare_trip</span><span class="p">(</span><span class="n">trip</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">buy_food</span><span class="p">(</span><span class="n">trip</span><span class="o">.</span><span class="n">customers</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Driver</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prepare_trip</span><span class="p">(</span><span class="n">trip</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">vehicle</span> <span class="o">=</span> <span class="n">trip</span><span class="o">.</span><span class="n">vehicle</span>
+</span><span class='line'>    <span class="n">gas_up</span><span class="p">(</span><span class="n">vehicle</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">fill_water_tank</span><span class="p">(</span><span class="n">vehicle</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>What&rsquo;s changed? <code>Trip</code>&rsquo;s <code>prepare</code> method and each other class' unique preparation methods (they&rsquo;ve all become <code>prepare_trip</code>). We&rsquo;ve effectively implemented a <code>Preparer</code> class, but it has no concrete existence; it exists only as a duck type. Now all objects that implement <code>prepare_trip</code> are <code>Preparers</code>.</p>
 

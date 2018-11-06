@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Inheritance | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/inheritance/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:21-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA['Cheerful, Detached, and Merciless': Composition and Code Arrangement in Ruby (POODR: Chapter 8)]]></title>
     <link href="http://cek.io/blog/2014/05/27/poodr-ch-8/"/>
-    <updated>2014-05-27T09:57:39-04:00</updated>
+    <updated>2014-05-27T06:57:39-07:00</updated>
     <id>http://cek.io/blog/2014/05/27/poodr-ch-8</id>
     <content type="html"><![CDATA[<p><strong>I am working my way through programming-related reading, currently with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="http://cek.io/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
 
@@ -27,15 +27,7 @@
 
 <p>Sandi Metz describes object-oriented composition&mdash;the combining of simple, independent objects into larger, more complex wholes, in which the larger object is connected to its parts via a &lsquo;has-a&rsquo; relationship&mdash;and code arrangement in Ruby more generally:</p>
 
-<p>{% blockquote Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (190)  %}
-Composition allows you to combine small parts to create more complex objects such that the <strong>whole becomes more than the sum of its parts</strong>. Composed objects tend to consist of simple, discrete entities that can easily be rearranged into new combinations. These simple objects are easy to understand, reuse, and test, but because they combine into a more complicated whole, the operation of the bigger application may not be as easy to understand as that of the individual parts.</p>
-
-<p>Composition, <a href="http://cek.io/blog/2014/05/06/poodr-ch-6/">classical inheritance</a>, and <a href="http://cek.io/blog/2014/05/26/poodr-ch-7/">behavior sharing via modules</a> are competing techniques for arranging code. Each has different costs and benefits; these differences predispose them to be better at solving slightly different problems.</p>
-
-<p>These techniques are tools, nothing more, and <strong>you’ll become a better designer if you practice each of them</strong>. Learning to use them properly is a matter of experience and judgment, and one of the best ways to gain experience is to learn from your own mistakes. <strong>The key to improving your design skills is to attempt these techniques, accept your errors cheerfully, remain detached from past design decisions, and refactor mercilessly</strong>.</p>
-
-<p>As you gain experience, you’ll get better at choosing the correct technique the first time, your costs will go down, and your applications will improve.
-{% endblockquote %}</p>
+<p><blockquote><p>Composition allows you to combine small parts to create more complex objects such that the <strong>whole becomes more than the sum of its parts</strong>. Composed objects tend to consist of simple, discrete entities that can easily be rearranged into new combinations. These simple objects are easy to understand, reuse, and test, but because they combine into a more complicated whole, the operation of the bigger application may not be as easy to understand as that of the individual parts.</p></p><p><p>Composition, <a href="http://cek.io/blog/2014/05/06/poodr-ch-6/">classical inheritance</a>, and <a href="http://cek.io/blog/2014/05/26/poodr-ch-7/">behavior sharing via modules</a> are competing techniques for arranging code. Each has different costs and benefits; these differences predispose them to be better at solving slightly different problems.</p></p><p><p>These techniques are tools, nothing more, and <strong>you’ll become a better designer if you practice each of them</strong>. Learning to use them properly is a matter of experience and judgment, and one of the best ways to gain experience is to learn from your own mistakes. <strong>The key to improving your design skills is to attempt these techniques, accept your errors cheerfully, remain detached from past design decisions, and refactor mercilessly</strong>.</p></p><p><p>As you gain experience, you’ll get better at choosing the correct technique the first time, your costs will go down, and your applications will improve.</p><footer><strong>Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (190)</strong></footer></blockquote></p>
 
 <p>Cheerful, detached, and merciless. New descriptors of a <a href="http://threevirtues.com/">virtuous programmer</a>?</p>
 ]]></content>
@@ -44,7 +36,7 @@ Composition allows you to combine small parts to create more complex objects suc
   <entry>
     <title type="html"><![CDATA[Roles, Modules, and Mix-Ins in Ruby (POODR: Chapter 7)]]></title>
     <link href="http://cek.io/blog/2014/05/26/poodr-ch-7/"/>
-    <updated>2014-05-26T11:52:50-04:00</updated>
+    <updated>2014-05-26T08:52:50-07:00</updated>
     <id>http://cek.io/blog/2014/05/26/poodr-ch-7</id>
     <content type="html"><![CDATA[<p><strong>I am working my way through programming-related reading, currently with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="http://cek.io/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
 
@@ -83,22 +75,16 @@ Composition allows you to combine small parts to create more complex objects suc
 <h3>Roles</h3>
 
 
-<p>{% blockquote %}
-Some problems require <strong>sharing behavior among otherwise unrelated objects</strong>. This common behavior is orthogonal to class; it’s <strong>a role an object plays</strong>. [&hellip;] When formerly unrelated objects begin to play a common role, they enter into a relationship with the objects for whom they play the role. These relationships are not as visible as those created by the subclass/superclass requirements of classical inheritance but they exist nonetheless.
-{% endblockquote %}</p>
+<p><blockquote><p>Some problems require <strong>sharing behavior among otherwise unrelated objects</strong>. This common behavior is orthogonal to class; it’s <strong>a role an object plays</strong>. [&hellip;] When formerly unrelated objects begin to play a common role, they enter into a relationship with the objects for whom they play the role. These relationships are not as visible as those created by the subclass/superclass requirements of classical inheritance but they exist nonetheless.</p></blockquote></p>
 
 <p>Furthermore, Metz writes:
-{% blockquote Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (142-143)  %}
-When a role needs shared behavior you’re faced with <strong>the problem of organizing the shared code</strong>. [&hellip;] Many object-oriented languages provide a way to define a named group of methods that are independent of class and can be mixed in to any object. <strong>In Ruby, these mix-ins are called modules</strong>. Methods can be defined in a module and then the module can be added to any object. Modules thus provide a perfect way to <strong>allow objects of different classes to play a common role using a single set of code.</strong>&ldquo;
-{% endblockquote %}</p>
+<blockquote><p>When a role needs shared behavior you’re faced with <strong>the problem of organizing the shared code</strong>. [&hellip;] Many object-oriented languages provide a way to define a named group of methods that are independent of class and can be mixed in to any object. <strong>In Ruby, these mix-ins are called modules</strong>. Methods can be defined in a module and then the module can be added to any object. Modules thus provide a perfect way to <strong>allow objects of different classes to play a common role using a single set of code.</strong>&ldquo;</p><footer><strong>Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (142-143)</strong></footer></blockquote></p>
 
 <h3>Inheritable Code</h3>
 
 
 <p>The whole point of modules is to enable us to write good code. But Metz warns:
-{% blockquote Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (158)  %}
-&hellip;you are equipped to write some truly frightening code. Imagine the possibilities. You can write modules that include other modules. You can write modules that override the methods defined in other modules. You can create deeply nested class inheritance hierarchies and then include these various modules at different levels of the hierarchy. You can write code that is impossible to understand, debug, or extend.
-{% endblockquote %}</p>
+<blockquote><p>&hellip;you are equipped to write some truly frightening code. Imagine the possibilities. You can write modules that include other modules. You can write modules that override the methods defined in other modules. You can create deeply nested class inheritance hierarchies and then include these various modules at different levels of the hierarchy. You can write code that is impossible to understand, debug, or extend.</p><footer><strong>Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  Practical Object-Oriented Design in Ruby (158)</strong></footer></blockquote></p>
 
 <p>She follows this warning, however, by saying &ldquo;this very same power is what allows you to create simple structures of related objects
 that elegantly fulfill the needs of your application, your task is not to avoid these
@@ -125,7 +111,7 @@ correct way.&rdquo; The first step in this direction, Metz argues, is to write p
   </li>
   <li>
       <strong>"Create Shallow Hierarchies"</strong>: The shallower and narrower, the better.
-      {% img center /images/poodr/shallow-hierarchies.png %}
+      <img class="center" src="/images/poodr/shallow-hierarchies.png">
   </li>
 </ul>
 
@@ -140,10 +126,93 @@ correct way.&rdquo; The first step in this direction, Metz argues, is to write p
 <p>This code allows an instance of <code>MemorialDay</code> to call (1) methods that have been implemented in the <code>MemorialDay</code> class itself, (2) methods implemented in all objects above it in the hierarchy (in this case, <code>Object</code>), and (3) methods implemented in any module that has been added, namely <code>May</code> and <code>Holiday</code>.</p>
 
 <p><strong>Note</strong>: there is a difference between <code>include</code> and <code>extend</code> when mixing in modules&mdash;<code>include</code> is for instance methods, <code>extend</code> for class methods.
-{% include_code modules-mixins-poodr/may.rb %}
-{% include_code modules-mixins-poodr/holiday.rb %}
-{% include_code modules-mixins-poodr/memorial_day.rb %}
-{% img center /images/poodr/memorial_day_irb.png %}</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (may.rb)</span> <a href='/downloads/code/modules-mixins-poodr/may.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">module</span> <span class="nn">May</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">mondays</span>
+</span><span class='line'>    <span class="c1"># Array of all Mondays in May</span>
+</span><span class='line'>        <span class="o">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">26</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">month_of_year</span>
+</span><span class='line'>        <span class="mi">5</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (holiday.rb)</span> <a href='/downloads/code/modules-mixins-poodr/holiday.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">module</span> <span class="nn">Holiday</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">cause</span>
+</span><span class='line'>        <span class="k">case</span> <span class="nb">name</span>
+</span><span class='line'>        <span class="k">when</span> <span class="s2">&quot;Memorial Day&quot;</span>
+</span><span class='line'>            <span class="s2">&quot;remembering the men and women who died while serving in the country&#39;s armed forces&quot;</span>
+</span><span class='line'>        <span class="k">when</span> <span class="s2">&quot;Thanksgiving&quot;</span>
+</span><span class='line'>            <span class="s2">&quot;giving thanks for the blessing of the harvest and of the preceding year&quot;</span>
+</span><span class='line'>        <span class="c1"># ...</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (memorial_day.rb)</span> <a href='/downloads/code/modules-mixins-poodr/memorial_day.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">MemorialDay</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">May</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">Holiday</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">name</span>
+</span><span class='line'>        <span class="s2">&quot;Memorial Day&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Memorial Day always occurs on the last Monday in May</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">day_of</span>
+</span><span class='line'>      <span class="n">mondays</span><span class="o">.</span><span class="n">last</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">date</span>
+</span><span class='line'>        <span class="no">Date</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">month_of_year</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">day_of</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<img class="center" src="/images/poodr/memorial_day_irb.png"></p>
 
 <p>Happy Memorial Day!</p>
 ]]></content>
@@ -152,7 +221,7 @@ correct way.&rdquo; The first step in this direction, Metz argues, is to write p
   <entry>
     <title type="html"><![CDATA[A Few Notes on Classical Inheritance in Ruby (POODR: Chapter 6)]]></title>
     <link href="http://cek.io/blog/2014/05/06/poodr-ch-6/"/>
-    <updated>2014-05-06T09:55:11-04:00</updated>
+    <updated>2014-05-06T06:55:11-07:00</updated>
     <id>http://cek.io/blog/2014/05/06/poodr-ch-6</id>
     <content type="html"><![CDATA[<p><strong>Having recently graduated from the Flatiron School, I am working my way through programming-related reading, beginning with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="http://cek.io/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
 
@@ -163,9 +232,7 @@ correct way.&rdquo; The first step in this direction, Metz argues, is to write p
 
 <p>What&rsquo;s inheritance?</p>
 
-<p>{% blockquote Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  &ldquo;Practical Object-Oriented Design in Ruby (105)&rdquo;  %}
-The idea of inheritance may seem complicated but as with all complexity, there’s a simplifying abstraction. Inheritance is, at its core, a mechanism for automatic message delegation. It defines a forwarding path for not-understood messages. It creates relationships such that, if one object cannot respond to a received message, it delegates that message to another. You don’t have to write code to explicitly delegate the message, instead you define an inheritance relationship between two objects and the forwarding happens automatically.
-{% endblockquote %}</p>
+<p><blockquote><p>The idea of inheritance may seem complicated but as with all complexity, there’s a simplifying abstraction. Inheritance is, at its core, a mechanism for automatic message delegation. It defines a forwarding path for not-understood messages. It creates relationships such that, if one object cannot respond to a received message, it delegates that message to another. You don’t have to write code to explicitly delegate the message, instead you define an inheritance relationship between two objects and the forwarding happens automatically.</p><footer><strong>Sandi Metz <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330</a>  &ldquo;Practical Object-Oriented Design in Ruby (105)&rdquo;</strong></footer></blockquote></p>
 
 <!--more-->
 
@@ -189,7 +256,7 @@ The idea of inheritance may seem complicated but as with all complexity, there�
 
 <p>Whether you&rsquo;ve implemented a class hierarchy or not, if you&rsquo;ve used Ruby then you&rsquo;ve used inheritance. An example: <code>nil?</code>. Ruby contains two implementations of that method, one in <code>NilClass</code> and the other in <code>Object</code>. When <code>nil?</code> is called on an instance of <code>NilClass</code>, it returns <code>true</code>. On everything else, because everything elses is a subclass of <code>Object</code>, the <code>nil?</code> message travels up the superclass hierarchy to <code>Object</code>, which will then return <code>false</code>. See the image below for a depiction of this.</p>
 
-<p>{% img center /images/nil-inheritance.png %}</p>
+<p><img class="center" src="/images/nil-inheritance.png"></p>
 
 <h3>Creating a Hierarchy has Costs (to duplicate or inherit?)</h3>
 
@@ -215,7 +282,138 @@ The idea of inheritance may seem complicated but as with all complexity, there�
 
 
 <p>I&rsquo;ve copied Metz&rsquo;s final example of inheritance using <code>RoadBike</code>, <code>MountainBike</code>, and <code>Bicycle</code> classes. As you can see, many of the methods (<code>initialize</code>, <code>spares</code>, different <code>default</code>s, etc.) are shared by the superclass, but some are unique to the subclasses.
-{% include_code bicycle_inheritance.rb %}</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (bicycle_inheritance.rb)</span> <a href='/downloads/code/bicycle_inheritance.rb'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Bicycle</span>
+</span><span class='line'><span class="kp">attr_reader</span> <span class="ss">:size</span><span class="p">,</span> <span class="ss">:chain</span><span class="p">,</span> <span class="ss">:tire_size</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">{})</span>
+</span><span class='line'>    <span class="vi">@size</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:size</span><span class="o">]</span>
+</span><span class='line'>    <span class="vi">@chain</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:chain</span><span class="o">]</span> <span class="o">||</span> <span class="n">default_chain</span>
+</span><span class='line'>    <span class="vi">@tire_size</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:tire_size</span><span class="o">]</span> <span class="o">||</span> <span class="n">default_tire_size</span>
+</span><span class='line'>    <span class="n">post_initialize</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">spares</span>
+</span><span class='line'>    <span class="p">{</span>  <span class="n">tire_size</span><span class="p">:</span> <span class="n">tire_size</span><span class="p">,</span>
+</span><span class='line'>       <span class="ss">chain</span><span class="p">:</span> <span class="n">chain</span><span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">local_spares</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_tire_size</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="no">NotImplementedError</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">post_initialize</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span><span class='line'>    <span class="kp">nil</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">local_spares</span>
+</span><span class='line'>    <span class="p">{}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_chain</span>
+</span><span class='line'>    <span class="s1">&#39;10-speed&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">RoadBike</span> <span class="o">&lt;</span> <span class="no">Bicycle</span>
+</span><span class='line'>    <span class="kp">attr_reader</span> <span class="ss">:tape_color</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">post_initialize</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@tape_color</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:tape_color</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">local_spares</span>
+</span><span class='line'>    <span class="p">{</span><span class="n">tape_color</span><span class="p">:</span> <span class="n">tape_color</span><span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_tire_size</span>
+</span><span class='line'>    <span class="s1">&#39;23&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MountainBike</span> <span class="o">&lt;</span> <span class="no">Bicycle</span>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:front_shock</span><span class="p">,</span> <span class="ss">:rear_shock</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">post_initialize</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@front_shock</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:front_shock</span><span class="o">]</span>
+</span><span class='line'>    <span class="vi">@rear_shock</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="ss">:rear_shock</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">local_spares</span>
+</span><span class='line'>    <span class="p">{</span><span class="n">rear_shock</span><span class="p">:</span> <span class="n">rear_shock</span><span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_tire_size</span>
+</span><span class='line'>    <span class="s1">&#39;2.1&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>This is a finished example, but Metz likes to go through what she calls &ldquo;antipatterns&rdquo;&mdash;common patterns that appear beneficial but are actually detrimental&mdash;to demonstrate a concept, so make sure to read <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">the full text</a>.</p>
 ]]></content>

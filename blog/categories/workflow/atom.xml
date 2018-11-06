@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Workflow | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/workflow/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:21-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -14,15 +14,173 @@
 
   
   <entry>
-    <title type="html"><![CDATA[On Vim, Vimium, and Workflow]]></title>
-    <link href="http://cek.io/blog/2014/05/27/vim/"/>
-    <updated>2014-05-27T12:27:09-04:00</updated>
-    <id>http://cek.io/blog/2014/05/27/vim</id>
-    <content type="html"><![CDATA[<p>Write about Vim
-vimtutor
-Vimium
-<a href="http://yannesposito.com/Scratch/en/blog/Learn-Vim-Progressively/">http://yannesposito.com/Scratch/en/blog/Learn-Vim-Progressively/</a>
-<a href="https://vimium.github.io/">https://vimium.github.io/</a></p>
+    <title type="html"><![CDATA[The Hammer of JavaScript (and Other Tools for Other Nails)]]></title>
+    <link href="http://cek.io/blog/2016/02/08/javascript-hammer/"/>
+    <updated>2016-02-08T08:10:04-08:00</updated>
+    <id>http://cek.io/blog/2016/02/08/javascript-hammer</id>
+    <content type="html"><![CDATA[<p><em>The one where I get a harsh reminder to question my instincts from a real-life experience of <a href="https://xkcd.com/1319/">this XKCD comic</a>.</em></p>
+
+<p>As a mental exercise, a friend proposed the following potential interview question: given a directory with 10,000 files of text, how would you extract all the phone numbers from that directory into a single file?</p>
+
+<p>My immediate thought: this would be a basic assessment of someone&rsquo;s knowledge of:</p>
+
+<ol>
+<li>regular expressions to match patterns of numbers</li>
+<li>how to programmatically read/write files</li>
+<li>basic algorithmic complexity for iterating through files quickly.</li>
+</ol>
+
+
+<p>I even knew how I&rsquo;d implement it: use node&rsquo;s filesystem module to read the files, parse them for regex matches, and write all matches to a new file.</p>
+
+<p><img class="right" src="/images/hammer-nail.jpg" width="300"></p>
+
+<p>I was intrigued enough that I decided to prove it out. I wrote a basic phone number regex by hand (<code>\d{3}(-|\s|\.)?\d{3}(-|\s|\.)?\d{4}\</code> (for 3 digits, 3 digits, and 4 digits separated by hyphens, periods, spaces, or nothing), and looked into popular phone number regexes. I realized how unfamiliar I am with <a href="https://nodejs.org/api/fs.html">Node&rsquo;s filesystem module</a> (<code>readdir</code> and <code>readFile</code> and <code>writeFile</code>). Then I got curious about <a href="https://docs.npmjs.com/getting-started/publishing-npm-packages">publishing npm packages</a>. Before I knew it, I&rsquo;d spent a couple hours and produced a <a href="https://www.npmjs.com/package/collect-phone-numbers">somewhat polished npm project</a> for this hypothetical task.</p>
+
+<p>And it was all wrong.</p>
+
+<!--more-->
+
+
+<p>The thought process I used was logical. My work as a software engineer focuses almost entirely on the web, JavaScript, build tools, UI features, HTTP servers. I&rsquo;m comfortable with databases, front- and back-end code, version control, and countless other things. But that&rsquo;s a small subset of software! Classic hammer/nail.</p>
+
+<p>To Wikipedia:
+<blockquote><p>Software: any set of instructions that directs a computer to perform specific tasks or operations.</p><footer><strong>Wikipedia <a href="https://en.wikipedia.org/wiki/Software">https://en.wikipedia.org/wiki/Software</a> &ldquo;Software&rdquo;</strong></footer></blockquote></p>
+
+<p>Software is about problem-solving. But problems can&rsquo;t be solved well without being understood. And they won&rsquo;t be well understood if we assume we should use the same solution every time. There&rsquo;s something to be said for using the tools you know, but software also requires a humility to recognize when a given tool is the wrong one.</p>
+
+<p>In this case, I skipped the step of analyzing the problem. I didn&rsquo;t think about the specifics of the problem, the tradeoffs of time, or the alternative solutions I could choose. This was a one-time, approximate task. It was unlikely to be repeated often enough to make automating worthwhile. And yet I instinctually went with what I knew, implementing a &ldquo;good&rdquo;, &ldquo;complete&rdquo; solution that was really just a picture of overengineering.</p>
+
+<p><img class="left <a" src="href="https://imgs.xkcd.com/comics/automation.png">https://imgs.xkcd.com/comics/automation.png</a>" width="300"></p>
+
+<p>For a problem like this, why use another language or abstraction when it can be done via the command line, the text interface for the computer itself and a much more direct interface with the filesystem? Why use a language like JavaScript that&rsquo;s best suited for the web or pull in Node just for the sake of using a tool I know?</p>
+
+<p>These are questions I won&rsquo;t soon forget to ask myself when I take on a new problem. Hopefully that&rsquo;ll prevent me from falling into traps that webcomics are made of. I know for sure that, next time I&rsquo;m presented with a problem of finding text within a filesystem, I&rsquo;ll remember that tools like <code>grep</code> were made for exactly that. A simpler, less time-instensive, and more appropriate solution.</p>
+
+<p><code>egrep "\b[[:digit:]]{3}(-|\s|.)?[[:digit:]]{3}(-|\s|.)?[[:digit:]]{4}\b" ./* &gt; ./nums.txt</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pruning Code]]></title>
+    <link href="http://cek.io/blog/2015/11/21/code-pruning/"/>
+    <updated>2015-11-21T09:23:14-08:00</updated>
+    <id>http://cek.io/blog/2015/11/21/code-pruning</id>
+    <content type="html"><![CDATA[<p>It was Friday afternoon, the end of the day, at the end of a long week of urgent bugfixes to prepare a release. Our next features hadn&rsquo;t been fully designed and approved, all the high-priority bugs had been identified and fixed, and I was left with a few hours to choose what to work on.</p>
+
+<p>These moments are some of my favorites, opportunities to focus on the important/non-urgent tasks like performance improvements, refactors, new technologies, and code cleanup. So I spent the last few hours of the day on that last item: pruning old code from the codebase.</p>
+
+<p>We all know that pruning is about <a href="http://dictionary.reference.com/browse/pruning">removing the superfluous</a>, which is by definition a good thing (&ldquo;superfluous&rdquo; being &ldquo;unnecessary&rdquo;, after all), but the benefits of pruning also include:</p>
+
+<ul>
+<li>improving or maintaining health</li>
+<li>reducing risk</li>
+<li>increasing yield or quality</li>
+</ul>
+
+
+<p><em>Source</em>: <a href="https://en.wikipedia.org/wiki/Pruning">&ldquo;Pruning&rdquo;, Wikipedia</a></p>
+
+<p>Ok, ok, we&rsquo;re not talking about plant health, risk of falling branches, or yield of flowers and fruits. But it&rsquo;s a pretty straightforward metaphor for code.</p>
+
+<!--more-->
+
+
+<p>The pull request I ended up submitting did three things (removed, removed, removed, like pruning):</p>
+
+<ul>
+<li>It removed the <code>/** @jsx React.DOM */</code> pragma, which has been unnecessary since React 0.12 (we&rsquo;re currently running 0.13).</li>
+<li>It removed <code>Immutable</code> as a global variable (we&rsquo;re using Immutable JS on most&mdash;but not all&mdash;pages, and we want to explicitly require libraries for each file/component, plus&hellip;<a href="http://c2.com/cgi/wiki?GlobalVariablesAreBad">yeah</a>).</li>
+<li>It removed a couple helper functions from a utility file the depends on lodash.js, which largely overlaps with our Ramda.js library.</li>
+</ul>
+
+
+<p>These are simple things. Remove unnecessary lines of code. Clarify what a given file is doing by making modules more explicit. Reduce the number of dependencies and the weight of the codebase.</p>
+
+<p>These are clearly beneficial things. Deleting the unnecessary reduces mental overhead. Explicit requires ease our ability to reason about a piece of code. Removing an external library improves performance.</p>
+
+<p>Simple, beneficial, and yet when do these things get accomplished? As I referenced above, rarely. It was only after feature development, testing, and bugfixing that I even considered it. To some degree that&rsquo;s on me: it&rsquo;s a technical discipline like performance or code quality that needs to be considered at each step along the way. But it&rsquo;s also on the development process and management: if it&rsquo;s not prioritized and time isn&rsquo;t allotted, it won&rsquo;t happen! That simple.</p>
+
+<p>Anyway, that&rsquo;s my argument for code pruning. Regardless of whether anyone else finds it valid, it&rsquo;s a personal goal of mine to spend a couple hours a week on exactly that. Removing dependencies, deleting dead code, refactoring. And who knows, perhaps with a little more disciplined code pruning along the way, code quality will improve and our team will have fewer weeks of urgent bugfixes.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Performance Process: Takeaways From AEA]]></title>
+    <link href="http://cek.io/blog/2015/10/09/performance/"/>
+    <updated>2015-10-09T10:39:03-07:00</updated>
+    <id>http://cek.io/blog/2015/10/09/performance</id>
+    <content type="html"><![CDATA[<p>The stars have aligned lately to focus my attention on performance. Consider the following:</p>
+
+<ul>
+<li>A few months ago, I was tasked with assessing and documenting the differences between our app&rsquo;s functionality/performance in Chrome vs. Firefox.</li>
+<li>This exercise resulted in a pull request that improved Firefox performance by over 2 seconds (~25%) on initial page load.</li>
+<li><a href="/blog/2015/10/08/an-event-apart/">Earlier this week</a>, two separate talks (by <a href="http://twitter.com/yeseniaa">Yesenia Perez-Cruz</a> and <a href="http://twitter.com/lara_hogan">Lara Hogan</a>) focused on designing for performance.</li>
+<li>Also this week, <a href="http://www.nateberkopec.com/2015/10/07/frontend-performance-chrome-timeline.html">Nate Berkopec&rsquo;s post on front end performance</a> made the rounds on Hacker News.</li>
+</ul>
+
+
+<p>What does this add up to? I&rsquo;ve been thinking a lot about performance, particularly front end performance of web apps. In this post, I&rsquo;ll summarize some takeaways from AEA regarding performance, particularly as they relate to integrating performance into planning and design.</p>
+
+<!--more-->
+
+
+
+
+<h3>Set up for failure</h3>
+
+
+<p>Summarizing a few points from Yesenia&rsquo;s talk, consider this project plan, one that we&rsquo;ve all presumed to follow:</p>
+
+<p><img src="/images/performance/ideal-plan.png"></p>
+
+<p>But then realize that, due to biz dev requirements, delays in research, and longer-than-expected design time, all while keeping the same sprint/client/deployment deadline, the actual project plan looks like this:</p>
+
+<p><img src="/images/performance/actual-plan.png"></p>
+
+<p>We&rsquo;ve all seen it! And it probably happens more often this way than the ideal case. What&rsquo;s the definition of insanity again?</p>
+
+<p>Now I could speculate and hypothesize about the underlying issues of failed project management, but I&rsquo;ll leave that to someone else. I want to focus on performance. A question: with that development timeline in mind, when do we think about performance? During the software development segment, right?</p>
+
+<p><img src="/images/performance/perf-timeline-reality.png"></p>
+
+<p>But why? We developers think we can implement user functionality, meet the design specs, and still have time left over to optimize at the end. But that never happens. Could we not consider performance at the beginning of the process?</p>
+
+<p><img src="/images/performance/perf-timeline-improved.png"></p>
+
+<p>We need to think about performance as a design feature. We need to think about performance early. We need to prioritize page speed and load times just as much as UX and beautiful interfaces. But how?</p>
+
+<h3>Performance Budgets</h3>
+
+
+<p><span class='caption-wrapper'><img class='caption' src='/images/performance/dilbert-budget.gif' width='' height='' title='&ldquo;We only have the budget for a poor job&rdquo;'><span class='caption-text'>&ldquo;We only have the budget for a poor job&rdquo;</span></span></p>
+
+<p>I&rsquo;m not sure we&rsquo;re being cheap <em>or</em> smart by thinking about performance this way. We don&rsquo;t have any budget at all! A theme throughout AEA, and not just in Yesenia&rsquo;s and Lara&rsquo;s talks, was <strong>setting a performance budget</strong>.</p>
+
+<p>Yesenia explained that a performance budget is both &ldquo;a performance goal used to guide design &amp; development&rdquo; and &ldquo;a tangible way to talk about performance.&rdquo; How well do those conversations about performance-intensive features usually go? For developers, it&rsquo;s often either &ldquo;no, we can&rsquo;t do that&rdquo; or a resigned &ldquo;ok, I guess we have to do it.&rdquo;</p>
+
+<p><span class='caption-wrapper'><img class='caption' src='/images/performance/google-designer-developer.png' width='' height='' title='One incredible trick will render 728,000 Google results obselete!'><span class='caption-text'>One incredible trick will render 728,000 Google results obselete!</span></span></p>
+
+<p>What if, instead of a win-lose scenario between designers and devs, the conversation was framed around a budget? We talk about the inherent tradeoffs between technologies, so why not consider performance tradeoffs in discussions about design?</p>
+
+<p>&ldquo;But how do I go about setting a performance budget?&rdquo;, you might ask. Yesenia and Lara made some suggestions:</p>
+
+<ul>
+<li><em>Browser-based approach</em>: &ldquo;our pages should weigh no more than 400kb, and make no more than 15 requests.&rdquo;</li>
+<li><em>User experience-based</em>: &ldquo;our pages should take no more than 10 seconds to load over a sub-3G connection.&rdquo;</li>
+<li><em>Look to your competitors</em>: aim for a 20% improvement over your competitors.</li>
+</ul>
+
+
+<p>I&rsquo;m still working on this, on how to practically establish a performance budget on the job. I don&rsquo;t have access to my competitors' product, so for now I can only set the goal as arbitrarily better performance.</p>
+
+<p>One thing I will say: everything I&rsquo;ve said in this blogpost has to be a culture change. Stealing from Lara&rsquo;s talk, it can&rsquo;t be all on one individual. You have to establish a culture of performance.</p>
+
+<blockquote class="twitter-tweet" lang="en"><p lang="en" dir="ltr">&quot;There should be no performance cops or janitors. It&#39;s not sustainable. You need a culture of performance.&quot; <a href="https://twitter.com/lara_hogan">@lara_hogan</a> <a href="https://twitter.com/hashtag/aeaaus?src=hash">#aeaaus</a></p>&mdash; Chris EK (@cek_io) <a href="https://twitter.com/cek_io/status/651406414225649666">October 6, 2015</a></blockquote>
+
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 ]]></content>
   </entry>
   

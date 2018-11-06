@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[A Clojure Introduction to Binary and Bitwise Operators]]></title>
     <link href="http://cek.io/blog/2017/08/17/clojure-introduction-binary-bitwise/"/>
-    <updated>2017-08-17T18:00:00-04:00</updated>
+    <updated>2017-08-17T15:00:00-07:00</updated>
     <id>http://cek.io/blog/2017/08/17/clojure-introduction-binary-bitwise</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been working in Clojure and ClojureScript lately. A few months back, I came across <a href="http://realworldclojure.com/one-weird-trick/">this one weird trick to master Clojure</a>. <em>TL;DR</em>: it recommends reading the API docs, fully, top to bottom.</p>
 
@@ -201,7 +201,7 @@ user=> (bit-flip 2r1010 3)   ;; flips the 3rd bit from right
 <p><code>`` clojure
 ;;</code>bit-set` sets the bit to 1 at a given index</p>
 
-<p>user=> (bit-set 2r1010 2)   ;; sets the 1st bit from right to 1
+<p>user=> (bit-set 2r1010 2)   ;; sets the 2nd bit from right to 1
 14  ;; 2r1110
 ```</p>
 

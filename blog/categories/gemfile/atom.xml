@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Gemfile | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/gemfile/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Should You Ever Edit Your Gemfile.lock? (No...But Maybe Sometimes...Conservatively)]]></title>
     <link href="http://cek.io/blog/2014/07/23/edit-gemfile-dot-lock/"/>
-    <updated>2014-07-23T10:19:30-04:00</updated>
+    <updated>2014-07-23T07:19:30-07:00</updated>
     <id>http://cek.io/blog/2014/07/23/edit-gemfile-dot-lock</id>
     <content type="html"><![CDATA[<p>When developing a Rails app, should you ever edit your Gemfile.lock? Easy answer: it&rsquo;s no, right? <a href="http://stackoverflow.com/a/11136025/3166243">Plenty</a> <a href="http://codedecoder.wordpress.com/2013/01/02/difference-gemfile-lock-rails/">of</a> <a href="http://asciicasts.com/episodes/201-bundler">reputable</a> <a href="http://codelikethis.com/lessons/ruby_tools/bundler">sources</a> all seem to discourage it. I myself gave that answer when asked recently. But I&rsquo;ve come to learn that the answer is not a complete cut-and-dried &ldquo;no&rdquo;, at least not in certain circumstances.</p>
 

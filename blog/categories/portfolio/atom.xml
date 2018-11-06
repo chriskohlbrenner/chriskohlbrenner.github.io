@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Portfolio | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/portfolio/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Introducing Tender]]></title>
     <link href="http://cek.io/blog/2014/04/29/reblog-introducing-tender/"/>
-    <updated>2014-04-29T09:46:48-04:00</updated>
+    <updated>2014-04-29T06:46:48-07:00</updated>
     <id>http://cek.io/blog/2014/04/29/reblog-introducing-tender</id>
     <content type="html"><![CDATA[<p><strong>Note:</strong> This post is a reblog. It originally appeared on <a href="http://squarecraft.co/introducing-tender">Alex Patriquin&rsquo;s blog</a>.</p>
 
@@ -62,7 +62,7 @@
   <entry>
     <title type="html"><![CDATA[Portfolio Page]]></title>
     <link href="http://cek.io/blog/2014/04/08/portfolio-page/"/>
-    <updated>2014-04-08T09:11:40-04:00</updated>
+    <updated>2014-04-08T06:11:40-07:00</updated>
     <id>http://cek.io/blog/2014/04/08/portfolio-page</id>
     <content type="html"><![CDATA[<p>I have a <a href="http://chriskohlbrenner.github.io/portfolio/">portfolio page</a>! This is where I&rsquo;ll be listing all the apps I&rsquo;ve built (and am building).</p>
 ]]></content>

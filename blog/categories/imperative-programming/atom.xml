@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Imperative Programming | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/imperative-programming/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[An Imperative Declaration]]></title>
     <link href="http://cek.io/blog/2015/10/23/imperative-declaration/"/>
-    <updated>2015-10-23T16:42:28-04:00</updated>
+    <updated>2015-10-23T13:42:28-07:00</updated>
     <id>http://cek.io/blog/2015/10/23/imperative-declaration</id>
     <content type="html"><![CDATA[<p>A few hours ago, my understanding of imperative and declarative programming was effectively: imperative is about &ldquo;how&rdquo; something should happen and declarative is about &ldquo;what&rdquo; should happen. Not exactly authoritative, so I spent these last couple hours trying to clear that up by finding conclusive answers to the following questions:</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[JavaScript Frameworks: On Node.js, Express, AngularJS, and SockJS]]></title>
     <link href="http://cek.io/blog/2014/05/28/chat-express-node/"/>
-    <updated>2014-05-28T12:55:45-04:00</updated>
+    <updated>2014-05-28T09:55:45-07:00</updated>
     <id>http://cek.io/blog/2014/05/28/chat-express-node</id>
     <content type="html"><![CDATA[<p>Having confidence in one web development framework, Ruby on Rails, I&rsquo;ve recently set out to better understand some other established frameworks, particularly JavaScript frameworks. It was difficult to know where to focus my efforts<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>, and I eventually decided to learn by doing. I ended up with <a href="http://node-express-chat.herokuapp.com/">ExpressChat</a>, a simple real-time chat application built using Node.js, Express, AngularJS, and SockJS.</p>
 

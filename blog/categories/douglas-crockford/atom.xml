@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Douglas Crockford | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/douglas-crockford/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Intro to JavaScript (According to Douglas Crockford)]]></title>
     <link href="http://cek.io/blog/2014/07/21/intro-to-javascript-crockford/"/>
-    <updated>2014-07-21T12:21:55-04:00</updated>
+    <updated>2014-07-21T09:21:55-07:00</updated>
     <id>http://cek.io/blog/2014/07/21/intro-to-javascript-crockford</id>
     <content type="html"><![CDATA[<p><strong>Summary</strong>: I&rsquo;m working my way through a few <a href="https://github.com/bolshchikov/js-must-watch">must-watch videos about JavaScript</a>. If you know JavaScript, pretend to know JavaScript, or hope to learn JavaScript, check out those videos. Or read this and the <a href="http://cek.io/blog/2014/07/21/javascripts-historical-context-crockford">previous post</a> (and save yourself three hours of video-watching), in which I pull some of my favorite quotes from what <a href="https://en.wikipedia.org/wiki/Douglas_Crockford">Douglas Crockford</a> has to say about JavaScript.</p>
 
@@ -103,7 +103,7 @@ myObject;
   <entry>
     <title type="html"><![CDATA[JavaScript's Historical Context (According to Douglas Crockford)]]></title>
     <link href="http://cek.io/blog/2014/07/21/javascripts-historical-context-crockford/"/>
-    <updated>2014-07-21T10:01:39-04:00</updated>
+    <updated>2014-07-21T07:01:39-07:00</updated>
     <id>http://cek.io/blog/2014/07/21/javascripts-historical-context-crockford</id>
     <content type="html"><![CDATA[<p><strong>Summary</strong>: I&rsquo;m working my way through a few <a href="https://github.com/bolshchikov/js-must-watch">must-watch videos about JavaScript</a>. If you know JavaScript, pretend to know JavaScript, or hope to learn JavaScript, check out those videos. Or read this and the <a href="http://cek.io/blog/2014/07/21/intro-to-javascript-crockford">following post</a> (and save yourself three hours of video-watching), in which I pull some of my favorite quotes from what <a href="https://en.wikipedia.org/wiki/Douglas_Crockford">Douglas Crockford</a> has to say about JavaScript.</p>
 

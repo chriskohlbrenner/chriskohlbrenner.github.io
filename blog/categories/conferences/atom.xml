@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Conferences | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/conferences/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2017-08-17T18:15:12-04:00</updated>
+  <updated>2018-11-06T07:27:02-08:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[React Conf Reactions]]></title>
     <link href="http://cek.io/blog/2016/02/27/react-conf/"/>
-    <updated>2016-02-27T16:43:32-05:00</updated>
+    <updated>2016-02-27T13:43:32-08:00</updated>
     <id>http://cek.io/blog/2016/02/27/react-conf</id>
     <content type="html"><![CDATA[<p>The React.js Conf was a blast. All the talks were recorded and can be watched <a href="https://www.youtube.com/playlist?list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">here</a>. My full bullet point notes are <a href="/downloads/react_conf_notes.txt">here</a>, but what follows are some more readable reactions to the conference.</p>
 
@@ -59,7 +59,7 @@
   <entry>
     <title type="html"><![CDATA[Performance Process: Takeaways From AEA]]></title>
     <link href="http://cek.io/blog/2015/10/09/performance/"/>
-    <updated>2015-10-09T13:39:03-04:00</updated>
+    <updated>2015-10-09T10:39:03-07:00</updated>
     <id>http://cek.io/blog/2015/10/09/performance</id>
     <content type="html"><![CDATA[<p>The stars have aligned lately to focus my attention on performance. Consider the following:</p>
 
@@ -138,7 +138,7 @@
   <entry>
     <title type="html"><![CDATA[An Event Apart]]></title>
     <link href="http://cek.io/blog/2015/10/08/an-event-apart/"/>
-    <updated>2015-10-08T17:09:32-04:00</updated>
+    <updated>2015-10-08T14:09:32-07:00</updated>
     <id>http://cek.io/blog/2015/10/08/an-event-apart</id>
     <content type="html"><![CDATA[<p>This week, I had the good fortune of attending <a href="http://aneventapart.com/event/austin-2015">An Event Apart in Austin, TX</a>. Coordinated by the same great people behind <a href="http://alistapart.com/">A List Apart</a>, An Event Apart (AEA) is two days of fantastic talks about the web&mdash;content, design, development&mdash;and a full-day workshop (A Day Apart). Many of the concepts we now take for granted as web best practices, like mobile first and responsive design, have been introduced and elaborated at AEA events.</p>
 
