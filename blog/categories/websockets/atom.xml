@@ -4,7 +4,7 @@
   <title><![CDATA[Category: WebSockets | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/websockets/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2019-06-27T11:22:27+01:00</updated>
+  <updated>2019-06-27T15:15:02+01:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -95,7 +95,7 @@
 </span><span class='line'>    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;node app.js&quot;</span>
 </span><span class='line'>  <span class="p">},</span>
 </span><span class='line'>  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;express&quot;</span><span class="p">:</span> <span class="s2">&quot;3.4.8&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;express&quot;</span><span class="p">:</span> <span class="s2">&quot;3.11.0&quot;</span><span class="p">,</span>
 </span><span class='line'>    <span class="nt">&quot;sockjs&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
 </span><span class='line'>    <span class="nt">&quot;ejs&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span>
 </span><span class='line'>  <span class="p">}</span>
