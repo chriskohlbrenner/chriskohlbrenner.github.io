@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Cache | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/cache/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2018-11-06T07:27:02-08:00</updated>
+  <updated>2019-06-27T11:21:29+01:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Caching in Rails]]></title>
     <link href="http://cek.io/blog/2014/05/12/caching-in-rails/"/>
-    <updated>2014-05-12T10:11:54-07:00</updated>
+    <updated>2014-05-12T18:11:54+01:00</updated>
     <id>http://cek.io/blog/2014/05/12/caching-in-rails</id>
     <content type="html"><![CDATA[<p><strong>Summary</strong>: caching temporarily stores data so future requests don&rsquo;t take as much time. There are multiple caching techniques that can be easily implemented in Rails applications.</p>
 

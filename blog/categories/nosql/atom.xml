@@ -4,7 +4,7 @@
   <title><![CDATA[Category: NoSQL | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/nosql/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2018-11-06T07:27:02-08:00</updated>
+  <updated>2019-06-27T11:21:29+01:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[An Introduction to Redis]]></title>
-    <link href="http://cek.io/blog/2014/05/06/redis/"/>
-    <updated>2014-05-06T18:54:09-07:00</updated>
-    <id>http://cek.io/blog/2014/05/06/redis</id>
+    <link href="http://cek.io/blog/2014/05/07/redis/"/>
+    <updated>2014-05-07T02:54:09+01:00</updated>
+    <id>http://cek.io/blog/2014/05/07/redis</id>
     <content type="html"><![CDATA[<p>Redis, which got its name as a <strong>re</strong>mote <strong>di</strong>ctionary <strong>s</strong>erver, is a key-value data store that can be useful for temporary caching or as a NoSQL (&lsquo;not only SQL&rsquo;) data store.</p>
 
 <p>I recommend getting started with <a href="http://labs.alcacoop.it/doku.php?id=articles:redis_land">this post about Redis</a>. It&rsquo;s a little old, but covers some key use cases for Redis. In this post, I will provide an overview to get started with Redis.</p>

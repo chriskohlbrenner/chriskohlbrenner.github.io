@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Design | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/design/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2018-11-06T07:27:02-08:00</updated>
+  <updated>2019-06-27T11:21:29+01:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[A Single Set of Color Vars With PostCSS]]></title>
     <link href="http://cek.io/blog/2016/06/30/postcss-color-vars/"/>
-    <updated>2016-06-30T05:05:35-07:00</updated>
+    <updated>2016-06-30T13:05:35+01:00</updated>
     <id>http://cek.io/blog/2016/06/30/postcss-color-vars</id>
     <content type="html"><![CDATA[<p>In this post, I describe how to create a single list of color variables (in JavaScript) so that those colors can be shared across JavaScript files and CSS stylesheets. Using PostCSS within a Webpack app, I outline the problem of sharing styles between CSS and JS and how it can be solved. For step-by-step code examples, skip ahead to &ldquo;Enter PostCSS (Problem Solved)&rdquo;.</p>
 
@@ -279,7 +279,7 @@
   <entry>
     <title type="html"><![CDATA[An Event Apart]]></title>
     <link href="http://cek.io/blog/2015/10/08/an-event-apart/"/>
-    <updated>2015-10-08T14:09:32-07:00</updated>
+    <updated>2015-10-08T22:09:32+01:00</updated>
     <id>http://cek.io/blog/2015/10/08/an-event-apart</id>
     <content type="html"><![CDATA[<p>This week, I had the good fortune of attending <a href="http://aneventapart.com/event/austin-2015">An Event Apart in Austin, TX</a>. Coordinated by the same great people behind <a href="http://alistapart.com/">A List Apart</a>, An Event Apart (AEA) is two days of fantastic talks about the web&mdash;content, design, development&mdash;and a full-day workshop (A Day Apart). Many of the concepts we now take for granted as web best practices, like mobile first and responsive design, have been introduced and elaborated at AEA events.</p>
 

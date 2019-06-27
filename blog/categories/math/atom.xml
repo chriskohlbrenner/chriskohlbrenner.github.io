@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Math | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/math/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2018-11-06T07:27:02-08:00</updated>
+  <updated>2019-06-27T11:21:29+01:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[A Clojure Introduction to Binary and Bitwise Operators]]></title>
     <link href="http://cek.io/blog/2017/08/17/clojure-introduction-binary-bitwise/"/>
-    <updated>2017-08-17T15:00:00-07:00</updated>
+    <updated>2017-08-17T23:00:00+01:00</updated>
     <id>http://cek.io/blog/2017/08/17/clojure-introduction-binary-bitwise</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been working in Clojure and ClojureScript lately. A few months back, I came across <a href="http://realworldclojure.com/one-weird-trick/">this one weird trick to master Clojure</a>. <em>TL;DR</em>: it recommends reading the API docs, fully, top to bottom.</p>
 

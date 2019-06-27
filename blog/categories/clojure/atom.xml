@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Clojure | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2018-11-06T07:27:02-08:00</updated>
+  <updated>2019-06-27T11:21:29+01:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -14,9 +14,177 @@
 
   
   <entry>
+    <title type="html"><![CDATA[A (Scheme) Calculator in Clojure]]></title>
+    <link href="http://cek.io/blog/2019/06/27/scheme-clojure-calculator/"/>
+    <updated>2019-06-27T11:30:00+01:00</updated>
+    <id>http://cek.io/blog/2019/06/27/scheme-clojure-calculator</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been working through <a href="https://mitpress.mit.edu/sites/default/files/sicp/index.html">Structure and Interpretation of Computer Programs (SICP)</a> and watching the <a href="https://archive.org/details/ucberkeley-webcast-PL3E89002AA9B9879E?sort=titleSorter">UC Berkeley CS61A lectures from Brian Harvey</a>. It&rsquo;s great content, so I can understand why he refers to SICP as &ldquo;the best computer science book in the world&rdquo;.</p>
+
+<p>The <a href="https://archive.org/details/ucberkeley_webcast_nzMPF59Ackg">most recent lecture</a> presented a calculator implementation (for a calculator with four functions) in Scheme. This calculator is a simple REPL interpreter: it reads a user input, evaluates it, prints the output, and loops back again.</p>
+
+<p>What follows is a summary of the lecture with my takeaways, including a description of the program (and why it&rsquo;s worth considering), the original Scheme program from the lecture, and my translation of it into Clojure.</p>
+
+<h3>Why look at this example?</h3>
+
+
+<p>There are two main reasons to look at this:</p>
+
+<ol>
+<li> It is an example of processing deep lists (lists of lists of lists)</li>
+<li> This is a step towards understanding an actual Scheme interpreter written in Scheme. Unlike an actual Scheme interpreter, this has no variables and no procedures as first-class things. It only has four procedures: <code>+</code>, <code>/</code>, <code>-</code>, and <code>*</code>. But it&rsquo;s Scheme-like in its notation (<code>(+ 6 7)</code>) and does composition of functions as Scheme does.</li>
+</ol>
+
+
+<h3>The 4-function calculator code</h3>
+
+
+<p>Original Scheme code:</p>
+
+<p>``` scheme
+(define (calc)
+  (display &ldquo;calc: &rdquo;)
+  (flush)
+  (print (calc-eval (read)))
+  (calc))</p>
+
+<p>(define (calc-eval exp)
+  (cond ((number? exp) exp)</p>
+
+<pre><code>    ((list? exp) (calc-apply (car exp) (map calc-eval (cdr exp))))
+    (else (error "Calc: bad expression:" exp))))
+</code></pre>
+
+<p>(define (calc-apply fn args)
+  (cond ((eq? fn &lsquo;+) (accumulate + 0 args))</p>
+
+<pre><code>    ((eq? fn '-) (cond ((null? args) (error "Calc: no args to -"))
+                       ((= (length args) 1) (- (car args)))
+                       (else (- (car args) (accumulate + 0 (cdr args))))))
+    ((eq? fn '*) (accumulate * 1 args))
+    ((eq? fn '/) (cond ((null? args) (error "Calc: no args to /"))
+                       ((= (length args) 1) (/ (car args)))
+                       (else (/ (car args) (accumulate * 1 (cdr args))))))
+    (else (error "Calc: bad operator:" fn))))
+</code></pre>
+
+<p>```</p>
+
+<p>And my translation into Clojure:</p>
+
+<p>``` clojure
+(defn calc-apply [fn args]
+  (cond</p>
+
+<pre><code>(= fn '+) (reduce + 0 args)
+(= fn '-) (cond
+            (nil? args) (throw (Exception. "Calc: no args to -"))
+            (= (count args) 1) (- (first args))
+            :else (- (first args) (reduce + 0 (rest args))))
+(= fn '*) (reduce * 1 args)
+(= fn '/) (cond
+            (nil? args) (throw (Exception. "Calc: no args to /"))
+            (= (count args) 1) (/ (first args))
+            :else (/ (first args) (reduce + 0 (rest args))))
+:else (throw (Exception. (str "Calc: bad operator:" fn)))))
+</code></pre>
+
+<p>(defn calc-eval [exp]
+  (cond</p>
+
+<pre><code>(number? exp) exp
+(list? exp) (calc-apply (first exp)
+                        (map calc-eval (rest exp)))
+:else (throw (Exception. (str "Calc: bad expression:" exp)))))
+</code></pre>
+
+<p>(defn calc []
+  (println &ldquo;calc: &rdquo;)
+  (println (calc-eval (read)))
+  (calc))
+```</p>
+
+<h3>Dealing with Deep Lists</h3>
+
+
+<p>The key to handling deep lists can be seen in <code>(map calc-eval (cdr exp))</code>. It is sort of a recursive call, but not a exactly a recursive call, because there&rsquo;s no open parenthesis in front of <code>calc-eval</code>. Instead, <code>calc-eval</code> is an argument to <code>map</code>; <code>map</code> will typically call <code>calc-eval</code> more than once (for each sub-expression). So it&rsquo;s not just a simple recursive call, but a multi-way recursive call, which is the secret of dealing with deep lists.</p>
+
+<p>For deep lists, we make a recursive call for each element of the top level list, and then for each element of sub-lists, and so on all the way down. The base case is an empty list (or when the expression isn&rsquo;t a list).</p>
+
+<h3>Interpreters and Types of Expressions</h3>
+
+
+<p>There are three pieces to an interpreter (and this goes for any interpreter, not just Scheme or Clojure):</p>
+
+<ol>
+<li>The read-eval-print loop (REPL). It&rsquo;s a loop because the last thing in it is a call to itself, so it runs forever. In the example, <code>read</code> turns things in parentheses into pairs. <code>calc-eval</code> takes an expression as its argument and returns (and prints) the value of that expression.</li>
+<li><code>(eval exp)</code> returns the value of the expression</li>
+<li><code>(apply function arglist)</code> returns the value returned by the function. This is where the example is different from a full interpreter: the actual Scheme interpreter handles first-class procedures, whereas this calculator example depends on the <em>name</em> of the function (must be one of <code>+</code>, <code>/</code>, <code>-</code>, and <code>*</code>.</li>
+</ol>
+
+
+<p>In Scheme, there are basically four types of expressions:</p>
+
+<ul>
+<li><strong>Self-evaluating expressions</strong> (primitives) like numbers or booleans &mdash; these are used in the calculator</li>
+<li><strong>Variables</strong> &mdash; these are <strong>not</strong> supported in the calculator</li>
+<li><strong>Function calls</strong> &mdash; these are used in the calculator</li>
+<li><strong>Special forms</strong> &mdash; these are <strong>not</strong> supported in the calculator. A full interpreter would include special forms, but this introduces a lot of complexity which is ignored in the calculator example.</li>
+</ul>
+
+
+<p>In an interpreter, an evaluator&rsquo;s job is to take the stuff that is typed in and figure out what it means. This requires figuring out what the notation means. Scheme and Clojure (or any Lisp) make this easier, because a complete expression is one list; the language was designed in order to be able to evaluate its own programs. Compare this to Java, for example, where there are many different notations that are not uniform, so what you can put in one context is different than another context.</p>
+
+<p>Lispians say &ldquo;at the heart of every programming language there&rsquo;s a lisp interpreter trying to get out&rdquo;, because you have to evaluate expressions that are procedure calls. Syntax doesn&rsquo;t get in the way.</p>
+
+<p>A few differences between a full interpreter and this example can be seen in the following:</p>
+
+<ul>
+<li><strong><code>calc-eval</code></strong>: we will not see a recursive call for <code>(car exp)</code> in <code>calc-eval</code>; <code>(car exp)</code> has to be one of the 4 math symbols, but in a real Scheme interpreter it could be a symbol that&rsquo;s the name of a procedure, or it could be a lambda or procedure call or any number of other things to provide the function (so it would need to be evaluated).</li>
+<li><strong><code>calc-apply</code></strong>: this function takes <code>fn</code> and <code>args</code> as its arguments, where <code>args</code> is always a list. This is not just a simplification, but an actual difference from a full interpreter: we don&rsquo;t have procedures as first-class values, so fn argument is a <em>symbol</em>, not the procedure itself. This means that the calculator cannot handle all procedures (like <code>sqrt</code>, etc.)</li>
+</ul>
+
+
+<p>There are a number of properties of a programming language that determine what it is to be a program in that language. For example, Scheme has first-class procedures, applicative order, variables. All of these properties manifest themselves in the interpreter; we can look at the interpreter and ask &ldquo;how would I change this interpreter if I wanted Scheme, but with normal order instead of applicative order?&rdquo; In that case, don&rsquo;t call <code>(map calc-eval (cdr exp))</code>, but just use <code>(cdr exp)</code>. Then we&rsquo;d be giving apply actual argument expressions rather than argument values.</p>
+
+<h3>Syntax and Semantics</h3>
+
+
+<p><em>Syntax</em> is the technical term for the form of a program, what the program looks like. The Scheme function syntax is <code>(procedure arg arg arg)</code>. <em>Semantics</em> is what that thing means. For example, <code>(procedure arg arg arg)</code> means &ldquo;call that procedure with these argument values after you&rsquo;ve recursively evaluated the argument expressions&rdquo;. There are differences across languages, but we see more or less the same kinds of things in the semantics&mdash;conditionals, loops, call functions, define variables&mdash;while syntax can be very different across languages.</p>
+
+<p>An important point about the calculator: we are actually dealing with two different programming languages. <em>The calculator is a program written in Scheme, but the language that the calculator implements is a programming language that isn&rsquo;t Scheme</em>. For example, there are no variables in this calculator programming language. When Scheme interpreters are written in Scheme, there are also two languages involved (and it&rsquo;s more difficult to see the differences than Scheme vs. calculator language).</p>
+
+<p>Notice that <code>eval</code> lives in both the syntax and semantics worlds. When it takes an expression (syntax) and returns a value, it turns syntax into semantics by turning the form into something meaningful. Meanwhile <code>apply</code> doesn&rsquo;t know anything about syntax. It takes a procedure and argument values, so it&rsquo;s entirely about semantics.</p>
+
+<h3>An Aside on Functional Programming</h3>
+
+
+<p>The <code>read</code> and <code>print</code> functions are primitive procedures that are <em>not</em> functional. <code>read</code> is not functional because, every time you call it with the same arguments, you get a different answer. <code>print</code> is not functional because it changes the state of the world. Functions just compute and return values. Even though Scheme is a functional programming language, the Scheme interpreter itself is not an entirely functional program. Most of it (<code>eval</code> and <code>apply</code>) is functional, since it just takes arguments and returns values.</p>
+
+<h3>Some Clojure/Scheme Observations</h3>
+
+
+<p>Clearly Scheme and Clojure are both Lisps. It&rsquo;s nice to see that the Clojure implementation is as consise as Scheme (it&rsquo;s four more lines, but that could be eliminated if we didn&rsquo;t put the four <code>cond</code>s on their own line). There are a few syntax differences (Clojure <code>reduce</code> instead of Scheme <code>accumulate</code>, <code>read-line</code> instead of <code>read</code>), but the semantics are identical.</p>
+
+<p>One final syntax difference: In Scheme (and Common Lisp and most other Lisp dialects), <code>cons</code> is a primitive data structure made up of a pair. In Clojure, this is not the case. We can see the <code>cons</code> in the Scheme example when we use <code>car</code> (to access the first element) and <code>cdr</code> (to access the rest). Clojure <em>does</em> have a <code>cons</code> function, but it works differently:</p>
+
+<p>``` clojure
+(cons 1 2) ; IllegalArgumentException Don&rsquo;t know how to create ISeq from: java.lang.Long</p>
+
+<p>(cons 1 &lsquo;(2 3 4)) ; (1 2 3 4)</p>
+
+<p>; this is not a list, but a Cons
+(list? (cons 1 &lsquo;(2 3 4))) ; false
+(type (cons 1 &rsquo;(2 3 4))) ; clojure.lang.Cons
+```</p>
+
+<p>This is really a subject for <a href="https://stackoverflow.com/questions/34347985/clojure-no-cons-cells">further</a> <a href="https://stackoverflow.com/questions/5741111/help-explaining-how-cons-in-scheme-work">reading</a>, but suffice it to say that Clojure is a Lisp with some <a href="https://clojure.org/reference/lisps">differences from other Lisps</a>, including the fact that &ldquo;<code>cons</code>, <code>first</code> and <code>rest</code> manipulate sequence abstractions, not concrete cons cells&rdquo;.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[A Clojure Introduction to Binary and Bitwise Operators]]></title>
     <link href="http://cek.io/blog/2017/08/17/clojure-introduction-binary-bitwise/"/>
-    <updated>2017-08-17T15:00:00-07:00</updated>
+    <updated>2017-08-17T23:00:00+01:00</updated>
     <id>http://cek.io/blog/2017/08/17/clojure-introduction-binary-bitwise</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been working in Clojure and ClojureScript lately. A few months back, I came across <a href="http://realworldclojure.com/one-weird-trick/">this one weird trick to master Clojure</a>. <em>TL;DR</em>: it recommends reading the API docs, fully, top to bottom.</p>
 

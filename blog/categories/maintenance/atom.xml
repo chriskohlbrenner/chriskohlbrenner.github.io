@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Maintenance | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/maintenance/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2018-11-06T07:27:02-08:00</updated>
+  <updated>2019-06-27T11:21:29+01:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Pruning Code]]></title>
     <link href="http://cek.io/blog/2015/11/21/code-pruning/"/>
-    <updated>2015-11-21T09:23:14-08:00</updated>
+    <updated>2015-11-21T17:23:14+00:00</updated>
     <id>http://cek.io/blog/2015/11/21/code-pruning</id>
     <content type="html"><![CDATA[<p>It was Friday afternoon, the end of the day, at the end of a long week of urgent bugfixes to prepare a release. Our next features hadn&rsquo;t been fully designed and approved, all the high-priority bugs had been identified and fixed, and I was left with a few hours to choose what to work on.</p>
 

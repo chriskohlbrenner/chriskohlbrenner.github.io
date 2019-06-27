@@ -2,234 +2,238 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://cek.io/blog/2014/02/04/hello-world/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/02/04/then-and-now/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/02/12/terminally-bashing-the-kernel/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/02/28/on-blog-scheduling/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/03/03/gems-and-weather/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/03/04/sinatra-what/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/03/13/generating-rails-in-broad-strokes/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/03/19/im-a-rails-contributor/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/03/27/spending-saving-time/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/04/08/portfolio-page/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/04/15/typeahead/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/04/16/typeahead-2/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/04/22/pursuit-of-happyness/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/04/28/poodr-ch-4/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/04/29/reblog-introducing-tender/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/04/30/ruby-vs-javascript-booleans/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/04/30/amqp-rabbitmq-ruby/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/05/02/poodr-ch-5/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/05/06/poodr-ch-6/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
-        <loc>http://cek.io/blog/2014/05/06/redis/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <loc>http://cek.io/blog/2014/05/07/redis/</loc>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/05/11/the-gap/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/05/12/caching-in-rails/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/05/18/active-support-inflectors/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/05/19/cucumber/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/05/21/dirty-checking/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/05/26/poodr-ch-7/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/05/27/poodr-ch-8/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/05/28/chat-express-node/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/06/04/debugging-with-git-bisect-log-blame/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/06/10/poodr-ch-9/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/06/13/learning-d3/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/06/20/crud-sql-http-translation/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/06/24/low-to-high-testing/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/07/16/closures-ruby/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/07/21/javascripts-historical-context-crockford/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/07/21/intro-to-javascript-crockford/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2014/07/23/edit-gemfile-dot-lock/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2015/01/03/new-year/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2015/03/24/chrome-extension/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2015/06/23/react-d3/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2015/07/14/once/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2015/10/08/an-event-apart/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2015/10/09/performance/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2015/10/23/imperative-declaration/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2015/11/21/code-pruning/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2015/12/03/event-loop/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2016/02/08/javascript-hammer/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2016/02/27/react-conf/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2016/06/30/postcss-color-vars/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
-        <loc>http://cek.io/blog/2016/07/06/d3-and-react-faux-dom/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <loc>http://cek.io/blog/2016/07/07/d3-and-react-faux-dom/</loc>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2016/10/24/knex-configuration-heroku/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2016/10/29/ramda-sort-tiebreakers-comparators-either/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/2017/08/17/clojure-introduction-binary-bitwise/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
+    </url>
+    <url>
+        <loc>http://cek.io/blog/2019/06/27/scheme-clojure-calculator/</loc>
+        <lastmod>2019-06-27T11:20:58+01:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2019-06-27T11:20:58+01:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/blog/archives/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2019-06-27T11:20:58+01:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/portfolio/</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/robots.txt</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
     <url>
         <loc>http://cek.io/downloads/aea_notes.txt</loc>
-        <lastmod>2018-11-06T07:22:20-08:00</lastmod>
+        <lastmod>2018-11-06T15:22:20+00:00</lastmod>
     </url>
 </urlset>

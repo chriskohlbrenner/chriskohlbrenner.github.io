@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Strings | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/strings/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2018-11-06T07:27:02-08:00</updated>
+  <updated>2019-06-27T11:21:29+01:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Bending Strings With ActiveSupport::Inflector]]></title>
     <link href="http://cek.io/blog/2014/05/18/active-support-inflectors/"/>
-    <updated>2014-05-18T12:32:15-07:00</updated>
+    <updated>2014-05-18T20:32:15+01:00</updated>
     <id>http://cek.io/blog/2014/05/18/active-support-inflectors</id>
     <content type="html"><![CDATA[<p>Ever run into issues with strings? Problems like converting CamelCase to snake_case, pluralizing words, or making integers into ordinals? Inflectors give us an easy solution.</p>
 

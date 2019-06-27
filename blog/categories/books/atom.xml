@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Books | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/books/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2018-11-06T07:27:02-08:00</updated>
+  <updated>2019-06-27T11:21:29+01:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Old and New Years]]></title>
     <link href="http://cek.io/blog/2015/01/03/new-year/"/>
-    <updated>2015-01-03T09:14:20-08:00</updated>
+    <updated>2015-01-03T17:14:20+00:00</updated>
     <id>http://cek.io/blog/2015/01/03/new-year</id>
     <content type="html"><![CDATA[<p>Happy new year! A resolution of mine for 2015 is to write more&mdash;not just code, which is itself an admirable goal, but human-readable English. This was motivated by (1) the advice in <a href="http://www.shubhro.com/2014/12/27/software-engineers-should-write/">this article</a> I read recently, which is <a href="http://bit.ly/1K9MAZk">not new advice</a>, (2) the hope that, for all the benefits of specialization, there&rsquo;s value in maintaining competence in both programming and verbal language, and (3) the fact that I like writing! So you can expect more consistent posts than the last six months have yielded.</p>
 
@@ -88,7 +88,7 @@
   <entry>
     <title type="html"><![CDATA[Notes on Cost-Effective Testing (POODR: Chapter 9)]]></title>
     <link href="http://cek.io/blog/2014/06/10/poodr-ch-9/"/>
-    <updated>2014-06-10T07:17:18-07:00</updated>
+    <updated>2014-06-10T15:17:18+01:00</updated>
     <id>http://cek.io/blog/2014/06/10/poodr-ch-9</id>
     <content type="html"><![CDATA[<p><strong>I am working my way through programming-related reading, currently with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="http://cek.io/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
 
@@ -160,7 +160,7 @@
   <entry>
     <title type="html"><![CDATA['Cheerful, Detached, and Merciless': Composition and Code Arrangement in Ruby (POODR: Chapter 8)]]></title>
     <link href="http://cek.io/blog/2014/05/27/poodr-ch-8/"/>
-    <updated>2014-05-27T06:57:39-07:00</updated>
+    <updated>2014-05-27T14:57:39+01:00</updated>
     <id>http://cek.io/blog/2014/05/27/poodr-ch-8</id>
     <content type="html"><![CDATA[<p><strong>I am working my way through programming-related reading, currently with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="http://cek.io/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
 
@@ -180,7 +180,7 @@
   <entry>
     <title type="html"><![CDATA[Roles, Modules, and Mix-Ins in Ruby (POODR: Chapter 7)]]></title>
     <link href="http://cek.io/blog/2014/05/26/poodr-ch-7/"/>
-    <updated>2014-05-26T08:52:50-07:00</updated>
+    <updated>2014-05-26T16:52:50+01:00</updated>
     <id>http://cek.io/blog/2014/05/26/poodr-ch-7</id>
     <content type="html"><![CDATA[<p><strong>I am working my way through programming-related reading, currently with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="http://cek.io/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
 
@@ -365,7 +365,7 @@ correct way.&rdquo; The first step in this direction, Metz argues, is to write p
   <entry>
     <title type="html"><![CDATA[A Few Notes on Classical Inheritance in Ruby (POODR: Chapter 6)]]></title>
     <link href="http://cek.io/blog/2014/05/06/poodr-ch-6/"/>
-    <updated>2014-05-06T06:55:11-07:00</updated>
+    <updated>2014-05-06T14:55:11+01:00</updated>
     <id>http://cek.io/blog/2014/05/06/poodr-ch-6</id>
     <content type="html"><![CDATA[<p><strong>Having recently graduated from the Flatiron School, I am working my way through programming-related reading, beginning with Sandi Metz&rsquo;s &ldquo;Practical Object-Oriented Design in Ruby&rdquo;. Click <a href="http://cek.io/blog/categories/poodr/">here for more posts about POODR</a>.</strong></p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ramda | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/ramda/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2018-11-06T07:27:02-08:00</updated>
+  <updated>2019-06-27T11:21:29+01:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Ramda.js Array Sorting (With Tiebreakers) Using R.comparator, Variadic R.either, and R.reduce]]></title>
     <link href="http://cek.io/blog/2016/10/29/ramda-sort-tiebreakers-comparators-either/"/>
-    <updated>2016-10-29T09:50:14-07:00</updated>
+    <updated>2016-10-29T17:50:14+01:00</updated>
     <id>http://cek.io/blog/2016/10/29/ramda-sort-tiebreakers-comparators-either</id>
     <content type="html"><![CDATA[<p>A recent exercise in data processing with <a href="http://ramdajs.com/">Ramda.js</a>: I wanted to sort an array of objects by their key/value pairs. More specifically, I wanted to sort an array that looked like this:</p>
 
@@ -93,7 +93,7 @@ const codeComparator = R.comparator((a, b) => R.lt(R.prop(&lsquo;code&rsquo;, a)
   <entry>
     <title type="html"><![CDATA[Ramda's Once]]></title>
     <link href="http://cek.io/blog/2015/07/14/once/"/>
-    <updated>2015-07-14T08:29:18-07:00</updated>
+    <updated>2015-07-14T16:29:18+01:00</updated>
     <id>http://cek.io/blog/2015/07/14/once</id>
     <content type="html"><![CDATA[<p>Someone recently described to me that, in an interview, he was asked to implement a function that would only run once, even if invoked multiple times. This immediately made me think of <a href="http://ramdajs.com/">Ramda</a>&mdash;my go-to JavaScript library (think <a href="http://underscorejs.org/">Underscore</a> or <a href="https://lodash.com/">lodash</a>, but with a little more functional programming flavor)&mdash;and its <a href="http://ramdajs.com/docs/#once"><code>once</code> function</a>:</p>
 

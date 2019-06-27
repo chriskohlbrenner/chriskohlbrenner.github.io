@@ -4,7 +4,7 @@
   <title><![CDATA[Category: UI | CEK.io]]></title>
   <link href="http://cek.io/blog/categories/ui/atom.xml" rel="self"/>
   <link href="http://cek.io/"/>
-  <updated>2018-11-06T07:27:02-08:00</updated>
+  <updated>2019-06-27T11:21:29+01:00</updated>
   <id>http://cek.io/</id>
   <author>
     <name><![CDATA[Chris Eaves-Kohlbrenner]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[D3 and React Faux DOM]]></title>
-    <link href="http://cek.io/blog/2016/07/06/d3-and-react-faux-dom/"/>
-    <updated>2016-07-06T16:56:50-07:00</updated>
-    <id>http://cek.io/blog/2016/07/06/d3-and-react-faux-dom</id>
+    <link href="http://cek.io/blog/2016/07/07/d3-and-react-faux-dom/"/>
+    <updated>2016-07-07T00:56:50+01:00</updated>
+    <id>http://cek.io/blog/2016/07/07/d3-and-react-faux-dom</id>
     <content type="html"><![CDATA[<p><strong>Author&rsquo;s Note:</strong> This post makes <a href="/blog/2015/06/23/react-d3/">my original post exploring React + D3</a> obselete. I strongly recommend <code>react-faux-dom</code> (<a href="https://github.com/Olical/react-faux-dom">on Github</a>) over my previous post&rsquo;s suggestion.</p>
 
 <hr>
@@ -155,7 +155,7 @@
   <entry>
     <title type="html"><![CDATA[A Single Set of Color Vars With PostCSS]]></title>
     <link href="http://cek.io/blog/2016/06/30/postcss-color-vars/"/>
-    <updated>2016-06-30T05:05:35-07:00</updated>
+    <updated>2016-06-30T13:05:35+01:00</updated>
     <id>http://cek.io/blog/2016/06/30/postcss-color-vars</id>
     <content type="html"><![CDATA[<p>In this post, I describe how to create a single list of color variables (in JavaScript) so that those colors can be shared across JavaScript files and CSS stylesheets. Using PostCSS within a Webpack app, I outline the problem of sharing styles between CSS and JS and how it can be solved. For step-by-step code examples, skip ahead to &ldquo;Enter PostCSS (Problem Solved)&rdquo;.</p>
 
@@ -418,7 +418,7 @@
   <entry>
     <title type="html"><![CDATA[React Conf Reactions]]></title>
     <link href="http://cek.io/blog/2016/02/27/react-conf/"/>
-    <updated>2016-02-27T13:43:32-08:00</updated>
+    <updated>2016-02-27T21:43:32+00:00</updated>
     <id>http://cek.io/blog/2016/02/27/react-conf</id>
     <content type="html"><![CDATA[<p>The React.js Conf was a blast. All the talks were recorded and can be watched <a href="https://www.youtube.com/playlist?list=PLb0IAmt7-GS0M8Q95RIc2lOM6nc77q1IY">here</a>. My full bullet point notes are <a href="/downloads/react_conf_notes.txt">here</a>, but what follows are some more readable reactions to the conference.</p>
 
@@ -461,7 +461,7 @@
   <entry>
     <title type="html"><![CDATA[JavaScript's Call Stack, Callback Queue, and Event Loop]]></title>
     <link href="http://cek.io/blog/2015/12/03/event-loop/"/>
-    <updated>2015-12-03T06:01:39-08:00</updated>
+    <updated>2015-12-03T14:01:39+00:00</updated>
     <id>http://cek.io/blog/2015/12/03/event-loop</id>
     <content type="html"><![CDATA[<p>In this video, Philip Roberts clears up a lot of the details surrounding JavaScript&rsquo;s call stack, callback queue, and event loop. Feel free to skip this blog post and spend a half hour watching <a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">the video</a> instead. But if you&rsquo;d rather skim my highlights, don&rsquo;t let me stop you!</p>
 
@@ -576,7 +576,7 @@
   <entry>
     <title type="html"><![CDATA[Pruning Code]]></title>
     <link href="http://cek.io/blog/2015/11/21/code-pruning/"/>
-    <updated>2015-11-21T09:23:14-08:00</updated>
+    <updated>2015-11-21T17:23:14+00:00</updated>
     <id>http://cek.io/blog/2015/11/21/code-pruning</id>
     <content type="html"><![CDATA[<p>It was Friday afternoon, the end of the day, at the end of a long week of urgent bugfixes to prepare a release. Our next features hadn&rsquo;t been fully designed and approved, all the high-priority bugs had been identified and fixed, and I was left with a few hours to choose what to work on.</p>
 
